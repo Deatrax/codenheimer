@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <predefines.h>
+#include <QFontDatabase>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,7 +19,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_sidebarButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    void loadConfig();
+
+protected:
+    QFont newFont;
+    void loadCustomFonts();
 };
 #endif // MAINWINDOW_H

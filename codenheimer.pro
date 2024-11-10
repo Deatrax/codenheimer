@@ -13,10 +13,15 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    predefines.h
 
 FORMS += \
     mainwindow.ui
+
+RESOURCES += \
+    images/ \
+    fonts/
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
