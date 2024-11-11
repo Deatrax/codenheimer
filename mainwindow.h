@@ -27,7 +27,10 @@ private:
     void loadConfig();
 
 protected:
-    QFont newFont;
+    QFont CutiveMonoFont;
+    QFont CreteRoundFont;
     void loadCustomFonts();
+    void centreSidebarButtons();
+    void setSidebarButtonIcons();
 };
 #endif // MAINWINDOW_H
