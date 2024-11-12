@@ -22,6 +22,8 @@ MainWindow::~MainWindow()
         loadCustomFonts();
         ui->topbarTitle->setFont(CutiveMonoFont);
         ui->sidebarButtons->setFont(CreteRoundFont);
+        ui->usernameAndMainSettingsButton->setFont(CreteRoundFont);
+        ui->sidebar->layout()->setAlignment(ui->usernameAndMainSettingsButton, Qt::AlignHCenter);
         centreSidebarButtons();
         setSidebarButtonIcons();
     }
@@ -76,13 +78,18 @@ MainWindow::~MainWindow()
 
         // editors button
         ui->EditorsSidebarButton->setIcon(QIcon(":/images/editorIcon.svg"));
-        ui->EditorsSidebarButton->setIconSize(QSize(19, 19)); // Adjust icon size as needed
-        ui->EditorsSidebarButton->setLayoutDirection(Qt::RightToLeft); // Puts the icon on the right side
+        ui->EditorsSidebarButton->setIconSize(QSize(19, 19));
+        ui->EditorsSidebarButton->setLayoutDirection(Qt::RightToLeft);
 
         // browse button
         ui->downarrow->setIcon(QIcon(":/images/downArrowIcon.svg"));
-        ui->downarrow->setIconSize(QSize(17, 7)); // Adjust icon size as needed
-        ui->downarrow->setLayoutDirection(Qt::RightToLeft); // Puts the icon on the right side
+        ui->downarrow->setIconSize(QSize(17, 7));
+        ui->downarrow->setLayoutDirection(Qt::RightToLeft);
+
+        // username And Main Settings Button button
+        ui->usernameAndMainSettingsButton->setIcon(QIcon(":/images/settingsIcon.svg"));
+        ui->usernameAndMainSettingsButton->setIconSize(QSize(21, 21));
+        ui->usernameAndMainSettingsButton->setLayoutDirection(Qt::RightToLeft);
 
     }
 

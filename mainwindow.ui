@@ -410,7 +410,56 @@ border-top-right-radius:5px;</string>
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>392</height>
+              <height>297</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="usernameAndMainSettingsButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>129</width>
+              <height>27</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QWidget{
+	font-size:14px;
+	color: white;
+	border-radius:5px
+}
+QPushButton{
+	background:black;
+}
+
+QPushButton:hover{
+	background:#1E1E1E;
+}</string>
+            </property>
+            <property name="text">
+             <string>Username    </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>56</height>
              </size>
             </property>
            </spacer>
@@ -425,6 +474,9 @@ border-top-right-radius:5px;</string>
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -523,9 +575,51 @@ border-radius:7px;</string>
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="browsePage"/>
-         <widget class="QWidget" name="editorsPage"/>
-         <widget class="QWidget" name="searchPage"/>
+         <widget class="QWidget" name="browsePage">
+          <widget class="QLabel" name="label">
+           <property name="geometry">
+            <rect>
+             <x>290</x>
+             <y>280</y>
+             <width>251</width>
+             <height>81</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Browse page</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="editorsPage">
+          <widget class="QLabel" name="label_2">
+           <property name="geometry">
+            <rect>
+             <x>320</x>
+             <y>300</y>
+             <width>201</width>
+             <height>101</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>editor page</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="searchPage">
+          <widget class="QLabel" name="label_3">
+           <property name="geometry">
+            <rect>
+             <x>210</x>
+             <y>250</y>
+             <width>331</width>
+             <height>131</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Search page</string>
+           </property>
+          </widget>
+         </widget>
         </widget>
        </item>
       </layout>
