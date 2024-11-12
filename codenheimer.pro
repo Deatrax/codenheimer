@@ -10,14 +10,17 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    snippetpreviewbox.cpp
 
 HEADERS += \
     mainwindow.h \
-    predefines.h
+    predefines.h \
+    snippetpreviewbox.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    snippetpreviewbox.ui
 
 RESOURCES += \
     images/ \

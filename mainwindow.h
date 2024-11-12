@@ -19,6 +19,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    QFont getFont(std::string str);
 private slots:
     void on_sidebarButton_clicked();
 

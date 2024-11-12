@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "snippetpreviewbox.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -26,6 +27,14 @@ MainWindow::~MainWindow()
         ui->sidebar->layout()->setAlignment(ui->usernameAndMainSettingsButton, Qt::AlignHCenter); //align the settings button at the centre
         centreSidebarButtons();
         setSidebarButtonIcons();
+
+
+        //testing the snipper previewBox
+        for(int i=0;i<5;i++){
+            snippetPreviewBox* snp=new snippetPreviewBox(this);
+            ui->testbox->layout()->addWidget(snp);
+        }
+
 
         ui->maincontentsStack->setCurrentIndex(0);
     }
@@ -94,7 +103,11 @@ MainWindow::~MainWindow()
         ui->usernameAndMainSettingsButton->setIcon(QIcon(":/images/settingsIcon.svg"));
         ui->usernameAndMainSettingsButton->setIconSize(QSize(21, 21));
         ui->usernameAndMainSettingsButton->setLayoutDirection(Qt::RightToLeft);
+    }
 
+    QFont MainWindow::getFont(std::string str){
+        if(str=="Cutive") return CutiveMonoFont;
+        else if(str=="Crete") return CreteRoundFont;
     }
 
     void MainWindow::on_sidebarButton_clicked()
