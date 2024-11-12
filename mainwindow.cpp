@@ -76,7 +76,7 @@ MainWindow::~MainWindow()
 
         // editors button
         ui->EditorsSidebarButton->setIcon(QIcon(":/images/editorIcon.svg"));
-        ui->EditorsSidebarButton->setIconSize(QSize(16, 16)); // Adjust icon size as needed
+        ui->EditorsSidebarButton->setIconSize(QSize(19, 19)); // Adjust icon size as needed
         ui->EditorsSidebarButton->setLayoutDirection(Qt::RightToLeft); // Puts the icon on the right side
 
         // browse button
