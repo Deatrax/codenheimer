@@ -620,40 +620,6 @@ border-radius:7px;</string>
             <string>Browse page</string>
            </property>
           </widget>
-          <widget class="QGroupBox" name="testbox">
-           <property name="geometry">
-            <rect>
-             <x>70</x>
-             <y>20</y>
-             <width>751</width>
-             <height>271</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <property name="title">
-            <string>Test widget</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_5">
-            <item>
-             <widget class="QFrame" name="frame">
-              <property name="maximumSize">
-               <size>
-                <width>1</width>
-                <height>1</height>
-               </size>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
          </widget>
          <widget class="QWidget" name="settingsPage">
           <widget class="QLabel" name="label_4">

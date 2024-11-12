@@ -30,10 +30,10 @@ MainWindow::~MainWindow()
 
 
         //testing the snipper previewBox
-        for(int i=0;i<5;i++){
-            snippetPreviewBox* snp=new snippetPreviewBox(this);
-            ui->testbox->layout()->addWidget(snp);
-        }
+        // for(int i=0;i<5;i++){
+        //     snippetPreviewBox* snp=new snippetPreviewBox(this);
+        //     ui->testbox->layout()->addWidget(snp);
+        // }
 
 
         ui->maincontentsStack->setCurrentIndex(0);
