@@ -9,7 +9,7 @@
 */
 
 #include<iostream>
-
+#include <QString>
 
 namespace StyleSheet{
 
@@ -78,7 +78,71 @@ namespace StyleSheet{
     //     "background:"
 }
 
+namespace styles{
 
+    const QString buttonNormal=
+        "QWidget{"
+        "font-size:14px;"
+        "color: white;"
+        "border-radius:5px"
+        "}"
+        "QPushButton{"
+        "background:black;"
+        "}"
+        "QPushButton:hover{"
+        "background:#1E1E1E;"
+        "}";
+
+    const QString buttonVisited=
+        "QWidget{"
+        "font-size:14px;"
+        "color: white;"
+        "border-radius:5px"
+        "}"
+        "QPushButton{"
+        "background:#1E1E1E;"
+        "}"
+        "QPushButton:hover{"
+        "background:#1E1E1E;"
+        "}";
+
+    const QString buttonBrowseVisited=
+        "QWidget{"
+        "font-size:14px;"
+        "color: white;"
+        "border-radius:5px"
+        "}"
+        "QPushButton{"
+        "background:#1E1E1E;"
+        "border-bottom-left-radius:5px;"
+        "border-bottom-right-radius:0px;"
+        "border-top-left-radius:5px;"
+        "border-top-right-radius:0px;"
+        "text-align:right;"
+        "}"
+        "QPushButton:hover{"
+        "background:#1E1E1E;"
+        "}";
+
+    const QString buttonBrowseNormal=
+        "QWidget{"
+        "font-size:14px;"
+        "color: white;"
+        "border-radius:5px"
+        "}"
+        "QPushButton{"
+        "background:black;"
+        "text-align:right;"
+       "border-bottom-left-radius:5px;"
+       "border-bottom-right-radius:0px;"
+       "border-top-left-radius:5px;"
+       "border-top-right-radius:0px;"
+        "}"
+        "QPushButton:hover{"
+        "background:#1E1E1E;"
+        "}"
+        ;
+}
 
 #endif // PREDEFINES_H
 

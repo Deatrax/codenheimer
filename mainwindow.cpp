@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "snippetpreviewbox.h"
 #include "ui_mainwindow.h"
+#include "predefines.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,6 +16,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//START OF HUMAN ADDED FUNCTIONS
 
     void MainWindow::loadConfig(){
         setWindowTitle("Codenheimer");
@@ -110,39 +112,79 @@ MainWindow::~MainWindow()
         else if(str=="Crete") return CreteRoundFont;
     }
 
-    void MainWindow::on_sidebarButton_clicked()
-    {
-        if(!ui->sidebar->isHidden()) ui->sidebar->hide();
-        else ui->sidebar->show();
+    void MainWindow::setMainIndex(int n){
+        int x=ui->maincontentsStack->currentIndex();
+        ui->maincontentsStack->setCurrentIndex(n);
+        switch (n) {
+        case 0:
+            ui->AddnewSidebarButton->setStyleSheet(styles::buttonVisited);
+            break;
+        case 1:
+            ui->SearchSidebarButton->setStyleSheet(styles::buttonVisited);
+            break;
+        case 2:
+            ui->EditorsSidebarButton->setStyleSheet(styles::buttonVisited);
+            break;
+        case 3:
+            ui->BrowseSidebarButton->setStyleSheet(styles::buttonBrowseVisited);
+            break;
+        default:
+            break;
+        }
+
+        switch (x) {
+        case 0:
+            ui->AddnewSidebarButton->setStyleSheet(styles::buttonNormal);
+            break;
+        case 1:
+            ui->SearchSidebarButton->setStyleSheet(styles::buttonNormal);
+            break;
+        case 2:
+            ui->EditorsSidebarButton->setStyleSheet(styles::buttonNormal);
+            break;
+        case 3:
+            ui->BrowseSidebarButton->setStyleSheet(styles::buttonBrowseNormal);
+            break;
+        default:
+            break;
+        }
     }
+
+//END OF HUMAN ADDED FUNCTIONS
+
+void MainWindow::on_sidebarButton_clicked()
+{
+    if(!ui->sidebar->isHidden()) ui->sidebar->hide();
+    else ui->sidebar->show();
+}
 
 
 void MainWindow::on_AddnewSidebarButton_clicked()
 {
-    ui->maincontentsStack->setCurrentIndex(0);
+    setMainIndex(0);
 }
 
 
 void MainWindow::on_SearchSidebarButton_clicked()
 {
-    ui->maincontentsStack->setCurrentIndex(1);
+    setMainIndex(1);
 }
 
 
 void MainWindow::on_EditorsSidebarButton_clicked()
 {
-    ui->maincontentsStack->setCurrentIndex(2);
+    setMainIndex(2);
 }
 
 
 void MainWindow::on_BrowseSidebarButton_clicked()
 {
-    ui->maincontentsStack->setCurrentIndex(3);
+    setMainIndex(3);
 }
 
 
 void MainWindow::on_usernameAndMainSettingsButton_clicked()
 {
-    ui->maincontentsStack->setCurrentIndex(4);
+    setMainIndex(4);
 }
 

@@ -20,6 +20,7 @@ public:
     ~MainWindow();
 
     QFont getFont(std::string str);
+    void setMainIndex(int n);
 private slots:
     void on_sidebarButton_clicked();
 
