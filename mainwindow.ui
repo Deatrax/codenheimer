@@ -20,6 +20,7 @@
 
 QWidget { 
         background-color: #0F111A;  /* Apply background to the main window */
+		color:white;
     }
     
     /* Make QGroupBox transparent with no border, inheriting the main window's background color */
@@ -476,7 +477,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -575,18 +576,18 @@ border-radius:7px;</string>
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="browsePage">
-          <widget class="QLabel" name="label">
+         <widget class="QWidget" name="searchPage">
+          <widget class="QLabel" name="label_3">
            <property name="geometry">
             <rect>
-             <x>290</x>
-             <y>280</y>
-             <width>251</width>
-             <height>81</height>
+             <x>210</x>
+             <y>250</y>
+             <width>331</width>
+             <height>131</height>
             </rect>
            </property>
            <property name="text">
-            <string>Browse page</string>
+            <string>Search page</string>
            </property>
           </widget>
          </widget>
@@ -605,18 +606,33 @@ border-radius:7px;</string>
            </property>
           </widget>
          </widget>
-         <widget class="QWidget" name="searchPage">
-          <widget class="QLabel" name="label_3">
+         <widget class="QWidget" name="browsePage">
+          <widget class="QLabel" name="label">
            <property name="geometry">
             <rect>
-             <x>210</x>
-             <y>250</y>
-             <width>331</width>
-             <height>131</height>
+             <x>290</x>
+             <y>280</y>
+             <width>251</width>
+             <height>81</height>
             </rect>
            </property>
            <property name="text">
-            <string>Search page</string>
+            <string>Browse page</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="settingsPage">
+          <widget class="QLabel" name="label_4">
+           <property name="geometry">
+            <rect>
+             <x>280</x>
+             <y>290</y>
+             <width>141</width>
+             <height>71</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>settings page</string>
            </property>
           </widget>
          </widget>

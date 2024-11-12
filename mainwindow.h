@@ -22,6 +22,16 @@ public:
 private slots:
     void on_sidebarButton_clicked();
 
+    void on_AddnewSidebarButton_clicked();
+
+    void on_SearchSidebarButton_clicked();
+
+    void on_EditorsSidebarButton_clicked();
+
+    void on_BrowseSidebarButton_clicked();
+
+    void on_usernameAndMainSettingsButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     void loadConfig();

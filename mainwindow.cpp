@@ -21,11 +21,13 @@ MainWindow::~MainWindow()
         ui->sidebarButton->setIconSize(QSize(30, 33));
         loadCustomFonts();
         ui->topbarTitle->setFont(CutiveMonoFont);
-        ui->sidebarButtons->setFont(CreteRoundFont);
-        ui->usernameAndMainSettingsButton->setFont(CreteRoundFont);
-        ui->sidebar->layout()->setAlignment(ui->usernameAndMainSettingsButton, Qt::AlignHCenter);
+        ui->sidebarButtons->setFont(CreteRoundFont); //set the font of the sidebar page change buttons
+        ui->usernameAndMainSettingsButton->setFont(CreteRoundFont); //set the same font for the settings button
+        ui->sidebar->layout()->setAlignment(ui->usernameAndMainSettingsButton, Qt::AlignHCenter); //align the settings button at the centre
         centreSidebarButtons();
         setSidebarButtonIcons();
+
+        ui->maincontentsStack->setCurrentIndex(0);
     }
 
     void MainWindow::loadCustomFonts(){
@@ -49,6 +51,7 @@ MainWindow::~MainWindow()
         }
     }
 
+    ///centering the sidebar buttons
     void MainWindow::centreSidebarButtons(){
         // Get the layout from the UI file
         QVBoxLayout *layout = qobject_cast<QVBoxLayout*>(ui->sidebarButtons->layout());
@@ -64,6 +67,7 @@ MainWindow::~MainWindow()
         }
     }
 
+    ///assigning the icons of the sidebar buttons
     void MainWindow::setSidebarButtonIcons(){
         ui->EditorsSidebarButton->setFont(CreteRoundFont);
         ui->AddnewSidebarButton->setFont(CreteRoundFont);
@@ -98,4 +102,34 @@ MainWindow::~MainWindow()
         if(!ui->sidebar->isHidden()) ui->sidebar->hide();
         else ui->sidebar->show();
     }
+
+
+void MainWindow::on_AddnewSidebarButton_clicked()
+{
+    ui->maincontentsStack->setCurrentIndex(0);
+}
+
+
+void MainWindow::on_SearchSidebarButton_clicked()
+{
+    ui->maincontentsStack->setCurrentIndex(1);
+}
+
+
+void MainWindow::on_EditorsSidebarButton_clicked()
+{
+    ui->maincontentsStack->setCurrentIndex(2);
+}
+
+
+void MainWindow::on_BrowseSidebarButton_clicked()
+{
+    ui->maincontentsStack->setCurrentIndex(3);
+}
+
+
+void MainWindow::on_usernameAndMainSettingsButton_clicked()
+{
+    ui->maincontentsStack->setCurrentIndex(4);
+}
 
