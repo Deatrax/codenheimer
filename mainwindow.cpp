@@ -112,6 +112,7 @@ MainWindow::~MainWindow()
         else if(str=="Crete") return CreteRoundFont;
     }
 
+    ///Sets the current page as specified and sets the button shading correspondingly
     void MainWindow::setMainIndex(int n){
         int x=ui->maincontentsStack->currentIndex();
         ui->maincontentsStack->setCurrentIndex(n);
