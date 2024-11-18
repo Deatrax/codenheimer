@@ -9,5 +9,5 @@ void snippetLiveClass::innit(std::string nam, std::string flnam, int ln)
 
 void snippetLiveClass::addTag(std::string tag)
 {
-
+    tags.push_back(tag);
 }
