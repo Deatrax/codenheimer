@@ -11,11 +11,15 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    snippetbaseclass.cpp \
+    snippetliveclass.cpp \
     snippetpreviewbox.cpp
 
 HEADERS += \
     mainwindow.h \
     predefines.h \
+    snippetbaseclass.h \
+    snippetliveclass.h \
     snippetpreviewbox.h
 
 FORMS += \
