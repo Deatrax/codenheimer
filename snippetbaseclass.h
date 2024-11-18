@@ -13,7 +13,7 @@ protected:
     std::string name;
     std::string filename;
     int lineNum;
-
+    std::string lang;
 
 public:
     snippetBaseClass();
