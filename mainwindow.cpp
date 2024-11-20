@@ -37,7 +37,15 @@ MainWindow::~MainWindow()
         //     ui->testbox->layout()->addWidget(snp);
         // }
 
+        //setting the font and font size of the add new snippet in the central elements in the add new page
+        QFont addNewSnippetBoxFont=CutiveMonoFont;
+        addNewSnippetBoxFont.setPointSize(24);
+        ui->newSnippetNameBox->setFont(addNewSnippetBoxFont);
 
+
+
+
+        //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
     }
 
