@@ -115,6 +115,7 @@ MainWindow::~MainWindow()
     ///Sets the current page as specified and sets the button shading correspondingly
     void MainWindow::setMainIndex(int n){
         int x=ui->maincontentsStack->currentIndex();
+        if(x==n) return;
         ui->maincontentsStack->setCurrentIndex(n);
         switch (n) {
         case 0:
