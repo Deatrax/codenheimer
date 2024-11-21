@@ -38,11 +38,13 @@ private:
     Ui::MainWindow *ui;
     void loadConfig();
 
+
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
     void loadCustomFonts();
     void centreSidebarButtons();
     void setSidebarButtonIcons();
+    void prepareCentralArea();
 };
 #endif // MAINWINDOW_H

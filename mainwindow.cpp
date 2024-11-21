@@ -37,12 +37,7 @@ MainWindow::~MainWindow()
         //     ui->testbox->layout()->addWidget(snp);
         // }
 
-        //setting the font and font size of the add new snippet in the central elements in the add new page
-        QFont addNewSnippetBoxFont=CutiveMonoFont;
-        addNewSnippetBoxFont.setPointSize(24);
-        ui->newSnippetNameBox->setFont(addNewSnippetBoxFont);
-
-
+        prepareCentralArea();
 
 
         //load complete, land on add new page
@@ -159,6 +154,22 @@ MainWindow::~MainWindow()
             break;
         }
     }
+
+    //setting the font and font size of the central elements in the add new page
+    void MainWindow::prepareCentralArea(){
+
+        //new snippet box
+        QFont centralElementsFont=CutiveMonoFont;
+        centralElementsFont.setPointSize(24);
+        ui->newSnippetNameBox->setFont(centralElementsFont);
+
+        //search box
+        ui->centralSearchBoxLE->setFont(centralElementsFont);
+        QPixmap pixmap(":/images/searchIcon.svg");
+        ui->centralSearchIcon->setPixmap(pixmap.scaled(25, 25, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    }
+
 
 //END OF HUMAN ADDED FUNCTIONS
 
