@@ -165,9 +165,15 @@ MainWindow::~MainWindow()
 
         //search box
         ui->centralSearchBoxLE->setFont(centralElementsFont);
-        QPixmap pixmap(":/images/searchIcon.svg");
-        ui->centralSearchIcon->setPixmap(pixmap.scaled(25, 25, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        /*QPixmap pixmap(":/images/searchIcon.svg");
+        ui->centralSearchIcon->setPixmap(pixmap.scaled(25, 25, Qt::KeepAspectRatio, Qt::SmoothTransformation))*/;
+        ui->centralSearchIcon->setIcon(QIcon(":/images/searchIcon.svg"));
+        ui->centralSearchIcon->setIconSize(QSize(25, 25));
 
+        //browse box
+        ui->centralBrowseButton->setFont(centralElementsFont);
+        ui->centralBrowseButton->setIcon(QIcon(":images/centralBrowseIcon.svg"));
+        ui->centralBrowseButton->setIconSize(QSize(32, 28));
     }
 
 
