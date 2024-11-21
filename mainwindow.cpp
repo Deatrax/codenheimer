@@ -160,7 +160,7 @@ MainWindow::~MainWindow()
 
         //new snippet box
         QFont centralElementsFont=CutiveMonoFont;
-        centralElementsFont.setPointSize(24);
+        centralElementsFont.setPointSize(20);
         ui->newSnippetNameBox->setFont(centralElementsFont);
 
         //search box
