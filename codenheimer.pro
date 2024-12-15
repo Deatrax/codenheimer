@@ -20,7 +20,8 @@ HEADERS += \
     predefines.h \
     snippetbaseclass.h \
     snippetliveclass.h \
-    snippetpreviewbox.h
+    snippetpreviewbox.h \
+    helperFunctions.h
 
 FORMS += \
     mainwindow.ui \
