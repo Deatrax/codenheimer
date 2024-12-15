@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <predefines.h>
 #include <QFontDatabase>
+#include "helperFunctions.h"
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,6 +25,9 @@ public:
 
     QFont getFont(std::string str);
     void setMainIndex(int n);
+    void readData();
+    static int firstTimeInit();
+
 private slots:
     void on_sidebarButton_clicked();
 
@@ -34,11 +41,18 @@ private slots:
 
     void on_usernameAndMainSettingsButton_clicked();
 
+    void on_centralSearchIcon_clicked();
+
+    void on_centralSearchBoxLE_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     void loadConfig();
 
 
+
+
+    char coreUserConfig[1000];
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
@@ -46,5 +60,6 @@ protected:
     void centreSidebarButtons();
     void setSidebarButtonIcons();
     void prepareCentralArea();
+
 };
 #endif // MAINWINDOW_H

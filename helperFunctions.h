@@ -23,7 +23,7 @@ namespace assist{
      */
     static void getAppData_folder(char* str){
 
-        sprintf(str,"%s\\AppData\\Roaming\\exampleSearch", getenv("USERPROFILE"));
+        sprintf(str,"%s\\AppData\\Roaming\\KCATDVWSPJD", getenv("USERPROFILE"));
     }
     
     /**
@@ -33,7 +33,7 @@ namespace assist{
      */
     static void make_appData_filePath(char*  filename){
         char str[257];
-        sprintf(str,"%s\\AppData\\Roaming\\exampleSearch\\%s\0",getenv("USERPROFILE"),filename);
+        sprintf(str,"%s\\AppData\\Roaming\\KCATDVWSPJD\\%s\0",getenv("USERPROFILE"),filename);
         strcpy(filename,str);
     }
 
@@ -46,7 +46,7 @@ namespace assist{
      * @param str 
      */
     static void getAppData_folder(char* str) {
-        sprintf(str, "%s/Library/Application Support/exampleSearch", getenv("HOME"));
+        sprintf(str, "%s/Library/Application Support/KCATDVWSPJD", getenv("HOME"));
     }
 
     /**
@@ -56,7 +56,7 @@ namespace assist{
      */
     static void make_appData_filePath(char* filename) {
         char str[257];
-        sprintf(str, "%s/Library/Application Support/exampleSearch/%s", getenv("HOME"), filename);
+        sprintf(str, "%s/Library/Application Support/KCATDVWSPJD/%s", getenv("HOME"), filename);
         strcpy(filename, str);
     }
 
@@ -87,7 +87,7 @@ namespace assist{
  * @return int Returns 0 if successful, or -1 if failed to create either target.
  */
 
-    static int ensure_directory_and_open_file(const char *dir_path, const char *file_path, const char *mode) {
+static int ensure_directory_and_open_file(const char *dir_path, const char *file_path, const char *mode) {
             //skip if null passed BECOZ this means that directory making is to be skipped
             if (dir_path == NULL || strlen(dir_path) == 0) {
                 goto fileCheck;
