@@ -30,6 +30,8 @@ MainWindow::~MainWindow()
         centreSidebarButtons();
         setSidebarButtonIcons();
 
+        tagHolder tg(5);
+
         //testing the snipper previewBox
         // for(int i=0;i<5;i++){
         //     snippetPreviewBox* snp=new snippetPreviewBox(this);

@@ -15,7 +15,6 @@ protected:
     int lineNum;
     std::string lang;
     std::string SNIPPET;
-    std::vector<std::string> tags;
 
 public:
     snippetBaseClass();
@@ -28,13 +27,15 @@ public:
         std::vector<std::string> tgs
     )=0;
 
-    virtual void getDat(
+    virtual void getInfo(
         std::string &nam,
         std::string &lng,
         std::vector<std::string> &tgs
     )=0;
 
     virtual std::string getSnippet()=0;
+
+    virtual std::vector<std::string> getTags()=0;
     
 };
 

@@ -55,7 +55,7 @@ namespace assist{
      * @param filename the c-string that will be populated with the derived file path
      */
     static void make_appData_filePath(char* filename) {
-        char str[257];
+        char str[400];
         sprintf(str, "%s/Library/Application Support/KCATDVWSPJD/%s", getenv("HOME"), filename);
         strcpy(filename, str);
     }
