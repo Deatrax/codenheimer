@@ -26,3 +26,8 @@ std::vector<std::string> snippetLiveClass::getTags()
 {
     return tags;
 }
+
+// void snippetLiveClass::setEditor(QTextDocument *)
+// {
+
+// }

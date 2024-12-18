@@ -28,6 +28,8 @@ public:
     virtual std::string getSnippet() override;
 
     virtual std::vector<std::string> getTags() override;
+
+    // virtual void setEditor(QTextDocument*) override;
 };
 
 #endif // SNIPPETLIVECLASS_H
