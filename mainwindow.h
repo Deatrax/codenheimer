@@ -16,6 +16,22 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+
+class typeHolder{
+    private:
+        struct type{
+            std::string typ;
+            std::vector<snippetBaseClass*> snippets;
+        };
+
+        std::unordered_map<std::string, type>typeToSnippets;
+
+
+
+
+};
+
+
 class tagHolder{
 
     private:
@@ -46,6 +62,7 @@ class tagHolder{
                 std::string str;
                 std::getline(inFile, str);
                 qDebug("got line: %s",str.c_str());
+                //input logic is incomplete still
             }
         }
 
@@ -60,10 +77,6 @@ class tagHolder{
         std::vector<snippetBaseClass*>& getSnippetsFromTag(std::string tag){
             return storage[tag];
         }
-};
-
-class typeHolder{
-
 };
 
 
