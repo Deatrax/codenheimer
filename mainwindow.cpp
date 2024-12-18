@@ -30,6 +30,7 @@ MainWindow::~MainWindow()
         centreSidebarButtons();
         setSidebarButtonIcons();
 
+        tagHolder tg(5);
 
         //testing the snipper previewBox
         // for(int i=0;i<5;i++){
@@ -42,6 +43,26 @@ MainWindow::~MainWindow()
 
         //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
+    }
+
+    int MainWindow::firstTimeInit()
+    {
+
+        std::ifstream inFile("firstrun.txt", std::ios::in); // Attempt to open the file in read mode
+
+        if (!inFile.is_open()) { // Check if the file could not be opened and if not then this is the first time this is being run
+            std::ofstream make("firstrun.txt");
+            make.close();
+            std::cerr << "Error: File does not exist or cannot be opened!\n";
+            std::string strn;
+            char str[500];
+            assist::getAppData_folder(str);
+            std::string mode="wb";
+            assist::ensure_directory_and_open_file(str,NULL,mode.c_str());
+            return 1;
+            //makeSampleFile();
+        }
+        else return 0;
     }
 
     void MainWindow::loadCustomFonts(){
@@ -176,6 +197,10 @@ MainWindow::~MainWindow()
         ui->centralBrowseButton->setIconSize(QSize(32, 28));
     }
 
+    void MainWindow::readData(){
+        //data read args
+    }
+
 
 //END OF HUMAN ADDED FUNCTIONS
 
@@ -213,5 +238,17 @@ void MainWindow::on_BrowseSidebarButton_clicked()
 void MainWindow::on_usernameAndMainSettingsButton_clicked()
 {
     setMainIndex(4);
+}
+
+
+void MainWindow::on_centralSearchIcon_clicked()
+{
+
+}
+
+
+void MainWindow::on_centralSearchBoxLE_returnPressed()
+{
+
 }
 

@@ -12,15 +12,26 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     snippetbaseclass.cpp \
+    snippetc.cpp \
+    snippetcpp.cpp \
+    snippetcss.cpp \
+    snippetjava.cpp \
     snippetliveclass.cpp \
-    snippetpreviewbox.cpp
+    snippetpreviewbox.cpp \
+    snippetpy.cpp
 
 HEADERS += \
     mainwindow.h \
     predefines.h \
     snippetbaseclass.h \
+    snippetc.h \
+    snippetcpp.h \
+    snippetcss.h \
+    snippetjava.h \
     snippetliveclass.h \
-    snippetpreviewbox.h
+    snippetpreviewbox.h \
+    helperFunctions.h \
+    snippetpy.h
 
 FORMS += \
     mainwindow.ui \
