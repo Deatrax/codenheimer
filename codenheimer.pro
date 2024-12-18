@@ -15,6 +15,7 @@ SOURCES += \
     snippetc.cpp \
     snippetcpp.cpp \
     snippetcss.cpp \
+    snippetcustom.cpp \
     snippetjava.cpp \
     snippetliveclass.cpp \
     snippetpreviewbox.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     snippetc.h \
     snippetcpp.h \
     snippetcss.h \
+    snippetcustom.h \
     snippetjava.h \
     snippetliveclass.h \
     snippetpreviewbox.h \

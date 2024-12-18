@@ -31,3 +31,7 @@ std::vector<std::string> snippetLiveClass::getTags()
 // {
 
 // }
+
+std::string snippetLiveClass::getLang() {
+    return lang;
+}

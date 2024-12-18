@@ -7,10 +7,13 @@
 #include <cstring>
 
 /*
-    Even tho this file is being added to this example experimental project, it will be added to the main project.
+    This is a critial supportive file that handles accessing the appdata folders and other stuff.
     DO NOT TRY TO CHANGE ANYTHING IN HERE WITHOUT TELLING ME
 */
 
+//DEFINES and DEAFULTS
+// #define std:string string
+using std::string;
 
 namespace assist{
     

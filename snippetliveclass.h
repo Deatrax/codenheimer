@@ -30,6 +30,7 @@ public:
     virtual std::vector<std::string> getTags() override;
 
     // virtual void setEditor(QTextDocument*) override;
+    virtual std::string getLang() override;
 };
 
 #endif // SNIPPETLIVECLASS_H

@@ -17,18 +17,70 @@ class MainWindow;
 QT_END_NAMESPACE
 
 
-class typeHolder{
+class langHolder{
     private:
-        struct type{
-            std::string typ;
-            std::vector<snippetBaseClass*> snippets;
+        class lang{
+            public:
+                std::string langName;
+                std::vector<snippetBaseClass*> snippets;
         };
 
-        std::unordered_map<std::string, type>typeToSnippets;
+        class customLang: public lang{
+            public:
+                std::unordered_map<std::string,std::vector<std::string>> colorsData;
+        };
 
+        std::unordered_map<std::string, lang*>stringTolang;
+        char langFile[500]="langDat.cdh";
+        bool noAdditionallangs;
 
+        void prepPredefinedLangs(){
+            std::string langs[]={"cpp","c","java","css","py"};
+            for (int i = 0; i < 5; i++)
+            {
+                lang* ty=new lang;
+                ty->langName=langs[i];
+                stringTolang.emplace(langs[i],ty);
+            }
+            
 
+        }
 
+    public:
+        langHolder(int n){
+            prepPredefinedLangs();
+            if(n==0){
+                noAdditionallangs=true;
+            }
+            noAdditionallangs=false;
+            assist::make_appData_filePath(langFile);
+            std::ifstream inFile(langFile, std::ios::in);
+            if (!inFile.is_open()){
+                std::cerr<<"failed to open the langDat.cdh file\n";
+                return;
+            }
+            for (int var = 0; var < n; ++var) {
+                std::string line;
+                std::getline(inFile, line);
+
+                std::stringstream ss(line);
+                std::string typeName, colorsPart;
+
+                if (!std::getline(ss, typeName, '|') || !std::getline(ss, colorsPart, '|'))
+                {
+                    std::cerr << "Invalid line format: " << line << "\n";
+                    continue;
+                }
+
+                lang* custom=new customLang;
+                custom->langName=typeName;
+                stringTolang.emplace(typeName,custom);
+            }
+        }
+
+        void insert(snippetBaseClass* snippet){
+            stringTolang[snippet->getLang()]->snippets.push_back(snippet);
+        }
 };
 
 
@@ -52,6 +104,7 @@ class tagHolder{
                 noTags=true;
                 return;
             }
+            noTags=false;
             assist::make_appData_filePath(tagFile);
             std::ifstream inFile(tagFile, std::ios::in);
             if (!inFile.is_open()){
