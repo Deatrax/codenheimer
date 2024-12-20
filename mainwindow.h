@@ -252,7 +252,7 @@ public:
     void setMainIndex(int n);
     void readData();
     static int firstTimeInit();
-    static void readUconfig();
+    void readUconfig();
 private slots:
     void on_sidebarButton_clicked();
 
@@ -283,6 +283,8 @@ protected:
     std::string vaultLocation;
     std::string username;
     std::string hashResult;
+    tagHolder* mainTagHolder;
+    langHolder* mainLangHolder;
 
 
     void loadCustomFonts();

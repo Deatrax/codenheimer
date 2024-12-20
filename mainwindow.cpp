@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include "predefines.h"
 
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -30,17 +32,15 @@ MainWindow::~MainWindow()
         centreSidebarButtons();
         setSidebarButtonIcons();
 
-        //testing holders
-        tagHolder tg(5);
-        langHolder langs(5);
-        langs.testPrintCustomLang("typeName5");
-        langs.testPrintCustomLang("typeName4");
-        qDebug("the size of tagHolder:%d ",sizeof(tg));
-        qDebug("the size of langHolder:%d ",sizeof(langs));
-        qDebug("the size of this:%d ",sizeof(*this));
-
         readUconfig();
         readData();
+
+        //testing holders
+        mainTagHolder=new tagHolder(tagCount);
+        mainLangHolder=new langHolder(additionalTypeCount);
+        mainLangHolder->testPrintCustomLang("typeName5");
+        mainLangHolder->testPrintCustomLang("typeName4");
+
 
         //testing the snippet previewBox
         // for(int i=0;i<5;i++){
@@ -212,7 +212,23 @@ MainWindow::~MainWindow()
     }
 
     void MainWindow::readUconfig(){
+        char uconfigFile[500]="uconfig.cdh";
+        assist::make_appData_filePath(uconfigFile);
+        std::ifstream uconfigStream(uconfigFile, std::ios::in);
+        if(!uconfigStream.is_open()){
+            qDebug("Failed to open uconfig.cdh");
+            return;
+        }
+        std::getline(uconfigStream,username);
+        std::getline(uconfigStream,hashResult);
+        std::getline(uconfigStream,vaultLocation);
 
+        std::string tagC, typeC;
+        std::getline(uconfigStream,tagC);
+        std::getline(uconfigStream,typeC);
+        tagCount=std::stoi(tagC);
+        additionalTypeCount=std::stoi(typeC);
+        qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
     }
 
     void MainWindow::readData(){
