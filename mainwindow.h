@@ -287,6 +287,7 @@ protected:
     langHolder* mainLangHolder;
 
 
+
     void loadCustomFonts();
     void centreSidebarButtons();
     void setSidebarButtonIcons();
