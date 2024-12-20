@@ -5,7 +5,6 @@
 // #include <QString>
 #include <iostream>
 #include <QTextDocument>
-#include "helperFunctions.h"
 
 class snippetBaseClass
 {

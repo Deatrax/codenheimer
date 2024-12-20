@@ -32,10 +32,11 @@ MainWindow::~MainWindow()
         centreSidebarButtons();
         setSidebarButtonIcons();
 
+        readUconfig();
+
         mainTagHolder=new tagHolder(tagCount);
         mainLangHolder=new langHolder(additionalTypeCount);
 
-        readUconfig();
         readData();
 
         //testing holders
@@ -267,7 +268,7 @@ MainWindow::~MainWindow()
             snippetBaseClass* obj=generateSnippetObject(lang);
             obj->innit(name,filename,lineNum,lang,tags);
             mainLangHolder->insert(obj);
-            mainTagHolder->insert(obj);
+            if(ifTags=="tags")mainTagHolder->insert(obj);
 
             // Output or use the tags for testing
             std::cout << "Name: " << name << ", Filename: " << filename

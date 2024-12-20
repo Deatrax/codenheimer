@@ -60,7 +60,7 @@ class snippetCustom : public snippetLiveClass
 {
 
 private:
-    std::unordered_map<std::string,std::vector<string>> colorsData;
+    std::unordered_map<std::string,std::vector<std::string>> colorsData;
     KeywordHighlighterCUSTOM *highlighter;
 
 public:
