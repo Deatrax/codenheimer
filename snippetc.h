@@ -6,9 +6,9 @@
 #include <QSyntaxHighlighter>
 #include <QRegularExpression>
 #include <QTextCharFormat>
-class KeywordHighlighter : public QSyntaxHighlighter {
+class KeywordHighlighterC : public QSyntaxHighlighter {
 public:
-    KeywordHighlighter(QTextDocument *parent = nullptr) : QSyntaxHighlighter(parent) {
+    KeywordHighlighterC(QTextDocument *parent = nullptr) : QSyntaxHighlighter(parent) {
         // Format for keywords like int and string
         QTextCharFormat blueFormat;
         blueFormat.setForeground(Qt::blue);
@@ -55,16 +55,16 @@ private:
 
 
 
-#include "snippetliveclass.h";
+#include "snippetliveclass.h"
 class snippetC : public snippetLiveClass
 {
 
 private:
-    KeywordHighlighter *highlighter;
+    KeywordHighlighterC *highlighter;
 public:
     snippetC();
 
-    virtual void setEditor(QTextDocument*doc) override;
+    void setEditor(QTextDocument*doc) override;
 };
 
 #endif // SNIPPETC_H

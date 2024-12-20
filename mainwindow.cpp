@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include "predefines.h"
 
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -30,17 +32,17 @@ MainWindow::~MainWindow()
         centreSidebarButtons();
         setSidebarButtonIcons();
 
-        //testing holders
-        tagHolder tg(5);
-        langHolder langs(5);
-        langs.testPrintCustomLang("typeName5");
-        langs.testPrintCustomLang("typeName4");
-        qDebug("the size of tagHolder:%d ",sizeof(tg));
-        qDebug("the size of langHolder:%d ",sizeof(langs));
-        qDebug("the size of this:%d ",sizeof(*this));
-
         readUconfig();
+
+        mainTagHolder=new tagHolder(tagCount);
+        mainLangHolder=new langHolder(additionalTypeCount);
+
         readData();
+
+        //testing holders
+        mainLangHolder->testPrintCustomLang("typeName5");
+        mainLangHolder->testPrintCustomLang("typeName4");
+
 
         //testing the snippet previewBox
         // for(int i=0;i<5;i++){
@@ -212,11 +214,104 @@ MainWindow::~MainWindow()
     }
 
     void MainWindow::readUconfig(){
+        char uconfigFile[500]="uconfig.cdh";
+        assist::make_appData_filePath(uconfigFile);
+        std::ifstream uconfigStream(uconfigFile, std::ios::in);
+        if(!uconfigStream.is_open()){
+            qDebug("Failed to open uconfig.cdh");
+            return;
+        }
+        std::getline(uconfigStream,username);
+        std::getline(uconfigStream,hashResult);
+        std::getline(uconfigStream,vaultLocation);
 
+        std::string tagC, typeC;
+        std::getline(uconfigStream,tagC);
+        std::getline(uconfigStream,typeC);
+        tagCount=std::stoi(tagC);
+        additionalTypeCount=std::stoi(typeC);
+        qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
     }
 
     void MainWindow::readData(){
-        //data read args
+        char snippetVaultFile[500];
+        if(vaultLocation=="default"){
+            qDebug("the vault location is default");
+            std::strncpy(snippetVaultFile, "snipDatVault.cdh", sizeof(snippetVaultFile) - 1);
+            snippetVaultFile[sizeof(snippetVaultFile) - 1] = '\0';
+            assist::make_appData_filePath(snippetVaultFile);
+        }else{
+            std::strncpy(snippetVaultFile, vaultLocation.c_str(), sizeof(snippetVaultFile) - 1);
+            snippetVaultFile[sizeof(snippetVaultFile) - 1] = '\0';
+        }
+
+
+        std::string lineStore;
+        std::ifstream snippetVaultStream(snippetVaultFile,std::ios::in);
+        int lineNum=1;
+        while(std::getline(snippetVaultStream,lineStore)){
+            string ifTags,name,filename,lang,tag;
+            std::vector<std::string> tags;
+            std::stringstream ss(lineStore);
+            getline(ss,name,',');
+            getline(ss,filename,',');
+            getline(ss,lang,',');
+
+            getline(ss,ifTags,',');
+            if (ifTags == "tags") {
+
+                // Read the remaining part of the line for tags
+                while (std::getline(ss, tag, ',')) {
+                    tags.push_back(tag);
+                }
+            }
+            snippetBaseClass* obj=generateSnippetObject(lang);
+            obj->innit(name,filename,lineNum,lang,tags);
+            mainLangHolder->insert(obj);
+            if(ifTags=="tags")mainTagHolder->insert(obj);
+            mainStorage.push_back(obj);
+            //THIS IS WHERE JESSAN WILL ADD INSERT OF SEARCH CLASS
+
+            // Output or use the tags for testing
+            std::cout << "Name: " << name << ", Filename: " << filename
+                      << ", Lang: " << lang << ", Tags: ";
+            if(ifTags=="tags"){
+                for (const auto& t : tags) {
+                    std::cout << t << " ";
+                }
+            }
+
+            std::cout << std::endl;
+            lineNum++;
+        }
+    }
+
+    snippetBaseClass* MainWindow::generateSnippetObject(std::string lang){
+        snippetBaseClass* obj;
+        if(lang=="c"){
+            obj=new snippetC;
+            return obj;
+        }
+        if(lang=="cpp"){
+            obj=new snippetCPP;
+            return obj;
+        }
+        if(lang=="css"){
+            obj=new snippetCSS;
+            return obj;
+        }
+        if(lang=="java"){
+            obj=new snippetJAVA;
+            return obj;
+        }
+        if(lang=="py"){
+            obj=new snippetPY;
+            return obj;
+        }
+        else{
+            obj=new snippetCustom;
+            return obj;
+        }
 
     }
 

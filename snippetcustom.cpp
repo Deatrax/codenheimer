@@ -11,3 +11,7 @@ void snippetCustom::putColors(std::unordered_map<std::string, std::vector<std::s
 {
     this->colorsData=colorsData;
 }
+
+void snippetCustom::setEditor(QTextDocument *doc)
+{
+}

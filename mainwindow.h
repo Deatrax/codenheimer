@@ -9,6 +9,12 @@
 #include <iostream>
 #include <sstream>
 #include "snippetbaseclass.h"
+#include "snippetc.h"
+#include "snippetcpp.h"
+#include "snippetcss.h"
+#include "snippetjava.h"
+#include "snippetpy.h"
+#include "snippetcustom.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -164,12 +170,21 @@ class langHolder{
         }
 
         void insert(snippetBaseClass* snippet){
-            stringTolang[snippet->getLang()]->snippetsStorage.push_back(snippet);
+            // std::cerr<<"enetered insert of lang holder"<<std::endl;
+            if (stringTolang.find(snippet->getLang()) != stringTolang.end()) {
+                // std::cerr<<"find condition passed in the lang holder"<<std::endl;
+                stringTolang[snippet->getLang()]->snippetsStorage.push_back(snippet);
+            } else {
+                // std::cerr << "Language " << snippet->getLang() << " not found in stringTolang!" << std::endl;
+                return;
+            }
+            // std::cerr<<"pushed back the snippet to where it belongs"<<std::endl;
             if (snippet->isCustom())
-            {
+            {   
+                std::cerr<<"snippet is custom"<<std::endl;
                 snippet->putColors(stringTolang[snippet->getLang()]->returnCustomColors());
             }
-            
+            // std::cerr<<"exiting insert of lang holder"<<std::endl;
         }
 
         std::vector<snippetBaseClass*>& getSnippetsFromLang(std::string lang){
@@ -201,7 +216,7 @@ class tagHolder{
         };
 
         std::unordered_map<std::string, std::vector<snippetBaseClass*>> storage;
-        std::unordered_map<std::string,tag>tagStorage;
+        std::unordered_map<std::string,tag*>tagStorage;
         char tagFile[500]="tagDat.cdh";
         bool noTags;
 
@@ -219,19 +234,33 @@ class tagHolder{
                 return;
             }
             for (int var = 0; var < n; ++var) {
-                std::string str;
+                std::string str,tgName,tgColor;
                 std::getline(inFile, str);
                 qDebug("got line: %s",str.c_str());
-                //input logic is incomplete still
+                std::stringstream ss(str);
+                std::getline(ss,tgName,',');
+                std::getline(ss,tgColor,',');
+                tag* tg=new tag;
+                tg->hasData=true;
+                tg->tagColor=tgColor;
+                tg->tagName=tgName;
+                tagStorage.emplace(tgName,tg);
             }
         }
 
         void insert(snippetBaseClass* snippet){
+            std::cerr<<"entered the insert of tagHolder"<<std::endl;
             std::vector<std::string> gotTags=snippet->getTags();
+            std::cerr<<"got the list of tags from the snippet"<<std::endl;
             for (int i = 0; i < gotTags.size(); i++) {
-                if(tagStorage[gotTags[i]].hasData)continue;
+                //if(tagStorage[gotTags[i]].hasData)continue;
+                if(tagStorage.find(gotTags[i])==tagStorage.end()){
+                    std::cerr<<"tag: "<<gotTags[i]<<" was not found in tag list"<<std::endl;
+                    continue;
+                }
                 storage[gotTags[i]].push_back(snippet);
             }
+            std::cerr<<"loop completed, exiting tagHolder insert"<<std::endl;
         }
 
         std::vector<snippetBaseClass*>& getSnippetsFromTag(std::string tag){
@@ -252,7 +281,7 @@ public:
     void setMainIndex(int n);
     void readData();
     static int firstTimeInit();
-    static void readUconfig();
+    void readUconfig();
 private slots:
     void on_sidebarButton_clicked();
 
@@ -283,12 +312,16 @@ protected:
     std::string vaultLocation;
     std::string username;
     std::string hashResult;
+    tagHolder* mainTagHolder;
+    langHolder* mainLangHolder;
+    std::vector<snippetBaseClass*> mainStorage;
+
 
 
     void loadCustomFonts();
     void centreSidebarButtons();
     void setSidebarButtonIcons();
     void prepareCentralArea();
-
+    snippetBaseClass *generateSnippetObject(std::string lang);
 };
 #endif // MAINWINDOW_H
