@@ -170,12 +170,21 @@ class langHolder{
         }
 
         void insert(snippetBaseClass* snippet){
-            stringTolang[snippet->getLang()]->snippetsStorage.push_back(snippet);
+            std::cerr<<"enetered insert of lang holder"<<std::endl;
+            if (stringTolang.find(snippet->getLang()) != stringTolang.end()) {
+                std::cerr<<"find condition passed in the lang holder"<<std::endl;
+                stringTolang[snippet->getLang()]->snippetsStorage.push_back(snippet);
+            } else {
+                std::cerr << "Language " << snippet->getLang() << " not found in stringTolang!" << std::endl;
+                return;
+            }
+            std::cerr<<"pushed back the snippet to where it belongs"<<std::endl;
             if (snippet->isCustom())
-            {
+            {   
+                std::cerr<<"snippet is custom"<<std::endl;
                 snippet->putColors(stringTolang[snippet->getLang()]->returnCustomColors());
             }
-            
+            std::cerr<<"exiting insert of lang holder"<<std::endl;
         }
 
         std::vector<snippetBaseClass*>& getSnippetsFromLang(std::string lang){
