@@ -243,6 +243,37 @@ MainWindow::~MainWindow()
             snippetVaultFile[sizeof(snippetVaultFile) - 1] = '\0';
         }
 
+
+        std::string lineStore;
+        std::ifstream snippetVaultStream(snippetVaultFile,std::ios::in);
+
+        while(std::getline(snippetVaultStream,lineStore)){
+            string ifTags,name,filename,lang,tag;
+            std::vector<std::string> tags;
+            std::stringstream ss(lineStore);
+            getline(ss,name,',');
+            getline(ss,filename,',');
+            getline(ss,lang,',');
+            getline(ss,ifTags,',');
+            if (ifTags == "tags") {
+
+                // Read the remaining part of the line for tags
+                while (std::getline(ss, tag, ',')) {
+                    tags.push_back(tag);  // Store each tag in the vector
+                }
+            }
+            // Output or use the tags as needed
+            std::cout << "Name: " << name << ", Filename: " << filename
+                      << ", Lang: " << lang << ", Tags: ";
+            if(ifTags=="tags"){
+                for (const auto& t : tags) {
+                    std::cout << t << " ";  // Print each tag
+                }
+            }
+
+            std::cout << std::endl;
+
+        }
     }
 
 
