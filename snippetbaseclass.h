@@ -5,6 +5,7 @@
 // #include <QString>
 #include <iostream>
 #include <QTextDocument>
+#include "helperFunctions.h"
 
 class snippetBaseClass
 {
@@ -38,6 +39,12 @@ public:
     virtual std::vector<std::string> getTags()=0;
 
     virtual void setEditor(QTextDocument*)=0;
+
+    virtual std::string getLang()=0;
+    
+    virtual bool isCustom()=0;
+
+    virtual void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData)=0;
     
 };
 

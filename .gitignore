@@ -75,3 +75,9 @@ CMakeLists.txt.user*
 #custom added
 initialsetup.txt
 datafileSample.txt
+.vscode/c_cpp_properties.json
+.vscode/custom_theme.jsonc
+.vscode/launch.json
+.vscode/prev launch.json
+.vscode/settings.json
+.vscode/tasks.json

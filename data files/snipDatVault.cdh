@@ -1,4 +1,6 @@
-name,filename,lang,tags,,,
-name,filename,lang,tags,,,
-name,filename,lang,tags,,,
-name,filename,lang,tags,,,
+name,filename,lang|tags,,,
+name,filename,lang|tags,,,
+name,filename,lang|tags,,,
+name,filename,lang|tags,,,
+binary-sort,binary-sort.scdh,cpp|notags
+trie,trie.scdh,c|notags
