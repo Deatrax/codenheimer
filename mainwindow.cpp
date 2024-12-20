@@ -232,7 +232,16 @@ MainWindow::~MainWindow()
     }
 
     void MainWindow::readData(){
-        //data read args
+        char snippetVaultFile[500];
+        if(vaultLocation=="default"){
+            qDebug("the vault location is default");
+            std::strncpy(snippetVaultFile, "snipDatVault.cdh", sizeof(snippetVaultFile) - 1);
+            snippetVaultFile[sizeof(snippetVaultFile) - 1] = '\0';
+            assist::make_appData_filePath(snippetVaultFile);
+        }else{
+            std::strncpy(snippetVaultFile, vaultLocation.c_str(), sizeof(snippetVaultFile) - 1);
+            snippetVaultFile[sizeof(snippetVaultFile) - 1] = '\0';
+        }
 
     }
 
