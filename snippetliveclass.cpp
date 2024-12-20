@@ -35,3 +35,13 @@ std::vector<std::string> snippetLiveClass::getTags()
 std::string snippetLiveClass::getLang() {
     return lang;
 }
+
+bool snippetLiveClass::isCustom()
+{
+    return false;
+}
+
+void snippetLiveClass::putColors(std::unordered_map<std::string, std::vector<std::string>> &colorsData)
+{
+    return;
+}

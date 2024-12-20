@@ -9,7 +9,7 @@ protected:
     std::vector<std::string> tags;
 public:
     snippetLiveClass();
-    virtual void innit
+    void innit
     (
         std::string nam,
         std::string filenam,
@@ -18,19 +18,23 @@ public:
         std::vector<std::string> tgs
     ) override;
 
-    virtual void getInfo
+    void getInfo
     (
         std::string &nam,
         std::string &lng, 
         std::vector<std::string> &tgs
     ) override;
 
-    virtual std::string getSnippet() override;
+    std::string getSnippet() override;
 
-    virtual std::vector<std::string> getTags() override;
+    std::vector<std::string> getTags() override;
 
     // virtual void setEditor(QTextDocument*) override;
-    virtual std::string getLang() override;
+    std::string getLang() override;
+
+    virtual bool isCustom() override;
+
+    void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData) override;
 };
 
 #endif // SNIPPETLIVECLASS_H

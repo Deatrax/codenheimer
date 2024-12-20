@@ -30,9 +30,19 @@ MainWindow::~MainWindow()
         centreSidebarButtons();
         setSidebarButtonIcons();
 
+        //testing holders
         tagHolder tg(5);
+        langHolder langs(5);
+        langs.testPrintCustomLang("typeName5");
+        langs.testPrintCustomLang("typeName4");
+        qDebug("the size of tagHolder:%d ",sizeof(tg));
+        qDebug("the size of langHolder:%d ",sizeof(langs));
+        qDebug("the size of this:%d ",sizeof(*this));
 
-        //testing the snipper previewBox
+        readUconfig();
+        readData();
+
+        //testing the snippet previewBox
         // for(int i=0;i<5;i++){
         //     snippetPreviewBox* snp=new snippetPreviewBox(this);
         //     ui->testbox->layout()->addWidget(snp);
@@ -44,6 +54,10 @@ MainWindow::~MainWindow()
         //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
     }
+
+    // void MainWindow::readData(){
+
+    // }
 
     int MainWindow::firstTimeInit()
     {
@@ -197,8 +211,13 @@ MainWindow::~MainWindow()
         ui->centralBrowseButton->setIconSize(QSize(32, 28));
     }
 
+    void MainWindow::readUconfig(){
+
+    }
+
     void MainWindow::readData(){
         //data read args
+
     }
 
 

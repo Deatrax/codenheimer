@@ -42,6 +42,10 @@ public:
 
     virtual std::string getLang()=0;
     
+    virtual bool isCustom()=0;
+
+    virtual void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData)=0;
+    
 };
 
 #endif // SNIPPETBASECLASS_H

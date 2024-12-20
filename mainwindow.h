@@ -22,12 +22,65 @@ class langHolder{
         class lang{
             public:
                 std::string langName;
-                std::vector<snippetBaseClass*> snippets;
+                std::vector<snippetBaseClass*> snippetsStorage;
+
+                virtual void putCustomColors(std::unordered_map<std::string,std::vector<std::string>>& passed){
+                    //lol
+                }
+
+                virtual int getNoOfCustomColors(){
+                    //lol
+                }
+
+                virtual std::string getNthCustomColor(int n){
+                    //lol
+                }
+
+                virtual void printColorsOFCustomLang() const {
+                    std::cerr<<"ERROR base class function was called"<<std::endl;
+                }
+
+                virtual std::unordered_map<std::string,std::vector<std::string>>& returnCustomColors(){
+                    //lol
+                }
         };
 
         class customLang: public lang{
             public:
                 std::unordered_map<std::string,std::vector<std::string>> colorsData;
+                void putCustomColors(std::unordered_map<std::string,std::vector<std::string>>& passed) override{
+                    colorsData=passed;
+                }
+
+                int getNoOfCustomColors() override{
+                    return colorsData.size();
+                }
+
+                std::string getNthCustomColor(int n) override {
+                    auto itr=colorsData.begin();
+                    std::advance(itr, n);
+
+                    return itr->first;
+                }
+
+                void printColorsOFCustomLang() const override {
+                    std::cout<<"derieved class function was called"<<std::endl;
+                    for (const auto& pair : colorsData) {
+                        std::cout << pair.first << ": ";
+                        for (size_t i = 0; i < pair.second.size(); ++i) {
+                            std::cout << pair.second[i];
+                            if (i < pair.second.size() - 1) {
+                                std::cout << ", ";
+                            }
+                        }
+                        std::cout << std::endl;
+                    }
+                }
+
+                std::unordered_map<std::string,std::vector<std::string>>& returnCustomColors(){
+                    return colorsData;
+                }
+                
         };
 
         std::unordered_map<std::string, lang*>stringTolang;
@@ -51,6 +104,7 @@ class langHolder{
             prepPredefinedLangs();
             if(n==0){
                 noAdditionallangs=true;
+                return;
             }
             noAdditionallangs=false;
             assist::make_appData_filePath(langFile);
@@ -71,19 +125,72 @@ class langHolder{
                     std::cerr << "Invalid line format: " << line << "\n";
                     continue;
                 }
+                std::cout << "TypeName: " << typeName << std::endl;
+                std::cout << "Colors Part: " << colorsPart << std::endl;
+
+                std::unordered_map<std::string, std::vector<std::string>> colorsDataParsed;
+                std::stringstream colorsStream(colorsPart);
+                std::string colorBlock;
+
+                // Parse the color blocks
+                while (std::getline(colorsStream, colorBlock, '|')) {
+                    std::stringstream colorStream(colorBlock);
+                    std::string colorName, wordList;
+
+                    // Parse color and its associated words
+                    if (std::getline(colorStream, colorName, ';') && std::getline(colorStream, wordList)) {
+                        std::stringstream wordsStream(wordList);
+                        std::string word;
+
+                        while (std::getline(wordsStream, word, ',')) {
+                            colorsDataParsed[colorName].push_back(word);
+                        }
+
+                        std::cout << "Parsed color: " << colorName << std::endl;
+                        for (const auto &w : colorsDataParsed[colorName]) {
+                            std::cout << "  Word: " << w << std::endl;
+                        }
+                    } else {
+                        std::cerr << "Invalid color block: " << colorBlock << "\n";
+                    }
+                }
+                
 
                 lang* custom=new customLang;
                 custom->langName=typeName;
+                custom->putCustomColors(colorsDataParsed);
                 stringTolang.emplace(typeName,custom);
             }
         }
 
         void insert(snippetBaseClass* snippet){
-            stringTolang[snippet->getLang()]->snippets.push_back(snippet);
+            stringTolang[snippet->getLang()]->snippetsStorage.push_back(snippet);
+            if (snippet->isCustom())
+            {
+                snippet->putColors(stringTolang[snippet->getLang()]->returnCustomColors());
+            }
+            
+        }
+
+        std::vector<snippetBaseClass*>& getSnippetsFromLang(std::string lang){
+            return stringTolang[lang]->snippetsStorage;
+        }
+
+        void testPrintCustomLang(const std::string& lng) {
+            std::cout << "Test printing......." << std::endl;
+            if (stringTolang.find(lng) == stringTolang.end()) {
+                std::cerr << "Error: Language '" << lng << "' not found in stringTolang.\n";
+                return;
+            }
+            stringTolang[lng]->printColorsOFCustomLang();
         }
 };
 
-
+/**
+ * @brief a class for holing the info like tag name and the color of the 
+ * tag as well as store pointers to the corresponding snippet classes
+ * 
+ */
 class tagHolder{
 
     private:
@@ -145,7 +252,7 @@ public:
     void setMainIndex(int n);
     void readData();
     static int firstTimeInit();
-
+    static void readUconfig();
 private slots:
     void on_sidebarButton_clicked();
 
@@ -171,6 +278,12 @@ private:
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
+    int tagCount;
+    int additionalTypeCount;
+    std::string vaultLocation;
+    std::string username;
+    std::string hashResult;
+
 
     void loadCustomFonts();
     void centreSidebarButtons();
