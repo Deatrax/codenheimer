@@ -269,6 +269,8 @@ MainWindow::~MainWindow()
             obj->innit(name,filename,lineNum,lang,tags);
             mainLangHolder->insert(obj);
             if(ifTags=="tags")mainTagHolder->insert(obj);
+            mainStorage.push_back(obj);
+            //THIS IS WHERE JESSAN WILL ADD INSERT OF SEARCH CLASS
 
             // Output or use the tags for testing
             std::cout << "Name: " << name << ", Filename: " << filename
