@@ -45,3 +45,8 @@ void snippetLiveClass::putColors(std::unordered_map<std::string, std::vector<std
 {
     return;
 }
+
+void snippetLiveClass::putTags(std::vector<std::string> &foundTags)
+{
+    tags=foundTags;
+}

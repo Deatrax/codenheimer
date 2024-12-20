@@ -9,6 +9,12 @@
 #include <iostream>
 #include <sstream>
 #include "snippetbaseclass.h"
+#include "snippetc.h"
+#include "snippetcpp.h"
+#include "snippetcss.h"
+#include "snippetjava.h"
+#include "snippetpy.h"
+#include "snippetcustom.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -285,6 +291,7 @@ protected:
     std::string hashResult;
     tagHolder* mainTagHolder;
     langHolder* mainLangHolder;
+    std::vector<snippetBaseClass*> mainStorage;
 
 
 
@@ -292,6 +299,6 @@ protected:
     void centreSidebarButtons();
     void setSidebarButtonIcons();
     void prepareCentralArea();
-
+    snippetBaseClass *generateSnippetObject(std::string lang);
 };
 #endif // MAINWINDOW_H

@@ -4,5 +4,5 @@ snippetC::snippetC() {}
 
 void snippetC::setEditor(QTextDocument* doc)
 {
-    highlighter = new KeywordHighlighter(doc);
+    highlighter = new KeywordHighlighterC(doc);
 }

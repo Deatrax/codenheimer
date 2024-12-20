@@ -246,7 +246,7 @@ MainWindow::~MainWindow()
 
         std::string lineStore;
         std::ifstream snippetVaultStream(snippetVaultFile,std::ios::in);
-
+        int lineNum=1;
         while(std::getline(snippetVaultStream,lineStore)){
             string ifTags,name,filename,lang,tag;
             std::vector<std::string> tags;
@@ -254,26 +254,61 @@ MainWindow::~MainWindow()
             getline(ss,name,',');
             getline(ss,filename,',');
             getline(ss,lang,',');
+
             getline(ss,ifTags,',');
             if (ifTags == "tags") {
 
                 // Read the remaining part of the line for tags
                 while (std::getline(ss, tag, ',')) {
-                    tags.push_back(tag);  // Store each tag in the vector
+                    tags.push_back(tag);
                 }
             }
-            // Output or use the tags as needed
+            snippetBaseClass* obj=generateSnippetObject(lang);
+            obj->innit(name,filename,lineNum,lang,tags);
+            // mainLangHolder->insert(obj);
+            // mainTagHolder->insert(obj);
+
+            // Output or use the tags for testing
             std::cout << "Name: " << name << ", Filename: " << filename
                       << ", Lang: " << lang << ", Tags: ";
             if(ifTags=="tags"){
                 for (const auto& t : tags) {
-                    std::cout << t << " ";  // Print each tag
+                    std::cout << t << " ";
                 }
             }
 
             std::cout << std::endl;
-
+            lineNum++;
         }
+    }
+
+    snippetBaseClass* MainWindow::generateSnippetObject(std::string lang){
+        snippetBaseClass* obj;
+        if(lang=="c"){
+            obj=new snippetC;
+            return obj;
+        }
+        if(lang=="cpp"){
+            obj=new snippetCPP;
+            return obj;
+        }
+        if(lang=="css"){
+            obj=new snippetCSS;
+            return obj;
+        }
+        if(lang=="java"){
+            obj=new snippetJAVA;
+            return obj;
+        }
+        if(lang=="py"){
+            obj=new snippetPY;
+            return obj;
+        }
+        else{
+            obj=new snippetCustom;
+            return obj;
+        }
+
     }
 
 

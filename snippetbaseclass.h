@@ -45,6 +45,8 @@ public:
     virtual bool isCustom()=0;
 
     virtual void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData)=0;
+
+    virtual void putTags(std::vector<std::string>&)=0;
     
 };
 

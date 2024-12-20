@@ -35,6 +35,8 @@ public:
     virtual bool isCustom() override;
 
     void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData) override;
+
+    void putTags(std::vector<std::string>& foundTags) override;
 };
 
 #endif // SNIPPETLIVECLASS_H
