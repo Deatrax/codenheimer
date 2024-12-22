@@ -1,6 +1,6 @@
-name,filename,lang|tags,,,
-name,filename,lang|tags,,,
-name,filename,lang|tags,,,
-name,filename,lang|tags,,,
-binary-sort,binary-sort.scdh,cpp|notags
-trie,trie.scdh,c|notags
+name,filename,c,tags,cp,mid,choluk
+name,filename,cpp,tags,ds,coa,dm
+name,filename,py,tags,gf,bf,carrer
+name,filename,css,tags,iut,kuet,buet
+binary-sort,binary-sort.scdh,cpp,notags
+trie,trie.scdh,java,notags
