@@ -22,9 +22,39 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-
+/**
+ * @brief The langHolder class is designed to manage and store snippets efficiently 
+ *        based on their language or type. It facilitates quick access to snippets 
+ *        categorized by language, which is necessary for browsing or searching
+ *        in the application.\n 
+ *
+ * The class contains two internal private classes:
+ *  - lang: A base class representing a generic language. It provides virtual methods for 
+ *          managing and retrieving custom color data, allowing for extensibility.
+ *  - customLang: A derived class from lang that implements functionality for handling 
+ *                custom languages with specific color coding for syntax highlighting or 
+ *                other purposes.
+ *
+ * @details Key Features:
+ *  - Predefined languages: A set of common programming languages (e.g., C++, Python, Java) 
+ *                          are preloaded for quick access.\n 
+ *  - Custom languages: Users can define additional languages with custom color mappings, 
+ *                      which are loaded from an external file.\n 
+ *  - Snippet management: The class maintains a collection of snippets for each language, 
+ *                        enabling efficient organization and retrieval.
+ *
+ * Usage:
+ *  - Initialize the langHolder with the desired number of custom languages.
+ *  - Insert snippets into the holder using the insert() method.
+ *  - Retrieve snippets or perform operations like printing custom language data.
+ */
 class langHolder{
     private:
+        /**
+         * @brief The lang class serves as a base class for representing a language.
+         *        It provides a virtual interface for managing custom colors and 
+         *        storing associated snippets.
+         */
         class lang{
             public:
                 std::string langName;
@@ -203,8 +233,15 @@ class langHolder{
 
 /**
  * @brief a class for holing the info like tag name and the color of the 
- * tag as well as store pointers to the corresponding snippet classes
+ *  tag as well as store pointers to the corresponding snippet classes. 
  * 
+ *  this is done by implementing an internal struct called tag that holds that
+ *  tag's information: tag name, tag color. the tag's information can be accessed
+ *  by using the hashmap (unordered_map) by passing the string of the tag name
+ *  and getting a pointer to the tag in return. 
+ *  
+ *  the tag's information is held by a hashmap (unordered_map) with strings as keys and 
+ *  vectors at the key location 
  */
 class tagHolder{
 
@@ -221,6 +258,11 @@ class tagHolder{
         bool noTags;
 
     public:
+        /**
+         * @brief Construct a new tag Holder object. 
+         * 
+         * @param n takes in the number of tags and then reads them from the tagDat.cdh file. 
+         */
         tagHolder(int n){
             if(n==0){
                 noTags=true;
@@ -248,6 +290,11 @@ class tagHolder{
             }
         }
 
+        /**
+         * @brief inserts a snippet's pointer into the vector of the tag's hashmap
+         * 
+         * @param snippet 
+         */
         void insert(snippetBaseClass* snippet){
             std::cerr<<"entered the insert of tagHolder"<<std::endl;
             std::vector<std::string> gotTags=snippet->getTags();
@@ -263,9 +310,16 @@ class tagHolder{
             std::cerr<<"loop completed, exiting tagHolder insert"<<std::endl;
         }
 
+        /**
+         * @brief Get the Snippets From Tag object. Uses the unordered_map to get the pointer to the snippet
+         * 
+         * @param tag 
+         * @return std::vector<snippetBaseClass*>& 
+         */
         std::vector<snippetBaseClass*>& getSnippetsFromTag(std::string tag){
             return storage[tag];
         }
+    //END OF PUBLIC
 };
 
 
@@ -280,6 +334,14 @@ public:
     QFont getFont(std::string str);
     void setMainIndex(int n);
     void readData();
+    /**
+     * @brief makes and prepares all the folders and files in the
+     *  appdata directory for the app to use when the app is first 
+     *  run by the user so that the app doesn't crash when it tries
+     *  to access the data files it needs.  
+     * 
+     * @return int - different values based on the execution of the function
+     */
     static int firstTimeInit();
     void readUconfig();
 private slots:
@@ -301,27 +363,34 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
     void loadConfig();
     char coreUserConfig[1000];
 
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
-    int tagCount;
-    int additionalTypeCount;
-    std::string vaultLocation;
-    std::string username;
-    std::string hashResult;
-    tagHolder* mainTagHolder;
-    langHolder* mainLangHolder;
-    std::vector<snippetBaseClass*> mainStorage;
+    int tagCount; //the number of tags that exists
+    int additionalTypeCount; //number of user added types or languages
+    std::string vaultLocation; //location of the snippet files
+    std::string username; //username of the user
+    std::string hashResult; //hashresult of the password
+    tagHolder* mainTagHolder; //pointer to hold a tagHolder object to be added in readData() function
+    langHolder* mainLangHolder; //pointer to hold a langHolder object to be added in readData() function
+    std::vector<snippetBaseClass*> mainStorage; // a vector to hold all the snippet's pointers
 
 
-
+    /// @brief loads all the custom fonts into the QFont objects that have been decleared in the header
     void loadCustomFonts();
+    /// @brief centering the sidebar buttons
     void centreSidebarButtons();
+    /// @brief assigning the icons of the sidebar buttons
     void setSidebarButtonIcons();
+    /// @brief prepares the central area with the search, add new and browse islands
     void prepareCentralArea();
+    /// @brief generates a snippet object like a predefined cpp, c, java, py, css or custom. 
+    /// @param lang 
+    /// @return returns a snippetBaseClass* that uses polymorphism to store a snippetliveclass derived object. 
     snippetBaseClass *generateSnippetObject(std::string lang);
 };
 #endif // MAINWINDOW_H
