@@ -477,7 +477,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -777,14 +777,30 @@ QPushButton:hover {
           <widget class="QLabel" name="label_4">
            <property name="geometry">
             <rect>
-             <x>280</x>
-             <y>290</y>
+             <x>70</x>
+             <y>240</y>
              <width>141</width>
              <height>71</height>
             </rect>
            </property>
            <property name="text">
             <string>settings page</string>
+           </property>
+          </widget>
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="geometry">
+            <rect>
+             <x>260</x>
+             <y>110</y>
+             <width>501</width>
+             <height>441</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border:5px solid red</string>
+           </property>
+           <property name="title">
+            <string>Test area</string>
            </property>
           </widget>
          </widget>

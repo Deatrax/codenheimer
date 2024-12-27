@@ -27,10 +27,11 @@ void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, s
     }
 }
 
-void snippetLiveClass::getInfo(std::string& nam, std::string& lng, std::vector<std::string>&tgs)
+void snippetLiveClass::getInfo(std::string& nam, std::string& lng, std::vector<std::string>*tgs)
 {
     nam=name;
     lng=lang;
+    tgs=&tags;
 }
 
 std::string snippetLiveClass::getSnippet()

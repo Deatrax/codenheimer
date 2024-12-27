@@ -19,10 +19,9 @@ public:
     ) override;
 
     void getInfo
-    (
-        std::string &nam,
-        std::string &lng, 
-        std::vector<std::string> &tgs
+    (std::string &nam,
+        std::string &lng,
+        std::vector<std::string> *tgs
     ) override;
 
     std::string getSnippet() override;

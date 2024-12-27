@@ -22,3 +22,9 @@ snippetPreviewBox::~snippetPreviewBox()
 {
     delete ui;
 }
+
+void snippetPreviewBox::assignSnippet(snippetBaseClass* snippet){
+    assignedSnippet=snippet;
+    assignedSnippet->getInfo(name, lang, tags);
+    ui->Name->setText(QString::fromStdString(name));
+}

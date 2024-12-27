@@ -18,7 +18,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-//START OF HUMAN ADDED FUNCTIONS
+//START OF ADDITIONAL NON-SLOT BASED  FUNCTIONS
 
     void MainWindow::loadConfig(){
         setWindowTitle("Codenheimer");
@@ -57,9 +57,7 @@ MainWindow::~MainWindow()
         ui->maincontentsStack->setCurrentIndex(0);
     }
 
-    // void MainWindow::readData(){
-
-    // }
+    
 
     int MainWindow::firstTimeInit()
     {
@@ -316,7 +314,7 @@ MainWindow::~MainWindow()
     }
 
 
-//END OF HUMAN ADDED FUNCTIONS
+//END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
 
 void MainWindow::on_sidebarButton_clicked()
 {

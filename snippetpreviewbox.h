@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <mainwindow.h>
+#include "snippetbaseclass.h"
+
 namespace Ui {
 class snippetPreviewBox;
 }
@@ -15,10 +17,18 @@ public:
     explicit snippetPreviewBox(MainWindow *mainwindow, QWidget *parent = nullptr);
     ~snippetPreviewBox();
 
+    void assignSnippet(snippetBaseClass *snippet);
+protected:
+    void setTags();
 private:
     Ui::snippetPreviewBox *ui;
     MainWindow *masterWindow;
     QFont CutiveMonoFont;
+    snippetBaseClass* assignedSnippet;
+    std::string name;
+    std::string lang;
+    std::vector <std::string>* tags;
+
 };
 
 #endif // SNIPPETPREVIEWBOX_H

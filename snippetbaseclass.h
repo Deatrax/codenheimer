@@ -6,6 +6,10 @@
 #include <iostream>
 #include <QTextDocument>
 
+/**
+ * @brief 
+ * 
+ */
 class snippetBaseClass
 {
 
@@ -30,7 +34,7 @@ public:
     virtual void getInfo(
         std::string &nam,
         std::string &lng,
-        std::vector<std::string> &tgs
+        std::vector<std::string>* tgs
     )=0;
 
     virtual std::string getSnippet()=0;
