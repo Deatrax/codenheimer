@@ -29,7 +29,7 @@ MainWindow::~MainWindow()
  */
 void MainWindow::sandBox(){
     for(int i=0;i<6;i++){
-        snippetPreviewBox* pb=new snippetPreviewBox(this);
+        snippetPreviewBox* pb=new snippetPreviewBox(this,this);
         pb->assignSnippet(mainStorage[i]);
         ui->sandBox->layout()->addWidget(pb);
     }
@@ -269,6 +269,7 @@ void MainWindow::sandBox(){
             string ifTags,name,filename,lang,tag;
             std::vector<std::string> tags;
             std::stringstream ss(lineStore);
+            std::string lockStat;
             getline(ss,name,',');
             getline(ss,filename,',');
             getline(ss,lang,',');

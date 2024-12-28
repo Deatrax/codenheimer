@@ -29,6 +29,7 @@ private:
     std::string lang;
     std::vector <std::string>* tags;
 
+    void setLock();
 };
 
 #endif // SNIPPETPREVIEWBOX_H

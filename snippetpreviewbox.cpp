@@ -9,9 +9,6 @@ snippetPreviewBox::snippetPreviewBox(MainWindow *mainwindow, QWidget *parent)
 {
     ui->setupUi(this);
 
-    //setting the icon
-    QPixmap pixmap(":/images/lockIcon.svg");
-    ui->lockIcon->setPixmap(pixmap.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
     //getting and setting the font
     CutiveMonoFont=masterWindow->getFont("Cutive");
@@ -29,6 +26,7 @@ void snippetPreviewBox::assignSnippet(snippetBaseClass* snippet){
     tags=assignedSnippet->getInfo(name, lang);
     ui->Name->setText(QString::fromStdString(name));
     ui->langLabel->setText(QString::fromStdString(lang));
+    if(assignedSnippet->isLocked()) setLock();
     setTags();
 }
 
@@ -43,4 +41,11 @@ void snippetPreviewBox::setTags(){
         tv->setTag(name, color);
         ui->tagsBox->layout()->addWidget(tv);
     }
+}
+
+void snippetPreviewBox::setLock()
+{
+    //setting the icon
+    QPixmap pixmap(":/images/lockIcon.svg");
+    ui->lockIcon->setPixmap(pixmap.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }

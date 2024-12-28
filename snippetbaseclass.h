@@ -49,6 +49,8 @@ public:
     virtual void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData)=0;
 
     virtual void putTags(std::vector<std::string>&)=0;
+
+    virtual bool isLocked()=0;
     
 };
 

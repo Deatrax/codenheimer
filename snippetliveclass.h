@@ -7,6 +7,7 @@ class snippetLiveClass : public snippetBaseClass
 {
 protected:
     std::vector<std::string> tags;
+    bool isLockedVar;
 public:
     snippetLiveClass();
     void innit
@@ -35,6 +36,8 @@ public:
     void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData) override;
 
     void putTags(std::vector<std::string>& foundTags) override;
+
+    bool isLocked() override;
 };
 
 #endif // SNIPPETLIVECLASS_H

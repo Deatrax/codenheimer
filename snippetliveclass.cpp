@@ -10,11 +10,27 @@ void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, s
     lang=lng;
     tags=tgs;
 
+    size_t pos = filename.find_last_of('.');
+
+    if (pos != std::string::npos) {
+        // Extract the extension
+        std::string extension = filename.substr(pos + 1);
+        qDebug("got the file extension: %s",extension.c_str());
+        // Perform actions based on the extension
+        if (extension == "scdh") {
+            isLockedVar=false;
+        } else if (extension == "pcdh") {
+            isLockedVar=true;
+        }
+    }
+
+
     std::cout << "Snippet Initialized: " << std::endl;
     std::cout << "Name: " << name << std::endl;
     std::cout << "Filename: " << filename << std::endl;
     std::cout << "Line Number: " << lineNum << std::endl;
     std::cout << "Language: " << lang << std::endl;
+    std::cout << "Locked Status: " << isLockedVar << std::endl;
 
     std::cout << "Tags: ";
     if (tags.empty()) {
@@ -67,4 +83,9 @@ void snippetLiveClass::putColors(std::unordered_map<std::string, std::vector<std
 void snippetLiveClass::putTags(std::vector<std::string> &foundTags)
 {
     tags=foundTags;
+}
+
+bool snippetLiveClass::isLocked()
+{
+    return isLockedVar;
 }
