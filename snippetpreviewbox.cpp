@@ -26,7 +26,7 @@ snippetPreviewBox::~snippetPreviewBox()
 
 void snippetPreviewBox::assignSnippet(snippetBaseClass* snippet){
     assignedSnippet=snippet;
-    assignedSnippet->getInfo(name, lang, tags);
+    tags=assignedSnippet->getInfo(name, lang);
     ui->Name->setText(QString::fromStdString(name));
     ui->langLabel->setText(QString::fromStdString(lang));
     setTags();
@@ -34,11 +34,12 @@ void snippetPreviewBox::assignSnippet(snippetBaseClass* snippet){
 
 void snippetPreviewBox::setTags(){
 
-    for(/*auto& str: *tags*/int i=0;i<6;i++){
-        tagViewer* tv=new tagViewer;
+    for(auto& str: *tags/*int i=0;i<6;i++*/){
         std::string name="dickpbfdb";
         std::string color="red";
-        //masterWindow->getTagInfo(str, name, color);
+        masterWindow->getTagInfo(str, name, color);
+        if(name=="NoTag") continue;
+        tagViewer* tv=new tagViewer(this);
         tv->setTag(name, color);
         ui->tagsBox->layout()->addWidget(tv);
     }

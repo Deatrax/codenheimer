@@ -31,11 +31,10 @@ public:
         std::vector<std::string> tgs
     )=0;
 
-    virtual void getInfo(
+    virtual     std::vector<std::string> *getInfo(
         std::string &nam,
-        std::string &lng,
-        std::vector<std::string>* tgs
-    )=0;
+        std::string &lng
+        )=0;
 
     virtual std::string getSnippet()=0;
 

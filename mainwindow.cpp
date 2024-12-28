@@ -332,7 +332,16 @@ void MainWindow::sandBox(){
 
 
     void MainWindow::getTagInfo(string tagName, std::string &passedName, std::string& passedColor){
-        mainTagHolder->getTagInfo(tagName,passedName,passedColor);
+        // mainTagHolder->getTagInfo(tagName,passedName,passedColor);
+        auto it = (*mainTagHolder)[tagName]; // Check if tagName exists in the map
+        if (it != nullptr) {
+            passedName = it->tagName;
+            passedColor = it->tagColor;
+        } else {
+            qDebug("Error: Tag not found for name ");
+            passedName = "NoTag";
+            passedColor = "";
+        }
     }
 
 

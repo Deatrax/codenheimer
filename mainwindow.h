@@ -324,6 +324,14 @@ class tagHolder{
             passedName=tagStorage[tagName]->tagName;
             passedColor=tagStorage[tagName]->tagColor;
         }
+
+        tag* operator[](std::string str) {
+            auto it = tagStorage.find(str);
+            if (it != tagStorage.end()) {
+                return it->second; // Return the pointer if found
+            }
+            return nullptr;
+        }
     //END OF PUBLIC
 };
 

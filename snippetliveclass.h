@@ -18,10 +18,9 @@ public:
         std::vector<std::string> tgs
     ) override;
 
-    void getInfo
-    (std::string &nam,
-        std::string &lng,
-        std::vector<std::string> *tgs
+    std::vector<std::string> *getInfo(
+        std::string &nam,
+        std::string &lng
     ) override;
 
     std::string getSnippet() override;
