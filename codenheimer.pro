@@ -19,7 +19,8 @@ SOURCES += \
     snippetjava.cpp \
     snippetliveclass.cpp \
     snippetpreviewbox.cpp \
-    snippetpy.cpp
+    snippetpy.cpp \
+    tagviewer.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -33,11 +34,13 @@ HEADERS += \
     snippetliveclass.h \
     snippetpreviewbox.h \
     helperFunctions.h \
-    snippetpy.h
+    snippetpy.h \
+    tagviewer.h
 
 FORMS += \
     mainwindow.ui \
-    snippetpreviewbox.ui
+    snippetpreviewbox.ui \
+    tagviewer.ui
 
 RESOURCES += \
     images/ \

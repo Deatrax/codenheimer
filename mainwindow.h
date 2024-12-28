@@ -319,6 +319,11 @@ class tagHolder{
         std::vector<snippetBaseClass*>& getSnippetsFromTag(std::string tag){
             return storage[tag];
         }
+
+        void getTagInfo(string tagName, std::string &passedName, std::string& passedColor){
+            passedName=tagStorage[tagName]->tagName;
+            passedColor=tagStorage[tagName]->tagColor;
+        }
     //END OF PUBLIC
 };
 
@@ -344,6 +349,7 @@ public:
      */
     static int firstTimeInit();
     void readUconfig();
+    void getTagInfo(string tagName, std::string &passedName, std::string &passedColor);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -367,6 +373,7 @@ private:
     void loadConfig();
     char coreUserConfig[1000];
 
+    void sandBox();
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;

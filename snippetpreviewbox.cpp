@@ -1,5 +1,6 @@
 #include "snippetpreviewbox.h"
 #include "ui_snippetpreviewbox.h"
+#include "tagviewer.h"
 
 snippetPreviewBox::snippetPreviewBox(MainWindow *mainwindow, QWidget *parent)
     :QWidget(parent),
@@ -27,4 +28,18 @@ void snippetPreviewBox::assignSnippet(snippetBaseClass* snippet){
     assignedSnippet=snippet;
     assignedSnippet->getInfo(name, lang, tags);
     ui->Name->setText(QString::fromStdString(name));
+    ui->langLabel->setText(QString::fromStdString(lang));
+    setTags();
+}
+
+void snippetPreviewBox::setTags(){
+
+    for(/*auto& str: *tags*/int i=0;i<6;i++){
+        tagViewer* tv=new tagViewer;
+        std::string name="dickpbfdb";
+        std::string color="red";
+        //masterWindow->getTagInfo(str, name, color);
+        tv->setTag(name, color);
+        ui->tagsBox->layout()->addWidget(tv);
+    }
 }
