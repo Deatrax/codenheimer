@@ -28,7 +28,7 @@ MainWindow::~MainWindow()
  * this function is mainly designed as an experimentation area for the ui or just any thing really
  */
 void MainWindow::sandBox(){
-    for(int i=0;i<6;i++){
+    for(int i=0;i<12;i++){
         snippetPreviewBox* pb=new snippetPreviewBox(this,this);
         pb->assignSnippet(mainStorage[i]);
         ui->sandBox->layout()->addWidget(pb);
