@@ -18,6 +18,6 @@ void tagViewer::setTag(std::string Name, std::string Color){
     tagName = QString::fromStdString(Name);
     tagColor = QString::fromStdString(Color);
     ui->tagLabel->setText(tagName);
-    QString style=  "background:" + tagColor + ";" + "border-radius:7px;";
+    QString style=  "background:" + tagColor + ";" + "border-radius:7px; padding-left:5px; padding-right:5px;";
     ui->tagLabel->setStyleSheet(style);
 }

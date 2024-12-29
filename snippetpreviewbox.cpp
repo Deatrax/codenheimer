@@ -1,6 +1,7 @@
 #include "snippetpreviewbox.h"
 #include "ui_snippetpreviewbox.h"
 #include "tagviewer.h"
+#include "flowlayout.h"
 
 snippetPreviewBox::snippetPreviewBox(MainWindow *mainwindow, QWidget *parent)
     :QWidget(parent),
@@ -32,6 +33,8 @@ void snippetPreviewBox::assignSnippet(snippetBaseClass* snippet){
 
 void snippetPreviewBox::setTags(){
 
+    FlowLayout* fl=new FlowLayout(this,10,3,1);
+    fl->setSpacing(2);
     for(auto& str: *tags/*int i=0;i<6;i++*/){
         std::string name="dickpbfdb";
         std::string color="red";
@@ -39,8 +42,10 @@ void snippetPreviewBox::setTags(){
         if(name=="NoTag") continue;
         tagViewer* tv=new tagViewer(this);
         tv->setTag(name, color);
-        ui->tagsBox->layout()->addWidget(tv);
+        fl->addWidget(tv);
     }
+    ui->tagsBox->setLayout(fl);
+    // ui->tagsBox->layout()->setSpacing(2);
 }
 
 void snippetPreviewBox::setLock()

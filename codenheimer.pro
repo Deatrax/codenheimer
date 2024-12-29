@@ -20,7 +20,8 @@ SOURCES += \
     snippetliveclass.cpp \
     snippetpreviewbox.cpp \
     snippetpy.cpp \
-    tagviewer.cpp
+    tagviewer.cpp \
+    flowlayout.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -35,7 +36,8 @@ HEADERS += \
     snippetpreviewbox.h \
     helperFunctions.h \
     snippetpy.h \
-    tagviewer.h
+    tagviewer.h \
+    flowlayout.h
 
 FORMS += \
     mainwindow.ui \
