@@ -6,6 +6,10 @@
 #include <iostream>
 #include <QTextDocument>
 
+/**
+ * @brief 
+ * 
+ */
 class snippetBaseClass
 {
 
@@ -27,11 +31,10 @@ public:
         std::vector<std::string> tgs
     )=0;
 
-    virtual void getInfo(
+    virtual     std::vector<std::string> *getInfo(
         std::string &nam,
-        std::string &lng,
-        std::vector<std::string> &tgs
-    )=0;
+        std::string &lng
+        )=0;
 
     virtual std::string getSnippet()=0;
 
@@ -46,6 +49,8 @@ public:
     virtual void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData)=0;
 
     virtual void putTags(std::vector<std::string>&)=0;
+
+    virtual bool isLocked()=0;
     
 };
 

@@ -16,9 +16,27 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    qDebug("===========================Main window destructor was called");
+    delete mainLangHolder;
+    delete mainTagHolder;
 }
 
-//START OF HUMAN ADDED FUNCTIONS
+//START OF ADDITIONAL NON-SLOT BASED  FUNCTIONS
+
+/**
+ * @brief sandBox
+ * this function is mainly designed as an experimentation area for the ui or just any thing really
+ */
+void MainWindow::sandBox(){
+    for(int i=0;i<12;i++){
+        snippetPreviewBox* pb=new snippetPreviewBox(this,this);
+        pb->assignSnippet(mainStorage[i]);
+        ui->sandBox->layout()->addWidget(pb);
+    }
+    QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    ui->sandBox->layout()->addItem(verticalSpacer);
+
+}
 
     void MainWindow::loadConfig(){
         setWindowTitle("Codenheimer");
@@ -52,14 +70,12 @@ MainWindow::~MainWindow()
 
         prepareCentralArea();
 
-
+        sandBox();
         //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
     }
 
-    // void MainWindow::readData(){
-
-    // }
+    
 
     int MainWindow::firstTimeInit()
     {
@@ -253,6 +269,7 @@ MainWindow::~MainWindow()
             string ifTags,name,filename,lang,tag;
             std::vector<std::string> tags;
             std::stringstream ss(lineStore);
+            std::string lockStat;
             getline(ss,name,',');
             getline(ss,filename,',');
             getline(ss,lang,',');
@@ -312,11 +329,25 @@ MainWindow::~MainWindow()
             obj=new snippetCustom;
             return obj;
         }
-
     }
 
 
-//END OF HUMAN ADDED FUNCTIONS
+    void MainWindow::getTagInfo(string tagName, std::string &passedName, std::string& passedColor){
+        // mainTagHolder->getTagInfo(tagName,passedName,passedColor);
+        auto it = (*mainTagHolder)[tagName]; // Check if tagName exists in the map
+        if (it != nullptr) {
+            passedName = it->tagName;
+            passedColor = it->tagColor;
+        } else {
+            qDebug("Error: Tag not found for name ");
+            passedName = "NoTag";
+            passedColor = "";
+        }
+    }
+
+
+
+//END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
 
 void MainWindow::on_sidebarButton_clicked()
 {
