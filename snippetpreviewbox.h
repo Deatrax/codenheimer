@@ -24,6 +24,8 @@ protected:
 private slots:
 
 
+    void on_copyButton_clicked();
+
 private:
     Ui::snippetPreviewBox *ui;
     MainWindow *masterWindow;

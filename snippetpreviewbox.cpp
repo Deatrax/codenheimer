@@ -53,8 +53,17 @@ void snippetPreviewBox::setTags(){
 void snippetPreviewBox::setLock()
 {
     //setting the icon
-    QPixmap pixmap(":/images/lockIcon.svg");
-    ui->lockIcon->setPixmap(pixmap.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    /** old system using QLabel
+    *
+    *    // QPixmap pixmap(":/images/lockIcon.svg");
+    *    // ui->lockIcon->setPixmap(pixmap.scaled(20, 20, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    *
+    */
+
+    ui->lockIcon->setIcon(QIcon(":/images/lockIcon.svg"));
+    ui->lockIcon->setIconSize(QSize(18,18));
+
 }
 
 void snippetPreviewBox::addCopyButton()
@@ -81,5 +90,12 @@ bool snippetPreviewBox::eventFilter(QObject *watched, QEvent *event) {
 
     // Pass unhandled events to the base class
     return QWidget::eventFilter(watched, event);
+}
+
+
+void snippetPreviewBox::on_copyButton_clicked()
+{
+    //call assignedSnippet->getSnippet();
+
 }
 
