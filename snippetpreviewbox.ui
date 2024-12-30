@@ -112,6 +112,34 @@ border-radius:8px;</string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="copyButton">
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+	background:rgb(43, 54, 99);
+}
+QPushButton:hover{
+	background:rgb(34, 39, 59);
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>

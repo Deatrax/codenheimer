@@ -20,6 +20,10 @@ public:
     void assignSnippet(snippetBaseClass *snippet);
 protected:
     void setTags();
+    void addCopyButton();
+private slots:
+
+
 private:
     Ui::snippetPreviewBox *ui;
     MainWindow *masterWindow;
@@ -30,6 +34,7 @@ private:
     std::vector <std::string>* tags;
 
     void setLock();
+    bool eventFilter(QObject *watched, QEvent *event);
 };
 
 #endif // SNIPPETPREVIEWBOX_H
