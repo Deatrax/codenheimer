@@ -810,15 +810,7 @@ QPushButton:hover {
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
              <item>
-              <widget class="QGroupBox" name="sandBox">
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="title">
-                <string>Test area</string>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_5"/>
-              </widget>
+              <widget class="QListWidget" name="sandBox"/>
              </item>
             </layout>
            </widget>

@@ -28,13 +28,51 @@ MainWindow::~MainWindow()
  * this function is mainly designed as an experimentation area for the ui or just any thing really
  */
 void MainWindow::sandBox(){
-    for(int i=0;i<12;i++){
-        snippetPreviewBox* pb=new snippetPreviewBox(this,this);
+
+    // ********Implementation using QGroupBox
+    // for(int i=0;i<12;i++){
+    //     snippetPreviewBox* pb=new snippetPreviewBox(this,this);
+    //     pb->assignSnippet(mainStorage[i]);
+    //     ui->sandBox->layout()->addWidget(pb);
+    // }
+    // QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    // ui->sandBox->layout()->addItem(verticalSpacer);
+    //********
+
+    //*********implementation using list widget
+    //ui->sandBox->clear();
+    ui->sandBox->setSpacing(3);
+    ui->sandBox->setStyleSheet(
+        "QListWidget::item {"
+        "   border: 0px solid black;"
+        // "   border-radius: 5px;"
+        // "   padding: 5px;"
+        // "   margin: 3px;"
+        "}"
+        "QListWidget::item:selected {"
+        "   color: white;"
+        "   border: 1px solid red;"
+        "}"
+        );
+
+    for (int i = 0; i < 12; i++) {
+        // Create the custom widget
+        snippetPreviewBox* pb = new snippetPreviewBox(this, this);
         pb->assignSnippet(mainStorage[i]);
-        ui->sandBox->layout()->addWidget(pb);
+
+        // Create a QListWidgetItem to hold the custom widget
+        QListWidgetItem* item = new QListWidgetItem(ui->sandBox);
+
+        // Set the size of the item to match the widget
+        item->setSizeHint(pb->sizeHint());
+
+        // Add the item to the list widget
+        ui->sandBox->addItem(item);
+
+        // Set the custom widget for this item
+        ui->sandBox->setItemWidget(item, pb);
     }
-    QSpacerItem *verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    ui->sandBox->layout()->addItem(verticalSpacer);
+
 
 }
 
@@ -79,7 +117,6 @@ void MainWindow::sandBox(){
 
     int MainWindow::firstTimeInit()
     {
-
         std::ifstream inFile("firstrun.txt", std::ios::in); // Attempt to open the file in read mode
 
         if (!inFile.is_open()) { // Check if the file could not be opened and if not then this is the first time this is being run
