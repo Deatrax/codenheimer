@@ -477,7 +477,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -759,19 +759,46 @@ QPushButton:hover {
           </widget>
          </widget>
          <widget class="QWidget" name="browsePage">
-          <widget class="QLabel" name="label">
-           <property name="geometry">
-            <rect>
-             <x>290</x>
-             <y>280</y>
-             <width>251</width>
-             <height>81</height>
-            </rect>
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <property name="spacing">
+            <number>1</number>
            </property>
-           <property name="text">
-            <string>Browse page</string>
+           <property name="leftMargin">
+            <number>3</number>
            </property>
-          </widget>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QStackedWidget" name="browsePageSubPages">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="browseMain">
+              <widget class="QLabel" name="label">
+               <property name="geometry">
+                <rect>
+                 <x>160</x>
+                 <y>190</y>
+                 <width>251</width>
+                 <height>81</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Browse page</string>
+               </property>
+              </widget>
+             </widget>
+             <widget class="QWidget" name="browseSelector"/>
+            </widget>
+           </item>
+          </layout>
          </widget>
          <widget class="QWidget" name="settingsPage">
           <widget class="QLabel" name="label_4">
