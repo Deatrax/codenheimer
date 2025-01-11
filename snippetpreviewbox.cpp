@@ -95,8 +95,16 @@ bool snippetPreviewBox::eventFilter(QObject *watched, QEvent *event) {
 
 void snippetPreviewBox::on_copyButton_clicked()
 {
-    //call assignedSnippet->getSnippet();
+    std::string str="DefaultTestFailedToReadSnippet";
+    readSnippet(str);
+    QString text=QString::fromStdString(str);
+    //qDebug("the content of the std::string is=%s\nand the QString is=%s",str.c_str(),text.toStdString().c_str());
+    masterWindow->copyToClipboard(text);
+}
 
+void snippetPreviewBox::readSnippet(std::string& str)
+{
 
+    //call str=assignedSnippet->getSnippet();
 }
 

@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <QClipboard>
 #include "snippetbaseclass.h"
 #include "snippetc.h"
 #include "snippetcpp.h"
@@ -358,6 +359,7 @@ public:
     static int firstTimeInit();
     void readUconfig();
     void getTagInfo(string tagName, std::string &passedName, std::string &passedColor);
+    void copyToClipboard(const QString &text);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -393,6 +395,7 @@ protected:
     tagHolder* mainTagHolder; //pointer to hold a tagHolder object to be added in readData() function
     langHolder* mainLangHolder; //pointer to hold a langHolder object to be added in readData() function
     std::vector<snippetBaseClass*> mainStorage; // a vector to hold all the snippet's pointers
+    QClipboard *clipboard;
 
 
     /// @brief loads all the custom fonts into the QFont objects that have been decleared in the header

@@ -37,6 +37,7 @@ private:
 
     void setLock();
     bool eventFilter(QObject *watched, QEvent *event);
+    void readSnippet(std::string &str);
 };
 
 #endif // SNIPPETPREVIEWBOX_H
