@@ -37,7 +37,7 @@ void snippetPreviewBox::setTags(){
 
     FlowLayout* fl=new FlowLayout(10,3,1);
     fl->setSpacing(2);
-    for(auto& str: *tags/*int i=0;i<6;i++*/){
+    for(auto& str: *tags){
         std::string name="dickpbfdb";
         std::string color="red";
         masterWindow->getTagInfo(str, name, color);
