@@ -97,5 +97,6 @@ void snippetPreviewBox::on_copyButton_clicked()
 {
     //call assignedSnippet->getSnippet();
 
+
 }
 
