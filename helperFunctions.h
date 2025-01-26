@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <string>
 
 /*
     This is a critial supportive file that handles accessing the appdata folders and other stuff.
@@ -41,7 +42,7 @@ namespace assist{
     }
 
 
-    #elif defined(__APPLE__)  //===========UNIX FUNCTIONS================
+    #elif defined(__APPLE__)  //===========UNIX/MacOS FUNCTIONS================
 
     /**
      * @brief Get the AppData folder path for the app
@@ -77,7 +78,8 @@ namespace assist{
     #else
     #include <sys/stat.h>  // For mkdir() on macOS/Linux
     #endif
-    /**
+    
+/**
  * @brief Creates a target directory and/or file, and verifies their existence.
  *
  * This function creates the specified directory and file, if they do not exist,
@@ -87,9 +89,8 @@ namespace assist{
  * @param dir_path The target directory path. Pass null to skip directory creation.
  * @param file_path The target file path. Pass null to skip file creation.
  * @param mode The file open mode, determining destructive or non-destructive opening.
- * @return int Returns 0 if successful, or -1 if failed to create either target.
+ * @return int Returns 0 if successful, or -1 if failed to create either one of the targets.
  */
-
 static int ensure_directory_and_open_file(const char *dir_path, const char *file_path, const char *mode) {
             //skip if null passed BECOZ this means that directory making is to be skipped
             if (dir_path == NULL || strlen(dir_path) == 0) {
