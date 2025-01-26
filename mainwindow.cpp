@@ -92,6 +92,7 @@ void MainWindow::sandBox(){
 
         mainTagHolder=new tagHolder(tagCount);
         mainLangHolder=new langHolder(additionalTypeCount);
+        clipboard = QApplication::clipboard(); // Get the clipboard object
 
         readData();
 
@@ -382,7 +383,11 @@ void MainWindow::sandBox(){
         }
     }
 
-
+    void MainWindow::copyToClipboard(const QString& text){
+        
+        //qDebug("copy to clipboard called");
+        clipboard->setText(text); 
+    }
 
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
 
