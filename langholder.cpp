@@ -1,4 +1,30 @@
 #include "langholder.h"
+/**
+ * @brief The langHolder class is designed to manage and store snippets efficiently 
+ *        based on their language or type. It facilitates quick access to snippets 
+ *        categorized by language, which is necessary for browsing or searching
+ *        in the application.\n 
+ *
+ * The class contains two internal private classes:
+ *  - lang: A base class representing a generic language. It provides virtual methods for 
+ *          managing and retrieving custom color data, allowing for extensibility.
+ *  - customLang: A derived class from lang that implements functionality for handling 
+ *                custom languages with specific color coding for syntax highlighting or 
+ *                other purposes.
+ *
+ * @details Key Features:
+ *  - Predefined languages: A set of common programming languages (e.g., C++, Python, Java) 
+ *                          are preloaded for quick access.\n 
+ *  - Custom languages: Users can define additional languages with custom color mappings, 
+ *                      which are loaded from an external file.\n 
+ *  - Snippet management: The class maintains a collection of snippets for each language, 
+ *                        enabling efficient organization and retrieval.
+ *
+ * Usage:
+ *  - Initialize the langHolder with the desired number of custom languages.
+ *  - Insert snippets into the holder using the insert() method.
+ *  - Retrieve snippets or perform operations like printing custom language data.
+ */
 
 class langHolder{
     private:
