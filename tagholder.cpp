@@ -1,3 +1,16 @@
+/**
+ * @brief a class for holing the info like tag name and the color of the 
+ *  tag as well as store pointers to the corresponding snippet classes. 
+ * 
+ *  this is done by implementing an internal struct called tag that holds that
+ *  tag's information: tag name, tag color. the tag's information can be accessed
+ *  by using the hashmap (unordered_map) by passing the string of the tag name
+ *  and getting a pointer to the tag in return. 
+ *  
+ *  the tag's information is held by a hashmap (unordered_map) with strings as keys and 
+ *  vectors at the key location 
+ */
+
 #include "tagholder.h"
 
 class tagHolder{
