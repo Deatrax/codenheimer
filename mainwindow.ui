@@ -477,7 +477,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -744,19 +744,7 @@ QPushButton:hover {
           </widget>
          </widget>
          <widget class="QWidget" name="editorsPage">
-          <widget class="QLabel" name="label_2">
-           <property name="geometry">
-            <rect>
-             <x>320</x>
-             <y>300</y>
-             <width>201</width>
-             <height>101</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>editor page</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_11"/>
          </widget>
          <widget class="QWidget" name="browsePage">
           <layout class="QHBoxLayout" name="horizontalLayout_10">

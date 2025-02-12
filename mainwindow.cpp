@@ -2,6 +2,7 @@
 #include "snippetpreviewbox.h"
 #include "ui_mainwindow.h"
 #include "predefines.h"
+#include "editorwidget.h"
 
 
 
@@ -110,6 +111,12 @@ void MainWindow::sandBox(){
         prepareCentralArea();
 
         sandBox();
+
+
+        //testing the editor
+        editorWidget *widget=new editorWidget(this);
+        ui->editorsPage->layout()->addWidget(widget);
+
         //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
     }
