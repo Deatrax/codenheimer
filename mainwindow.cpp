@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     loadConfig();
 }
+//lol
 
 MainWindow::~MainWindow()
 {
