@@ -14,6 +14,9 @@ editorWidget::editorWidget(QWidget *parent)
     ui->lineNo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding); // Prevents expansion
     ui->lineNo->setAlignment(Qt::AlignTop | Qt::AlignLeft);  // Aligns text properly
 
+    ui->textEdit->setWordWrapMode(QTextOption::NoWrap); // Disable word wrapping
+    ui->textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded); // Show scrollbar when needed
+
     //text highlighting=====================================
     // QTextEdit *textEdit = new QTextEdit;
     // KeywordHighlighter *highlighter = new KeywordHighlighter(textEdit->document());
@@ -53,4 +56,8 @@ void editorWidget::on_textEdit_textChanged()
 void editorWidget::synchronizeScroll(int value) {
     // Scroll the label's content to match the textEdit
     ui->lineNo->move(ui->lineNo->x(), -value);
+}
+
+QTextDocument* editorWidget::syntaxHighlightTarget(){
+    return ui->textEdit->document();
 }

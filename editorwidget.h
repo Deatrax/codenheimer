@@ -2,6 +2,7 @@
 #define EDITORWIDGET_H
 
 #include <QWidget>
+#include <QTextDocument>
 
 namespace Ui {
 class editorWidget;
@@ -15,6 +16,7 @@ public:
     explicit editorWidget(QWidget *parent = nullptr);
     ~editorWidget();
 
+    QTextDocument *syntaxHighlightTarget();
 private slots:
     void on_textEdit_textChanged();
 private:
