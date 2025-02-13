@@ -771,7 +771,7 @@ QTabBar::tab {
 
 QTabBar::tab:selected {
     background: #3D4D8C;
-    font-weight: bold;
+	font-weight:bold;
     border-bottom: none;
 }
 
