@@ -748,12 +748,59 @@ QPushButton:hover {
            <item>
             <widget class="QTabWidget" name="editorTabs">
              <property name="styleSheet">
-              <string notr="true">border:none;</string>
+              <string notr="true">QTabWidget#editorTabs{
+    /*background: white;*/
+    border: 2px solid ocean;
+}
+
+QTabWidget::pane {
+    /*border: 1px solid black;*/
+}
+
+QTabBar {
+    border-bottom: 2px solid darkgray;
+}
+
+QTabBar::tab {
+    background: #2B3663;
+    padding: 5px 10px;
+    margin: 1px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+QTabBar::tab:selected {
+    background: #3D4D8C;
+    font-weight: bold;
+    border-bottom: none;
+}
+
+QTabBar::tab:hover {
+    background: #303755;
+}
+
+QTabBar::tab:disabled {
+    color: gray;
+    background: #f0f0f0;
+}
+
+QTabBar::close-button {
+    image: url(close-icon.png);
+    subcontrol-position: right;
+    margin-left: 5px;
+}
+
+QTabBar::close-button:hover {
+    image: url(close-icon-hover.png);
+}</string>
              </property>
              <property name="currentIndex">
               <number>0</number>
              </property>
              <widget class="QWidget" name="defaultTab">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
               <attribute name="title">
                <string>Tab 1</string>
               </attribute>
