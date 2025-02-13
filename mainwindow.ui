@@ -744,7 +744,45 @@ QPushButton:hover {
           </widget>
          </widget>
          <widget class="QWidget" name="editorsPage">
-          <layout class="QHBoxLayout" name="horizontalLayout_11"/>
+          <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <item>
+            <widget class="QTabWidget" name="editorTabs">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="defaultTab">
+              <attribute name="title">
+               <string>Tab 1</string>
+              </attribute>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_2">
+              <attribute name="title">
+               <string>Tab 2</string>
+              </attribute>
+             </widget>
+            </widget>
+           </item>
+          </layout>
          </widget>
          <widget class="QWidget" name="browsePage">
           <layout class="QHBoxLayout" name="horizontalLayout_10">

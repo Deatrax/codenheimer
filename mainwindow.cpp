@@ -115,7 +115,8 @@ void MainWindow::sandBox(){
 
         //testing the editor
         editorWidget *widget=new editorWidget(this);
-        ui->editorsPage->layout()->addWidget(widget);
+        //ui->editorsPage->layout()->addWidget(widget);
+        ui->defaultTab->layout()->addWidget(widget);
 
         //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
