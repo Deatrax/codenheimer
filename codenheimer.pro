@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     editorwidget.cpp \
+    langholder.cpp \
     main.cpp \
     mainwindow.cpp \
     snippetbaseclass.cpp \
@@ -21,11 +22,13 @@ SOURCES += \
     snippetliveclass.cpp \
     snippetpreviewbox.cpp \
     snippetpy.cpp \
+    tagholder.cpp \
     tagviewer.cpp \
     flowlayout.cpp
 
 HEADERS += \
     editorwidget.h \
+    langholder.h \
     mainwindow.h \
     predefines.h \
     snippetbaseclass.h \
@@ -38,6 +41,7 @@ HEADERS += \
     snippetpreviewbox.h \
     helperFunctions.h \
     snippetpy.h \
+    tagholder.h \
     tagviewer.h \
     flowlayout.h
 
