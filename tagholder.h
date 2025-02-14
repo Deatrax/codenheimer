@@ -40,7 +40,7 @@ class tagHolder{
 
         std::unordered_map<std::string, std::vector<snippetBaseClass*>> storage;
         std::unordered_map<std::string,tag*>tagStorage;
-        char tagFile[500]="tagDat.cdh";
+        char tagFile[assist::PATH_SIZE]="tagDat.cdh";
         bool noTags;
 
     public:

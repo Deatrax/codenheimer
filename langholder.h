@@ -119,7 +119,7 @@ private:
     };
 
     std::unordered_map<std::string, lang*>stringTolang;
-    char langFile[500]="langDat.cdh";
+    char langFile[assist::PATH_SIZE]="langDat.cdh";
     bool noAdditionallangs;
 
     void prepPredefinedLangs();

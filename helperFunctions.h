@@ -17,7 +17,21 @@
 using std::string;
 
 namespace assist{
-    
+    const int PATH_SIZE = 1024;
+
+    /**
+     * @brief Logs error messages to a file named "error_log.txt"
+     * 
+     * @param message The error message to log
+     */
+    static void errLog(const char* message) {
+        FILE* logFile = fopen("error_log.txt", "a");
+        if (logFile) {
+            fprintf(logFile, "Error: %s\n", message);
+            fclose(logFile);
+        }
+    }
+
     #ifdef _WIN32   //===========WINDOWS FUNCTIONS================
 
     /**
@@ -25,22 +39,34 @@ namespace assist{
      * 
      * @param str the c-string that will be populated with the derived path
      */
-    static void getAppData_folder(char* str){
-
-        sprintf(str,"%s\\AppData\\Roaming\\KCATDVWSPJD", getenv("USERPROFILE"));
+    static void getAppData_folder(char* str) {
+        const char* userProfile = getenv("USERPROFILE");
+        if (!userProfile) {
+            errLog("USERPROFILE environment variable is not set.");
+            str[0] = '\0'; // Ensure empty string if getenv fails
+            return;
+        }
+        snprintf(str, PATH_SIZE, "%s\\AppData\\Roaming\\KCATDVWSPJD", userProfile);
     }
-    
+
     /**
      * @brief function to make any folder name into a folder path in the appdata folder
      * 
      * @param filename the c-string that will be populated with the derived file path
      */
-    static void make_appData_filePath(char*  filename){
-        char str[257];
-        sprintf(str,"%s\\AppData\\Roaming\\KCATDVWSPJD\\%s\0",getenv("USERPROFILE"),filename);
-        strcpy(filename,str);
-    }
+    static void make_appData_filePath(char* filename) {
+        const char* userProfile = getenv("USERPROFILE");
+        if (!userProfile) {
+            errLog("USERPROFILE environment variable is not set.");
+            filename[0] = '\0'; // Ensure empty string if getenv fails
+            return;
+        }
 
+        char str[PATH_SIZE];
+        snprintf(str, sizeof(str), "%s\\AppData\\Roaming\\KCATDVWSPJD\\%s", userProfile, filename);
+        strncpy(filename, str, PATH_SIZE - 1);
+        filename[PATH_SIZE - 1] = '\0'; // Null-terminate
+    }
 
     #elif defined(__APPLE__)  //===========UNIX/MacOS FUNCTIONS================
 
@@ -50,7 +76,13 @@ namespace assist{
      * @param str 
      */
     static void getAppData_folder(char* str) {
-        sprintf(str, "%s/Library/Application Support/KCATDVWSPJD", getenv("HOME"));
+        const char* home = getenv("HOME");
+        if (!home) {
+            errLog("HOME environment variable is not set.");
+            str[0] = '\0'; // Ensure empty string if getenv fails
+            return;
+        }
+        snprintf(str, PATH_SIZE, "%s/Library/Application Support/KCATDVWSPJD", home);
     }
 
     /**
@@ -59,9 +91,17 @@ namespace assist{
      * @param filename the c-string that will be populated with the derived file path
      */
     static void make_appData_filePath(char* filename) {
-        char str[400];
-        sprintf(str, "%s/Library/Application Support/KCATDVWSPJD/%s", getenv("HOME"), filename);
-        strcpy(filename, str);
+        const char* home = getenv("HOME");
+        if (!home) {
+            errLog("HOME environment variable is not set.");
+            filename[0] = '\0'; // Ensure empty string if getenv fails
+            return;
+        }
+
+        char str[PATH_SIZE];
+        snprintf(str, sizeof(str), "%s/Library/Application Support/KCATDVWSPJD/%s", home, filename);
+        strncpy(filename, str, PATH_SIZE - 1);
+        filename[PATH_SIZE - 1] = '\0'; // Null-terminate
     }
 
     #endif
