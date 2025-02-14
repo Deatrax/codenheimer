@@ -477,7 +477,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -729,107 +729,129 @@ QPushButton:hover {
           </layout>
          </widget>
          <widget class="QWidget" name="searchPage">
-          <widget class="QLabel" name="label_3">
-           <property name="geometry">
-            <rect>
-             <x>210</x>
-             <y>250</y>
-             <width>331</width>
-             <height>131</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>Search page</string>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="editorsPage">
-          <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <widget class="QTabWidget" name="editorTabs">
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>810</width>
+               <height>57</height>
+              </size>
+             </property>
              <property name="styleSheet">
-              <string notr="true">QTabWidget#editorTabs{
-    /*background: white;*/
-    border: 2px solid ocean;
-}
-
-QTabWidget::pane {
-    /*border: 1px solid black;*/
-}
-
-QTabBar {
-    border-bottom: 2px solid darkgray;
-}
-
-QTabBar::tab {
-    background: #2B3663;
-    padding: 5px 10px;
-    margin: 1px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-QTabBar::tab:selected {
-    background: #3D4D8C;
-	font-weight:bold;
-    border-bottom: none;
-}
-
-QTabBar::tab:hover {
-    background: #303755;
-}
-
-QTabBar::tab:disabled {
-    color: gray;
-    background: #f0f0f0;
-}
-
-QTabBar::close-button {
-    image: url(close-icon.png);
-    subcontrol-position: right;
-    margin-left: 5px;
-}
-
-QTabBar::close-button:hover {
-    image: url(close-icon-hover.png);
-}</string>
+              <string notr="true">border-radius:7px;
+background:#2B3663;</string>
              </property>
-             <property name="currentIndex">
-              <number>0</number>
+             <property name="title">
+              <string/>
              </property>
-             <widget class="QWidget" name="defaultTab">
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-              <attribute name="title">
-               <string>Tab 1</string>
-              </attribute>
-              <layout class="QHBoxLayout" name="horizontalLayout_12">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="tab_2">
-              <attribute name="title">
-               <string>Tab 2</string>
-              </attribute>
-             </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QLineEdit" name="lineEdit">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>24</pointsize>
+                 </font>
+                </property>
+                <property name="placeholderText">
+                 <string>Search..</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="dummySearchIcon">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>37</width>
+                  <height>37</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushbutton{
+	border-radius:7px;
+	background:rgb(44, 50, 158);	
+}
+
+QPushButton:hover{
+	border-radius:7px;
+	background:rgb(51, 60, 184);	
+}
+</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_3">
+             <property name="title">
+              <string/>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <widget class="QScrollArea" name="scrollArea_2">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>816</width>
+                   <height>484</height>
+                  </rect>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
+         </widget>
+         <widget class="QWidget" name="editorsPage">
+          <widget class="QLabel" name="label_2">
+           <property name="geometry">
+            <rect>
+             <x>320</x>
+             <y>300</y>
+             <width>201</width>
+             <height>101</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>editor page</string>
+           </property>
+          </widget>
          </widget>
          <widget class="QWidget" name="browsePage">
           <layout class="QHBoxLayout" name="horizontalLayout_10">
