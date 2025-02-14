@@ -532,7 +532,7 @@ border-radius:7px;</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="comboBox">
+                  <widget class="QComboBox" name="addNewLangDropdown">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                      <horstretch>0</horstretch>

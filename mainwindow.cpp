@@ -283,7 +283,10 @@ void MainWindow::sandBox(){
 
     void MainWindow::prepareAddNewComboBox()
     {
-
+        std::vector<string> langs=mainLangHolder->getLangList();
+        for(auto& it:langs){
+            ui->addNewLangDropdown->addItem(QString(it.c_str()));
+        }
     }
 
 
