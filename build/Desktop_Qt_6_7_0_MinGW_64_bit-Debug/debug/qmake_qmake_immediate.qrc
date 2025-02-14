@@ -1,0 +1,20 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+<file alias="images/centralBrowseIcon.svg">D:/project snip/codenheimer/images/centralBrowseIcon.svg</file>
+<file alias="images/codenheimer_icon.png">D:/project snip/codenheimer/images/codenheimer_icon.png</file>
+<file alias="images/codenheimer_icon2.png">D:/project snip/codenheimer/images/codenheimer_icon2.png</file>
+<file alias="images/codenheimer_icon3.png">D:/project snip/codenheimer/images/codenheimer_icon3.png</file>
+<file alias="images/copyButton.svg">D:/project snip/codenheimer/images/copyButton.svg</file>
+<file alias="images/downArrowIcon.svg">D:/project snip/codenheimer/images/downArrowIcon.svg</file>
+<file alias="images/editorIcon.svg">D:/project snip/codenheimer/images/editorIcon.svg</file>
+<file alias="images/lockIcon.svg">D:/project snip/codenheimer/images/lockIcon.svg</file>
+<file alias="images/searchIcon.svg">D:/project snip/codenheimer/images/searchIcon.svg</file>
+<file alias="images/settingsIcon.svg">D:/project snip/codenheimer/images/settingsIcon.svg</file>
+<file alias="images/sidebarButton.png">D:/project snip/codenheimer/images/sidebarButton.png</file>
+<file alias="images/sidebarButtonSVG.svg">D:/project snip/codenheimer/images/sidebarButtonSVG.svg</file>
+<file alias="images/test widget status.png">D:/project snip/codenheimer/images/test widget status.png</file>
+<file alias="fonts/CreteRound-Italic.ttf">D:/project snip/codenheimer/fonts/CreteRound-Italic.ttf</file>
+<file alias="fonts/CreteRound-Regular.ttf">D:/project snip/codenheimer/fonts/CreteRound-Regular.ttf</file>
+<file alias="fonts/CutiveMono-Regular.ttf">D:/project snip/codenheimer/fonts/CutiveMono-Regular.ttf</file>
+</qresource>
+</RCC>

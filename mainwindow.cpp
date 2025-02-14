@@ -439,3 +439,9 @@ void MainWindow::on_centralSearchBoxLE_returnPressed()
 
 }
 
+
+void MainWindow::on_groupBox_2_clicked()
+{
+
+}
+
