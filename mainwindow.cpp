@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include "predefines.h"
 #include "editorwidget.h"
+#include <QSettings>
 
 
 
@@ -294,6 +295,20 @@ void MainWindow::sandBox(){
         tagCount=std::stoi(tagC);
         additionalTypeCount=std::stoi(typeC);
         qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
+
+
+        //Qsettings system
+        QSettings settings("AronoxStudios", "Codenheimer");
+
+        QString u=settings.value("username","default_user").toString();
+        QString hs=settings.value("hashres","default_val").toString();
+        QString va=settings.value("vault","locale").toString();
+        int ty=settings.value("type",69).toInt();
+        int tg=settings.value("tag",420).toInt();
+
+
+        qDebug() << "got from settings==" << u << hs << va << ty << tg;
+        qDebug() << "got from settings==" << u.toStdString().c_str() << hs.toStdString().c_str() << va.toStdString().c_str() << ty << tg;
     }
 
     void MainWindow::readData(){
