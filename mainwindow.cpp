@@ -101,8 +101,8 @@ void MainWindow::sandBox(){
         readData();
 
         //testing holders
-        mainLangHolder->testPrintCustomLang("typeName5");
-        mainLangHolder->testPrintCustomLang("typeName4");
+        // mainLangHolder->testPrintCustomLang("typeName5");
+        // mainLangHolder->testPrintCustomLang("typeName4");
 
 
         //testing the snippet previewBox
@@ -112,7 +112,7 @@ void MainWindow::sandBox(){
         // }
 
         prepareCentralArea();
-
+        prepareAddNewComboBox();
         sandBox();
 
 
@@ -120,6 +120,7 @@ void MainWindow::sandBox(){
         editorWidget *widget=new editorWidget(this);
         //ui->editorsPage->layout()->addWidget(widget);
         ui->defaultTab->layout()->addWidget(widget);
+
 
         //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
@@ -277,6 +278,14 @@ void MainWindow::sandBox(){
         ui->centralBrowseButton->setIcon(QIcon(":images/centralBrowseIcon.svg"));
         ui->centralBrowseButton->setIconSize(QSize(32, 28));
     }
+
+
+
+    void MainWindow::prepareAddNewComboBox()
+    {
+
+    }
+
 
     void MainWindow::readUconfig(){
 

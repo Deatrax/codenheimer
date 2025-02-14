@@ -77,6 +77,7 @@ private:
     char coreUserConfig[1000];
 
     void sandBox();
+    void prepareAddNewComboBox();
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;

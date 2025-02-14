@@ -105,3 +105,30 @@ void langHolder::testPrintCustomLang(const std::string& lng) {
     }
     stringTolang[lng]->printColorsOFCustomLang();
 }
+
+int langHolder::getNoOfLangs()
+{
+    return stringTolang.size();
+}
+
+langHolder::lang* langHolder::getLangFromString(string str)
+{
+    auto it = stringTolang.find(str);
+    if (it != stringTolang.end()) {
+        return it->second;
+    }
+    else return nullptr;
+}
+
+std::vector<string> langHolder::getLangList()
+{
+    std::vector<std::string> keys;
+
+    // Iterate and collect keys
+    for (const auto& pair : stringTolang) {
+        keys.push_back(pair.first);
+    }
+
+    return keys;
+}
+

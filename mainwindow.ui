@@ -477,7 +477,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -547,7 +547,10 @@ border-radius:7px;</string>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">
-border:3px solid black;</string>
+QComboBox{
+	border:3px solid black;
+}
+</string>
                    </property>
                   </widget>
                  </item>
