@@ -91,6 +91,7 @@ void MainWindow::sandBox(){
         setSidebarButtonIcons();
 
         readUconfig();
+        ui->usernameAndMainSettingsButton->setText(QString(username.c_str())+"  ");
 
         //preparing the holders
         mainTagHolder=new tagHolder(tagCount);
