@@ -278,24 +278,27 @@ void MainWindow::sandBox(){
     }
 
     void MainWindow::readUconfig(){
-        char uconfigFile[assist::PATH_SIZE]="uconfig.cdh";
-        assist::make_appData_filePath(uconfigFile);
-        std::ifstream uconfigStream(uconfigFile, std::ios::in);
-        if(!uconfigStream.is_open()){
-            qDebug("Failed to open uconfig.cdh");
-            return;
-        }
-        std::getline(uconfigStream,username);
-        std::getline(uconfigStream,hashResult);
-        std::getline(uconfigStream,vaultLocation);
 
-        std::string tagC, typeC;
-        std::getline(uconfigStream,tagC);
-        std::getline(uconfigStream,typeC);
-        tagCount=std::stoi(tagC);
-        additionalTypeCount=std::stoi(typeC);
-        qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
-
+        // //OLD system using File IO============
+        // char uconfigFile[assist::PATH_SIZE]="uconfig.cdh";
+        // assist::make_appData_filePath(uconfigFile);
+        // std::ifstream uconfigStream(uconfigFile, std::ios::in);
+        // if(!uconfigStream.is_open()){
+        //     qDebug("Failed to open uconfig.cdh");
+        //     return;
+        // }
+        //
+        // std::getline(uconfigStream,username);
+        // std::getline(uconfigStream,hashResult);
+        // std::getline(uconfigStream,vaultLocation);
+        // std::string tagC, typeC;
+        //
+        // std::getline(uconfigStream,tagC);
+        // std::getline(uconfigStream,typeC);
+        // tagCount=std::stoi(tagC);
+        // additionalTypeCount=std::stoi(typeC);
+        // qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
+        //========================================
 
         //Qsettings system
         QSettings settings("AronoxStudios", "Codenheimer");
@@ -306,9 +309,17 @@ void MainWindow::sandBox(){
         int ty=settings.value("type",69).toInt();
         int tg=settings.value("tag",420).toInt();
 
+        username=u.toStdString();
+        hashResult=hs.toStdString();
+        vaultLocation=va.toStdString();
+        tagCount=tg;
+        additionalTypeCount=ty;
+
 
         qDebug() << "got from settings==" << u << hs << va << ty << tg;
         qDebug() << "got from settings==" << u.toStdString().c_str() << hs.toStdString().c_str() << va.toStdString().c_str() << ty << tg;
+        qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
+
     }
 
     void MainWindow::readData(){
