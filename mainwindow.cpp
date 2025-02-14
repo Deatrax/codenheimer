@@ -108,7 +108,9 @@ void MainWindow::sandBox(){
         //     ui->testbox->layout()->addWidget(snp);
         // }
 
+        //custom UI styling calls
         prepareCentralArea();
+        searchPageSearchbar();
 
         sandBox();
 
@@ -273,6 +275,23 @@ void MainWindow::sandBox(){
         ui->centralBrowseButton->setFont(centralElementsFont);
         ui->centralBrowseButton->setIcon(QIcon(":images/centralBrowseIcon.svg"));
         ui->centralBrowseButton->setIconSize(QSize(32, 28));
+    }
+
+    void MainWindow::searchPageSearchbar(){
+        //the useless dummy icon
+        ui->searchDummyIcon->setText("");
+        ui->searchDummyIcon->setIcon(QIcon(":/images/searchIcon.svg"));
+        ui->searchDummyIcon->setIconSize(QSize(25, 25));
+
+        //the search box font
+        QFont searchBoxFont=CutiveMonoFont;
+        searchBoxFont.setPointSize(26);
+        ui->searchBoxLineEdit->setFont(searchBoxFont);
+
+        //the snippet settings icon
+        ui->snippetSettingsOnSearchPage->setText("");
+        ui->snippetSettingsOnSearchPage->setIcon(QIcon(":/images/settingsIcon.svg"));
+        ui->snippetSettingsOnSearchPage->setIconSize(QSize(23,23));
     }
 
     void MainWindow::readUconfig(){

@@ -384,6 +384,7 @@ private:
     char coreUserConfig[1000];
 
     void sandBox();
+    void searchPageSearchbar();
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
