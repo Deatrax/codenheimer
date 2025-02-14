@@ -91,6 +91,7 @@ void MainWindow::sandBox(){
 
         readUconfig();
 
+        //preparing the holders
         mainTagHolder=new tagHolder(tagCount);
         mainLangHolder=new langHolder(additionalTypeCount);
         clipboard = QApplication::clipboard(); // Get the clipboard object
@@ -133,7 +134,7 @@ void MainWindow::sandBox(){
             make.close();
             std::cerr << "Error: File does not exist or cannot be opened!\n";
             std::string strn;
-            char str[500];
+            char str[assist::PATH_SIZE];
             assist::getAppData_folder(str);
             std::string mode="wb";
             assist::ensure_directory_and_open_file(str,NULL,mode.c_str());
@@ -276,7 +277,7 @@ void MainWindow::sandBox(){
     }
 
     void MainWindow::readUconfig(){
-        char uconfigFile[500]="uconfig.cdh";
+        char uconfigFile[assist::PATH_SIZE]="uconfig.cdh";
         assist::make_appData_filePath(uconfigFile);
         std::ifstream uconfigStream(uconfigFile, std::ios::in);
         if(!uconfigStream.is_open()){
@@ -296,7 +297,7 @@ void MainWindow::sandBox(){
     }
 
     void MainWindow::readData(){
-        char snippetVaultFile[500];
+        char snippetVaultFile[assist::PATH_SIZE];
         if(vaultLocation=="default"){
             qDebug("the vault location is default");
             std::strncpy(snippetVaultFile, "snipDatVault.cdh", sizeof(snippetVaultFile) - 1);
