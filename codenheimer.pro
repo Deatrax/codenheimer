@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     editorwidget.cpp \
+    langholder.cpp \
     main.cpp \
     mainwindow.cpp \
     snippetbaseclass.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 
 HEADERS += \
     editorwidget.h \
+    langholder.h \
     mainwindow.h \
     predefines.h \
     snippetbaseclass.h \
