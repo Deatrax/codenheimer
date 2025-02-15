@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <fstream>
+#include <vector>
 
 /*
     This is a critial supportive file that handles accessing the appdata folders and other stuff.
@@ -170,6 +172,124 @@ static int ensure_directory_and_open_file(const char *dir_path, const char *file
             return 0;  // Success
     }
 
+// ========================== NEW FILE I/O FUNCTIONS ==========================
+
+/**
+ * @brief Edits a specific line in a file.
+ * Ensures the modified file does not contain unexpected newlines.
+ *
+ * @param filename The file to modify.
+ * @param lineNumber The line number to modify (1-based index).
+ * @param newLine The new content for the specified line.
+ * @return true if successful, false if the operation fails.
+ */
+static bool editLine(const std::string& filename, int lineNumber, const std::string& newLine) {
+    std::ifstream fileIn(filename);
+    if (!fileIn) return false;
+
+    std::vector<std::string> lines;
+    std::string line;
+    int currentLine = 1;
+
+    while (std::getline(fileIn, line)) {
+        if (currentLine == lineNumber) {
+            lines.push_back(newLine);  // Replace the target line
+        } else {
+            lines.push_back(line);
+        }
+        currentLine++;
+    }
+    fileIn.close();
+
+    if (lineNumber > currentLine) return false;  // Line number out of range
+
+    std::ofstream fileOut(filename, std::ios::trunc);
+    if (!fileOut) return false;
+
+    for (size_t i = 0; i < lines.size(); i++) {
+        fileOut << lines[i];
+        if (i != lines.size() - 1) fileOut << '\n';  // Prevent unexpected newlines
+    }
+    fileOut.close();
+    return true;
+}
+
+/**
+ * @brief Adds a new line at a specific position or appends at the end.
+ *
+ * @param filename The file to modify.
+ * @param lineNumber The position to insert (-1 to append).
+ * @param newLine The content to insert.
+ * @return true if successful, false if operation fails.
+ */
+static bool addLine(const std::string& filename, int lineNumber, const std::string& newLine) {
+    std::ifstream fileIn(filename);
+    if (!fileIn) return false;
+
+    std::vector<std::string> lines;
+    std::string line;
+    int currentLine = 1;
+
+    while (std::getline(fileIn, line)) {
+        if (currentLine == lineNumber) {
+            lines.push_back(newLine); // Insert at the right position
+        }
+        lines.push_back(line);
+        currentLine++;
+    }
+    fileIn.close();
+
+    if (lineNumber == -1) {
+        lines.push_back(newLine); // Append at the end
+    }
+
+    std::ofstream fileOut(filename, std::ios::trunc);
+    if (!fileOut) return false;
+
+    for (size_t i = 0; i < lines.size(); i++) {
+        fileOut << lines[i];
+        if (i != lines.size() - 1) fileOut << '\n';  // Prevent unexpected newlines
+    }
+    fileOut.close();
+    return true;
+}
+
+/**
+ * @brief Removes a specific line from a file.
+ * Ensures that there are no unexpected newlines after deletion.
+ *
+ * @param filename The file to modify.
+ * @param lineNumber The line number to remove.
+ * @return true if successful, false if operation fails.
+ */
+static bool removeLine(const std::string& filename, int lineNumber) {
+    std::ifstream fileIn(filename);
+    if (!fileIn) return false;
+
+    std::vector<std::string> lines;
+    std::string line;
+    int currentLine = 1;
+
+    while (std::getline(fileIn, line)) {
+        if (currentLine != lineNumber) {
+            lines.push_back(line);
+        }
+        currentLine++;
+    }
+    fileIn.close();
+
+    if (lineNumber > currentLine) return false;
+
+    std::ofstream fileOut(filename, std::ios::trunc);
+    if (!fileOut) return false;
+
+    for (size_t i = 0; i < lines.size(); i++) {
+        fileOut << lines[i];
+        if (i != lines.size() - 1) fileOut << '\n';  // Prevent unexpected newlines
+    }
+    fileOut.close();
+    return true;
+}
 }
 
 
