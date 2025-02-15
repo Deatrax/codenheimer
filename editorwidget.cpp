@@ -30,6 +30,15 @@ editorWidget::editorWidget(QWidget *parent)
     connect(ui->textEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, &editorWidget::synchronizeScroll);
     ui->lineNo->setContentsMargins(0, 5, 0, 0);  // Top margin of 5 pixels
     on_textEdit_textChanged();
+
+    ui->editorCopyButton->setIcon(QIcon(":images/copyButton.svg"));
+    ui->editorCopyButton->setIconSize(QSize(18,18));
+
+    ui->editorSnippetSettingsButton->setIcon(QIcon(":/images/settingsIcon.svg"));
+    ui->editorSnippetSettingsButton->setIconSize(QSize(21, 21));
+
+    ui->editorSaveButton->setIcon(QIcon(":/images/saveIcon.svg"));
+    ui->editorSaveButton->setIconSize(QSize(19, 19));
 }
 
 editorWidget::~editorWidget()
@@ -68,3 +77,9 @@ void editorWidget::assign(snippetBaseClass* snipObj, bool isOld){
     if(isOld) ui->textEdit->setText(QString(thisSnippet->getSnippet().c_str()));
     else ui->textEdit->setText("");
 }
+
+void editorWidget::on_editorSnippetSettingsButton_clicked()
+{
+
+}
+

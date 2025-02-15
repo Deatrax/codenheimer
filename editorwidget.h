@@ -21,6 +21,8 @@ public:
     void assign(snippetBaseClass *snipObj, bool isOld);
 private slots:
     void on_textEdit_textChanged();
+    void on_editorSnippetSettingsButton_clicked();
+
 private:
     Ui::editorWidget *ui;
     void synchronizeScroll(int value);
