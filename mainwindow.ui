@@ -845,7 +845,7 @@ QTabBar::close-button:hover {
                <string notr="true"/>
               </property>
               <attribute name="title">
-               <string>Tab 1</string>
+               <string>Default Tab</string>
               </attribute>
               <layout class="QHBoxLayout" name="horizontalLayout_12">
                <property name="spacing">
@@ -863,12 +863,69 @@ QTabBar::close-button:hover {
                <property name="bottomMargin">
                 <number>0</number>
                </property>
+               <item>
+                <widget class="QWidget" name="widget" native="true">
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>250</height>
+                  </size>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <widget class="QLabel" name="defaultTabExplainer">
+                    <property name="text">
+                     <string>Open a snippet in search or 
+ browse to edit</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="widget_2" native="true">
+                    <layout class="QHBoxLayout" name="horizontalLayout_13">
+                     <item>
+                      <widget class="QPushButton" name="EditorsDefaultTabButton">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="minimumSize">
+                        <size>
+                         <width>129</width>
+                         <height>27</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QWidget{
+	font-size:14px;
+	color: white;
+	border-radius:5px
+}
+QPushButton{
+	background:black;
+}
+
+QPushButton:hover{
+	background:#1E1E1E;
+}</string>
+                       </property>
+                       <property name="text">
+                        <string>Browse</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
               </layout>
-             </widget>
-             <widget class="QWidget" name="tab_2">
-              <attribute name="title">
-               <string>Tab 2</string>
-              </attribute>
              </widget>
             </widget>
            </item>

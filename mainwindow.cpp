@@ -117,9 +117,10 @@ void MainWindow::sandBox(){
 
 
         //testing the editor
-        editorWidget *widget=new editorWidget(this);
+        // editorWidget *widget=new editorWidget(this);
         //ui->editorsPage->layout()->addWidget(widget);
-        ui->defaultTab->layout()->addWidget(widget);
+        // ui->defaultTab->layout()->addWidget(widget);
+
 
 
         //load complete, land on add new page
@@ -190,6 +191,9 @@ void MainWindow::sandBox(){
         ui->AddnewSidebarButton->setFont(CreteRoundFont);
         ui->SearchSidebarButton->setFont(CreteRoundFont);
         ui->BrowseSidebarButton->setFont(CreteRoundFont);
+
+        ui->EditorsDefaultTabButton->setFont(CreteRoundFont);
+        ui->defaultTabExplainer->setFont(CreteRoundFont);
 
 
         // search button
@@ -523,6 +527,14 @@ void MainWindow::sandBox(){
         ui->editorTabs->addTab(newEditor,tabname);
         setMainIndex(2);
         ui->editorTabs->setCurrentWidget(newEditor);
+
+        if(ui->editorTabs->currentWidget()==ui->defaultTab) {
+            qDebug()<<"the current tab is default tab";
+        }
+        int i=ui->editorTabs->indexOf(ui->defaultTab);
+        if(ui->editorTabs->isTabVisible(i)){
+            ui->editorTabs->setTabVisible(i,false);
+        }
     }
 
     void MainWindow::openSnippetInEditor(std::string& str){
@@ -596,5 +608,11 @@ void MainWindow::on_newSnippetNameBox_returnPressed()
 void MainWindow::on_addNewButton_clicked()
 {
     addNewAction();
+}
+
+
+void MainWindow::on_EditorsDefaultTabButton_clicked()
+{
+    setMainIndex(3);
 }
 
