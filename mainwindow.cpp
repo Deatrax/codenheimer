@@ -364,7 +364,7 @@ void MainWindow::sandBox(){
 
         std::string lineStore;
         std::ifstream snippetVaultStream(snippetVaultFile,std::ios::in);
-        int lineNum=1;
+        lineNum=1;
         while(std::getline(snippetVaultStream,lineStore)){
             string ifTags,name,filename,lang,tag;
             std::vector<std::string> tags;
@@ -384,6 +384,7 @@ void MainWindow::sandBox(){
             }
             snippetBaseClass* obj=generateSnippetObject(lang);
             obj->innit(name,filename,lineNum,lang,tags);
+            filenameStorage[filename]=true;
             mainLangHolder->insert(obj);
             if(ifTags=="tags")mainTagHolder->insert(obj);
             mainStorage.push_back(obj);
@@ -464,6 +465,31 @@ void MainWindow::sandBox(){
 
     void MainWindow::addNewSnippet(QString name, QString lang){
         qDebug()<<"Add new final reached: "<<name<<" "<<lang;
+
+        //generate filename
+        std::string filename = name.toStdString() + ".cdh";
+        int i = 0;  // Start from 0 to check `name+".cdh"` first
+        do {
+            if (i == 3) {
+                warnUser("This name has been used 3 times, please use another name");
+                return;
+            }
+
+            if (i > 0) {
+                filename = name.toStdString() + std::to_string(i) + ".cdh";
+            }
+
+            i++;
+        } while (filenameStorage.find(filename) != filenameStorage.end());
+        filenameStorage[filename]=true;
+
+        snippetBaseClass* obj=generateSnippetObject(lang.toStdString());
+        obj->innit(name.toStdString(),filename,lineNum,lang.toStdString(),std::vector<std::string>());
+        mainLangHolder->insert(obj);
+        mainStorage.push_back(obj);
+        //Insert into search here
+
+
     }
 
 

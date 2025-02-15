@@ -12,6 +12,7 @@
 #include <QToolTip>
 #include <QMessageBox>
 #include <QTimer>
+#include <unordered_map>
 
 #include "snippetbaseclass.h"
 #include "snippetc.h"
@@ -91,14 +92,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
-    void loadConfig();
-    char coreUserConfig[1000];
-
-    void sandBox();
-    void prepareAddNewComboBox();
-    void warnUser(QString str);
-protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
     int tagCount; //the number of tags that exists
@@ -110,6 +103,18 @@ protected:
     langHolder* mainLangHolder; //pointer to hold a langHolder object to be added in readData() function
     std::vector<snippetBaseClass*> mainStorage; // a vector to hold all the snippet's pointers
     QClipboard *clipboard;
+    std::unordered_map<std::string,bool> filenameStorage;
+    int lineNum;
+
+    /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
+    void loadConfig();
+    char coreUserConfig[1000];
+
+    void sandBox();
+    void prepareAddNewComboBox();
+    void warnUser(QString str);
+protected:
+
 
 
     /// @brief loads all the custom fonts into the QFont objects that have been decleared in the header
