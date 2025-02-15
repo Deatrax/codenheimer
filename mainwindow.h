@@ -12,6 +12,7 @@
 #include <QToolTip>
 #include <QMessageBox>
 #include <QTimer>
+#include <unordered_map>
 
 #include "snippetbaseclass.h"
 #include "snippetc.h"
@@ -52,6 +53,7 @@ public:
     QFont getFont(std::string str);
     void setMainIndex(int n);
     void readData();
+
     /**
      * @brief makes and prepares all the folders and files in the
      *  appdata directory for the app to use when the app is first 
@@ -61,11 +63,13 @@ public:
      * @return int - different values based on the execution of the function
      */
     static int firstTimeInit();
+
     void readUconfig();
     void getTagInfo(string tagName, std::string &passedName, std::string &passedColor);
     void copyToClipboard(const QString &text);
     void addNewAction();
     void showAutoCloseMessageBox(QWidget *parent, QString errTitle, QString msg);
+    void openSnippetInEditor(std::string &str);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -89,16 +93,10 @@ private slots:
 
     void on_addNewButton_clicked();
 
+    void on_EditorsDefaultTabButton_clicked();
+
 private:
     Ui::MainWindow *ui;
-    /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
-    void loadConfig();
-    char coreUserConfig[1000];
-
-    void sandBox();
-    void prepareAddNewComboBox();
-    void warnUser(QString str);
-protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
     int tagCount; //the number of tags that exists
@@ -110,6 +108,19 @@ protected:
     langHolder* mainLangHolder; //pointer to hold a langHolder object to be added in readData() function
     std::vector<snippetBaseClass*> mainStorage; // a vector to hold all the snippet's pointers
     QClipboard *clipboard;
+    std::unordered_map<std::string,bool> filenameStorage;
+    int lineNum;
+
+    /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
+    void loadConfig();
+    char coreUserConfig[1000];
+
+    void sandBox();
+    void prepareAddNewComboBox();
+    void warnUser(QString str);
+    void openEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
+protected:
+
 
 
     /// @brief loads all the custom fonts into the QFont objects that have been decleared in the header

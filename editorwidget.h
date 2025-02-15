@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTextDocument>
+#include "snippetbaseclass.h"
 
 namespace Ui {
 class editorWidget;
@@ -17,11 +18,13 @@ public:
     ~editorWidget();
 
     QTextDocument *syntaxHighlightTarget();
+    void assign(snippetBaseClass *snipObj, bool isOld);
 private slots:
     void on_textEdit_textChanged();
 private:
     Ui::editorWidget *ui;
     void synchronizeScroll(int value);
+    snippetBaseClass* thisSnippet;
 };
 
 #endif // EDITORWIDGET_H

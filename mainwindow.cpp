@@ -117,9 +117,10 @@ void MainWindow::sandBox(){
 
 
         //testing the editor
-        editorWidget *widget=new editorWidget(this);
+        // editorWidget *widget=new editorWidget(this);
         //ui->editorsPage->layout()->addWidget(widget);
-        ui->defaultTab->layout()->addWidget(widget);
+        // ui->defaultTab->layout()->addWidget(widget);
+
 
 
         //load complete, land on add new page
@@ -190,6 +191,9 @@ void MainWindow::sandBox(){
         ui->AddnewSidebarButton->setFont(CreteRoundFont);
         ui->SearchSidebarButton->setFont(CreteRoundFont);
         ui->BrowseSidebarButton->setFont(CreteRoundFont);
+
+        ui->EditorsDefaultTabButton->setFont(CreteRoundFont);
+        ui->defaultTabExplainer->setFont(CreteRoundFont);
 
 
         // search button
@@ -364,7 +368,7 @@ void MainWindow::sandBox(){
 
         std::string lineStore;
         std::ifstream snippetVaultStream(snippetVaultFile,std::ios::in);
-        int lineNum=1;
+        lineNum=1;
         while(std::getline(snippetVaultStream,lineStore)){
             string ifTags,name,filename,lang,tag;
             std::vector<std::string> tags;
@@ -384,6 +388,7 @@ void MainWindow::sandBox(){
             }
             snippetBaseClass* obj=generateSnippetObject(lang);
             obj->innit(name,filename,lineNum,lang,tags);
+            filenameStorage[filename]=true;
             mainLangHolder->insert(obj);
             if(ifTags=="tags")mainTagHolder->insert(obj);
             mainStorage.push_back(obj);
@@ -464,6 +469,31 @@ void MainWindow::sandBox(){
 
     void MainWindow::addNewSnippet(QString name, QString lang){
         qDebug()<<"Add new final reached: "<<name<<" "<<lang;
+
+        //generate filename
+        std::string filename = name.toStdString() + ".cdh";
+        int i = 0;  // Start from 0 to check `name+".cdh"` first
+        do {
+            if (i == 3) {
+                warnUser("This name has been used 3 times, please use another name");
+                return;
+            }
+
+            if (i > 0) {
+                filename = name.toStdString() + std::to_string(i) + ".cdh";
+            }
+
+            i++;
+        } while (filenameStorage.find(filename) != filenameStorage.end());
+        filenameStorage[filename]=true;
+
+        snippetBaseClass* obj=generateSnippetObject(lang.toStdString());
+        obj->innit(name.toStdString(),filename,lineNum,lang.toStdString(),std::vector<std::string>());
+        mainLangHolder->insert(obj);
+        mainStorage.push_back(obj);
+        //Insert into search here
+
+        openEditor(obj,name,false);
     }
 
 
@@ -488,6 +518,27 @@ void MainWindow::sandBox(){
         // /*Using tooltip to warn user*/ QToolTip::showText(QCursor::pos(), str, nullptr, QRect(), 2000);
         showAutoCloseMessageBox(this, "Waring!!",str);
         qDebug()<<"User was warned: "<<str;
+    }
+
+    void MainWindow::openEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
+    {
+        editorWidget* newEditor=new editorWidget;
+        newEditor->assign(snipObj,false);
+        ui->editorTabs->addTab(newEditor,tabname);
+        setMainIndex(2);
+        ui->editorTabs->setCurrentWidget(newEditor);
+
+        if(ui->editorTabs->currentWidget()==ui->defaultTab) {
+            qDebug()<<"the current tab is default tab";
+        }
+        int i=ui->editorTabs->indexOf(ui->defaultTab);
+        if(ui->editorTabs->isTabVisible(i)){
+            ui->editorTabs->setTabVisible(i,false);
+        }
+    }
+
+    void MainWindow::openSnippetInEditor(std::string& str){
+
     }
 
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
@@ -557,5 +608,11 @@ void MainWindow::on_newSnippetNameBox_returnPressed()
 void MainWindow::on_addNewButton_clicked()
 {
     addNewAction();
+}
+
+
+void MainWindow::on_EditorsDefaultTabButton_clicked()
+{
+    setMainIndex(3);
 }
 

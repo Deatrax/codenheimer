@@ -52,7 +52,30 @@ std::vector<std::string>* snippetLiveClass::getInfo(std::string& nam, std::strin
 
 std::string snippetLiveClass::getSnippet()
 {
-    return SNIPPET;
+    if (!SNIPPET.empty()) {
+        return SNIPPET;
+    } else {
+        char snippetCodeFile[assist::PATH_SIZE];
+        // for now considering vaultLocation is default
+        if (true /*vaultLocation == "default"*/) {
+            qDebug("the vault location is default");
+            std::strncpy(snippetCodeFile, filename.c_str(), sizeof(snippetCodeFile) - 1);
+            snippetCodeFile[sizeof(snippetCodeFile) - 1] = '\0';
+            assist::make_appData_filePath(snippetCodeFile);
+        } else {
+            // Implement other vault location handling later
+        }
+
+        std::ifstream file(snippetCodeFile, std::ios::in);
+        if (!file) {
+            throw std::runtime_error("Failed to open file: " + filename);
+        }
+
+        std::ostringstream buffer;
+        buffer << file.rdbuf();
+        SNIPPET = buffer.str();
+        return SNIPPET;
+    }
 }
 
 std::vector<std::string> snippetLiveClass::getTags()
@@ -88,4 +111,32 @@ void snippetLiveClass::putTags(std::vector<std::string> &foundTags)
 bool snippetLiveClass::isLocked()
 {
     return isLockedVar;
+}
+
+string &snippetLiveClass::EditSnippet()
+{
+    if (!SNIPPET.empty()) {
+        return SNIPPET;
+    } else {
+        char snippetCodeFile[assist::PATH_SIZE];
+        // for now considering vaultLocation is default
+        if (true /*vaultLocation == "default"*/) {
+            qDebug("the vault location is default");
+            std::strncpy(snippetCodeFile, filename.c_str(), sizeof(snippetCodeFile) - 1);
+            snippetCodeFile[sizeof(snippetCodeFile) - 1] = '\0';
+            assist::make_appData_filePath(snippetCodeFile);
+        } else {
+            // Implement other vault location handling later
+        }
+
+        std::ifstream file(snippetCodeFile, std::ios::in);
+        if (!file) {
+            throw std::runtime_error("Failed to open file: " + filename);
+        }
+
+        std::ostringstream buffer;
+        buffer << file.rdbuf();
+        SNIPPET = buffer.str();
+        return SNIPPET;
+    }
 }
