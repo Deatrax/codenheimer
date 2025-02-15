@@ -277,6 +277,12 @@ void MainWindow::sandBox(){
         ui->centralBrowseButton->setFont(centralElementsFont);
         ui->centralBrowseButton->setIcon(QIcon(":images/centralBrowseIcon.svg"));
         ui->centralBrowseButton->setIconSize(QSize(32, 28));
+
+        ui->addNewButton->setFont(centralElementsFont);
+        ui->addNewButton->hide();
+
+        centralElementsFont.setPointSize(13);
+        ui->addNewLangDropdown->setFont(centralElementsFont);
     }
 
 
@@ -287,6 +293,14 @@ void MainWindow::sandBox(){
         for(auto& it:langs){
             ui->addNewLangDropdown->addItem(QString(it.c_str()));
         }
+        ui->addNewLangDropdown->addItem("Select");
+        ui->addNewLangDropdown->setCurrentText("Select");
+        ui->addNewLangDropdown->setStyleSheet(
+            "QComboBox {"
+            "   qproperty-alignment: AlignCenter;"  // Centers text horizontally and vertically
+            "   border:3px solid black;"
+            "}"
+            );
     }
 
 
@@ -437,6 +451,45 @@ void MainWindow::sandBox(){
         clipboard->setText(text); 
     }
 
+    void MainWindow::addNewAction(){
+        QString newName=ui->newSnippetNameBox->text();
+        if(newName!=""){
+            if(ui->addNewLangDropdown->currentText()!="Select")
+            addNewSnippet(newName,ui->addNewLangDropdown->currentText());
+            else warnUser("Please Select Language");
+        }
+        else warnUser("Please give a name");
+        return;
+    }
+
+    void MainWindow::addNewSnippet(QString name, QString lang){
+        qDebug()<<"Add new final reached: "<<name<<" "<<lang;
+    }
+
+
+    void MainWindow::showAutoCloseMessageBox(QWidget *parent,QString errTitle, QString msg) {
+        QMessageBox *msgBox = new QMessageBox(QMessageBox::Information,
+                                              errTitle,
+                                              msg,
+                                              QMessageBox::Ok,
+                                              parent);
+
+        msgBox->setAttribute(Qt::WA_DeleteOnClose);  // Delete after closing
+
+        // Close the message box after 3000 ms (3 seconds)
+        QTimer::singleShot(3000, msgBox, &QMessageBox::accept);
+
+        msgBox->exec();
+    }
+
+    void MainWindow::warnUser(QString str)
+    {
+
+        // /*Using tooltip to warn user*/ QToolTip::showText(QCursor::pos(), str, nullptr, QRect(), 2000);
+        showAutoCloseMessageBox(this, "Waring!!",str);
+        qDebug()<<"User was warned: "<<str;
+    }
+
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
 
 void MainWindow::on_sidebarButton_clicked()
@@ -485,5 +538,24 @@ void MainWindow::on_centralSearchIcon_clicked()
 void MainWindow::on_centralSearchBoxLE_returnPressed()
 {
 
+}
+
+
+void MainWindow::on_newSnippetNameBox_textChanged(const QString &arg1)
+{
+    if(arg1!="") ui->addNewButton->show();
+    else ui->addNewButton->hide();
+}
+
+
+void MainWindow::on_newSnippetNameBox_returnPressed()
+{
+    addNewAction();
+}
+
+
+void MainWindow::on_addNewButton_clicked()
+{
+    addNewAction();
 }
 

@@ -537,10 +537,34 @@ border-radius:7px;</string>
                  <string/>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <property name="spacing">
+                  <number>4</number>
+                 </property>
                  <item>
                   <widget class="QLineEdit" name="newSnippetNameBox">
                    <property name="placeholderText">
-                    <string>New Snippet...</string>
+                    <string>New Snippet Name...</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="addNewButton">
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton {
+    background: #2B3663; /* Normal background */
+    border-radius: 5px;  /* Border radius for normal state */
+    border: none;        /* Optional: removes any border */
+	padding:5px;
+
+}
+
+QPushButton:hover {
+    background: #3B4984; /* Background color on hover */
+    border-radius: 7px;  /* Keep the same border radius */
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>Go!</string>
                    </property>
                   </widget>
                  </item>
@@ -572,6 +596,9 @@ QComboBox{
               </item>
               <item>
                <widget class="QGroupBox" name="searchAndBrowse">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
                 <property name="title">
                  <string/>
                 </property>
