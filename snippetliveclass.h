@@ -2,6 +2,8 @@
 #define SNIPPETLIVECLASS_H
 
 #include <snippetbaseclass.h>
+#include "helperFunctions.h"
+#include <sstream>
 
 class snippetLiveClass : public snippetBaseClass
 {
@@ -38,6 +40,8 @@ public:
     void putTags(std::vector<std::string>& foundTags) override;
 
     bool isLocked() override;
+
+    std::string& EditSnippet() override;
 };
 
 #endif // SNIPPETLIVECLASS_H

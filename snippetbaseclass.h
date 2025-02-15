@@ -38,6 +38,8 @@ public:
 
     virtual std::string getSnippet()=0;
 
+    virtual std::string& EditSnippet()=0;
+
     virtual std::vector<std::string> getTags()=0;
 
     virtual void setEditor(QTextDocument*)=0;

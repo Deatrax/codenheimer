@@ -53,6 +53,7 @@ public:
     QFont getFont(std::string str);
     void setMainIndex(int n);
     void readData();
+
     /**
      * @brief makes and prepares all the folders and files in the
      *  appdata directory for the app to use when the app is first 
@@ -62,11 +63,13 @@ public:
      * @return int - different values based on the execution of the function
      */
     static int firstTimeInit();
+
     void readUconfig();
     void getTagInfo(string tagName, std::string &passedName, std::string &passedColor);
     void copyToClipboard(const QString &text);
     void addNewAction();
     void showAutoCloseMessageBox(QWidget *parent, QString errTitle, QString msg);
+    void openSnippetInEditor(std::string &str);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -113,6 +116,7 @@ private:
     void sandBox();
     void prepareAddNewComboBox();
     void warnUser(QString str);
+    void openEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
 protected:
 
 

@@ -61,3 +61,10 @@ void editorWidget::synchronizeScroll(int value) {
 QTextDocument* editorWidget::syntaxHighlightTarget(){
     return ui->textEdit->document();
 }
+
+void editorWidget::assign(snippetBaseClass* snipObj, bool isOld){
+    thisSnippet=snipObj;
+    thisSnippet->setEditor(ui->textEdit->document());
+    if(isOld) ui->textEdit->setText(QString(thisSnippet->getSnippet().c_str()));
+    else ui->textEdit->setText("");
+}

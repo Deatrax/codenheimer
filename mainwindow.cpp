@@ -489,7 +489,7 @@ void MainWindow::sandBox(){
         mainStorage.push_back(obj);
         //Insert into search here
 
-
+        openEditor(obj,name,false);
     }
 
 
@@ -514,6 +514,19 @@ void MainWindow::sandBox(){
         // /*Using tooltip to warn user*/ QToolTip::showText(QCursor::pos(), str, nullptr, QRect(), 2000);
         showAutoCloseMessageBox(this, "Waring!!",str);
         qDebug()<<"User was warned: "<<str;
+    }
+
+    void MainWindow::openEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
+    {
+        editorWidget* newEditor=new editorWidget;
+        newEditor->assign(snipObj,false);
+        ui->editorTabs->addTab(newEditor,tabname);
+        setMainIndex(2);
+        ui->editorTabs->setCurrentWidget(newEditor);
+    }
+
+    void MainWindow::openSnippetInEditor(std::string& str){
+
     }
 
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
