@@ -42,6 +42,8 @@ public:
     bool isLocked() override;
 
     std::string& EditSnippet() override;
+
+    bool saveSnippetToFile(std::string snippet) override;
 };
 
 #endif // SNIPPETLIVECLASS_H

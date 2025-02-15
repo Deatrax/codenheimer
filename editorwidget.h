@@ -23,6 +23,10 @@ private slots:
     void on_textEdit_textChanged();
     void on_editorSnippetSettingsButton_clicked();
 
+    void on_editorCopyButton_clicked();
+
+    void on_editorSaveButton_clicked();
+
 private:
     Ui::editorWidget *ui;
     void synchronizeScroll(int value);

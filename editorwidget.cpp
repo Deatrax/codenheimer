@@ -83,3 +83,16 @@ void editorWidget::on_editorSnippetSettingsButton_clicked()
 
 }
 
+
+void editorWidget::on_editorCopyButton_clicked()
+{
+
+}
+
+
+void editorWidget::on_editorSaveButton_clicked()
+{
+    QString str=ui->textEdit->toPlainText();
+    thisSnippet->saveSnippetToFile(str.toStdString());
+}
+
