@@ -81,6 +81,19 @@ border-radius:11px;</string>
            <height>0</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+	background:rgb(34, 39, 59);
+	margin-left:16px;
+	margin-right:16px;
+	padding-top:3px;
+	padding-bottom:3px;
+	border-radius:3px;
+}
+QPushButton:hover{
+	background:rgb(43, 54, 99);
+}</string>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -477,7 +490,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -524,15 +537,39 @@ border-radius:7px;</string>
                  <string/>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <property name="spacing">
+                  <number>4</number>
+                 </property>
                  <item>
                   <widget class="QLineEdit" name="newSnippetNameBox">
                    <property name="placeholderText">
-                    <string>New Snippet...</string>
+                    <string>New Snippet Name...</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="comboBox">
+                  <widget class="QPushButton" name="addNewButton">
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton {
+    background: #2B3663; /* Normal background */
+    border-radius: 5px;  /* Border radius for normal state */
+    border: none;        /* Optional: removes any border */
+	padding:5px;
+
+}
+
+QPushButton:hover {
+    background: #3B4984; /* Background color on hover */
+    border-radius: 7px;  /* Keep the same border radius */
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>Go!</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="addNewLangDropdown">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -547,7 +584,10 @@ border-radius:7px;</string>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">
-border:3px solid black;</string>
+QComboBox{
+	border:3px solid black;
+}
+</string>
                    </property>
                   </widget>
                  </item>
@@ -556,6 +596,9 @@ border:3px solid black;</string>
               </item>
               <item>
                <widget class="QGroupBox" name="searchAndBrowse">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
                 <property name="title">
                  <string/>
                 </property>

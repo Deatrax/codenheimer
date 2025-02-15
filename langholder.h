@@ -132,5 +132,11 @@ public:
     std::vector<snippetBaseClass*>& getSnippetsFromLang(std::string lang);
 
     void testPrintCustomLang(const std::string& lng);
+
+    int getNoOfLangs();
+
+    lang *getLangFromString(std::string str);
+
+    std::vector<std::string> getLangList();
 };
 #endif // LANGHOLDER_H

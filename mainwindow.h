@@ -9,6 +9,10 @@
 #include <iostream>
 #include <sstream>
 #include <QClipboard>
+#include <QToolTip>
+#include <QMessageBox>
+#include <QTimer>
+
 #include "snippetbaseclass.h"
 #include "snippetc.h"
 #include "snippetcpp.h"
@@ -25,6 +29,13 @@ namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
+
+
+
+
+
+
+
 
 
 
@@ -53,6 +64,8 @@ public:
     void readUconfig();
     void getTagInfo(string tagName, std::string &passedName, std::string &passedColor);
     void copyToClipboard(const QString &text);
+    void addNewAction();
+    void showAutoCloseMessageBox(QWidget *parent, QString errTitle, QString msg);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -70,6 +83,12 @@ private slots:
 
     void on_centralSearchBoxLE_returnPressed();
 
+    void on_newSnippetNameBox_textChanged(const QString &arg1);
+
+    void on_newSnippetNameBox_returnPressed();
+
+    void on_addNewButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -77,6 +96,8 @@ private:
     char coreUserConfig[1000];
 
     void sandBox();
+    void prepareAddNewComboBox();
+    void warnUser(QString str);
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
@@ -101,7 +122,8 @@ protected:
     void prepareCentralArea();
     /// @brief generates a snippet object like a predefined cpp, c, java, py, css or custom. 
     /// @param lang 
-    /// @return returns a snippetBaseClass* that uses polymorphism to store a snippetliveclass derived object. 
+    /// @return returns a snippetBaseClass* that uses polymorphism to store a snippetliveclass derived object.
     snippetBaseClass *generateSnippetObject(std::string lang);
+    void addNewSnippet(QString name, QString lang);
 };
 #endif // MAINWINDOW_H

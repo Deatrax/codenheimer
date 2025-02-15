@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include "predefines.h"
 #include "editorwidget.h"
+#include <QSettings>
 
 
 
@@ -90,6 +91,7 @@ void MainWindow::sandBox(){
         setSidebarButtonIcons();
 
         readUconfig();
+        ui->usernameAndMainSettingsButton->setText(QString(username.c_str())+"  ");
 
         //preparing the holders
         mainTagHolder=new tagHolder(tagCount);
@@ -99,8 +101,8 @@ void MainWindow::sandBox(){
         readData();
 
         //testing holders
-        mainLangHolder->testPrintCustomLang("typeName5");
-        mainLangHolder->testPrintCustomLang("typeName4");
+        // mainLangHolder->testPrintCustomLang("typeName5");
+        // mainLangHolder->testPrintCustomLang("typeName4");
 
 
         //testing the snippet previewBox
@@ -110,7 +112,7 @@ void MainWindow::sandBox(){
         // }
 
         prepareCentralArea();
-
+        prepareAddNewComboBox();
         sandBox();
 
 
@@ -118,6 +120,7 @@ void MainWindow::sandBox(){
         editorWidget *widget=new editorWidget(this);
         //ui->editorsPage->layout()->addWidget(widget);
         ui->defaultTab->layout()->addWidget(widget);
+
 
         //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
@@ -274,26 +277,76 @@ void MainWindow::sandBox(){
         ui->centralBrowseButton->setFont(centralElementsFont);
         ui->centralBrowseButton->setIcon(QIcon(":images/centralBrowseIcon.svg"));
         ui->centralBrowseButton->setIconSize(QSize(32, 28));
+
+        ui->addNewButton->setFont(centralElementsFont);
+        ui->addNewButton->hide();
+
+        centralElementsFont.setPointSize(13);
+        ui->addNewLangDropdown->setFont(centralElementsFont);
     }
 
-    void MainWindow::readUconfig(){
-        char uconfigFile[assist::PATH_SIZE]="uconfig.cdh";
-        assist::make_appData_filePath(uconfigFile);
-        std::ifstream uconfigStream(uconfigFile, std::ios::in);
-        if(!uconfigStream.is_open()){
-            qDebug("Failed to open uconfig.cdh");
-            return;
-        }
-        std::getline(uconfigStream,username);
-        std::getline(uconfigStream,hashResult);
-        std::getline(uconfigStream,vaultLocation);
 
-        std::string tagC, typeC;
-        std::getline(uconfigStream,tagC);
-        std::getline(uconfigStream,typeC);
-        tagCount=std::stoi(tagC);
-        additionalTypeCount=std::stoi(typeC);
+
+    void MainWindow::prepareAddNewComboBox()
+    {
+        std::vector<string> langs=mainLangHolder->getLangList();
+        for(auto& it:langs){
+            ui->addNewLangDropdown->addItem(QString(it.c_str()));
+        }
+        ui->addNewLangDropdown->addItem("Select");
+        ui->addNewLangDropdown->setCurrentText("Select");
+        ui->addNewLangDropdown->setStyleSheet(
+            "QComboBox {"
+            "   qproperty-alignment: AlignCenter;"  // Centers text horizontally and vertically
+            "   border:3px solid black;"
+            "}"
+            );
+    }
+
+
+    void MainWindow::readUconfig(){
+
+        // //OLD system using File IO============
+        // char uconfigFile[assist::PATH_SIZE]="uconfig.cdh";
+        // assist::make_appData_filePath(uconfigFile);
+        // std::ifstream uconfigStream(uconfigFile, std::ios::in);
+        // if(!uconfigStream.is_open()){
+        //     qDebug("Failed to open uconfig.cdh");
+        //     return;
+        // }
+        //
+        // std::getline(uconfigStream,username);
+        // std::getline(uconfigStream,hashResult);
+        // std::getline(uconfigStream,vaultLocation);
+        // std::string tagC, typeC;
+        //
+        // std::getline(uconfigStream,tagC);
+        // std::getline(uconfigStream,typeC);
+        // tagCount=std::stoi(tagC);
+        // additionalTypeCount=std::stoi(typeC);
+        // qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
+        //========================================
+
+        //Qsettings system
+        QSettings settings("AronoxStudios", "Codenheimer");
+
+        QString u=settings.value("username","default_user").toString();
+        QString hs=settings.value("hashres","default_val").toString();
+        QString va=settings.value("vault","locale").toString();
+        int ty=settings.value("type",69).toInt();
+        int tg=settings.value("tag",420).toInt();
+
+        username=u.toStdString();
+        hashResult=hs.toStdString();
+        vaultLocation=va.toStdString();
+        tagCount=tg;
+        additionalTypeCount=ty;
+
+
+        qDebug() << "got from settings==" << u << hs << va << ty << tg;
+        qDebug() << "got from settings==" << u.toStdString().c_str() << hs.toStdString().c_str() << va.toStdString().c_str() << ty << tg;
         qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
+
     }
 
     void MainWindow::readData(){
@@ -398,6 +451,45 @@ void MainWindow::sandBox(){
         clipboard->setText(text); 
     }
 
+    void MainWindow::addNewAction(){
+        QString newName=ui->newSnippetNameBox->text();
+        if(newName!=""){
+            if(ui->addNewLangDropdown->currentText()!="Select")
+            addNewSnippet(newName,ui->addNewLangDropdown->currentText());
+            else warnUser("Please Select Language");
+        }
+        else warnUser("Please give a name");
+        return;
+    }
+
+    void MainWindow::addNewSnippet(QString name, QString lang){
+        qDebug()<<"Add new final reached: "<<name<<" "<<lang;
+    }
+
+
+    void MainWindow::showAutoCloseMessageBox(QWidget *parent,QString errTitle, QString msg) {
+        QMessageBox *msgBox = new QMessageBox(QMessageBox::Information,
+                                              errTitle,
+                                              msg,
+                                              QMessageBox::Ok,
+                                              parent);
+
+        msgBox->setAttribute(Qt::WA_DeleteOnClose);  // Delete after closing
+
+        // Close the message box after 3000 ms (3 seconds)
+        QTimer::singleShot(3000, msgBox, &QMessageBox::accept);
+
+        msgBox->exec();
+    }
+
+    void MainWindow::warnUser(QString str)
+    {
+
+        // /*Using tooltip to warn user*/ QToolTip::showText(QCursor::pos(), str, nullptr, QRect(), 2000);
+        showAutoCloseMessageBox(this, "Waring!!",str);
+        qDebug()<<"User was warned: "<<str;
+    }
+
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
 
 void MainWindow::on_sidebarButton_clicked()
@@ -446,5 +538,24 @@ void MainWindow::on_centralSearchIcon_clicked()
 void MainWindow::on_centralSearchBoxLE_returnPressed()
 {
 
+}
+
+
+void MainWindow::on_newSnippetNameBox_textChanged(const QString &arg1)
+{
+    if(arg1!="") ui->addNewButton->show();
+    else ui->addNewButton->hide();
+}
+
+
+void MainWindow::on_newSnippetNameBox_returnPressed()
+{
+    addNewAction();
+}
+
+
+void MainWindow::on_addNewButton_clicked()
+{
+    addNewAction();
 }
 
