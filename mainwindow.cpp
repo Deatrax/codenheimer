@@ -492,7 +492,7 @@ void MainWindow::sandBox(){
         mainStorage.push_back(obj);
         //Insert into search here
 
-        openEditor(obj,name,false);
+        openSnippetInEditor(obj,name,false);
     }
 
 
@@ -519,13 +519,46 @@ void MainWindow::sandBox(){
         qDebug()<<"User was warned: "<<str;
     }
 
-    void MainWindow::openEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
+    void MainWindow::closeTab()
     {
-        editorWidget* newEditor=new editorWidget(this);
+        //int idx = ui->editorTabs->indexOf(tab);
+        // if (idx != -1) {  // Ensure the tab exists
+        //     ui->editorTabs->removeTab(idx);
+        // }
+
+        // editorWidget* editor = qobject_cast<editorWidget*>(ui->editorTabs->widget(idx));
+        // if (editor) {
+        //     editor->close();
+        // }
+
+        qDebug() << "Tab count: " << ui->editorTabs->count();
+        // ui->editorTabs->setCurrentIndex(0);
+        // if (!ui->editorTabs) {
+        //     qDebug() << "ERROR: ui->editorTabs is NULL!";
+        //     return;
+        // }
+        // qDebug() << "Editor tabs pointer:" << ui->editorTabs;
+
+        QWidget* currentTab = ui->editorTabs->currentWidget();
+        if (!currentTab) {
+            qDebug() << "No current tab selected!";
+            return;
+        }
+        int currentIdx=ui->editorTabs->indexOf(currentTab);
+        ui->editorTabs->removeTab(currentIdx);
+        currentTab->close();
+
+    }
+
+    void MainWindow::openSnippetInEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
+    {
+        editorWidget* newEditor=new editorWidget(this,this);
         newEditor->assign(snipObj,false);
         ui->editorTabs->addTab(newEditor,tabname);
+        newEditor->tellIdx(ui->editorTabs->indexOf(newEditor));
         setMainIndex(2);
         ui->editorTabs->setCurrentWidget(newEditor);
+        // ui->editorTabs->setCurrentIndex(ui->editorTabs->indexOf(newEditor));
 
         if(ui->editorTabs->currentWidget()==ui->defaultTab) {
             qDebug()<<"the current tab is default tab";
@@ -536,9 +569,7 @@ void MainWindow::sandBox(){
         }
     }
 
-    void MainWindow::openSnippetInEditor(std::string& str){
 
-    }
 
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
 

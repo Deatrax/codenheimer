@@ -5,9 +5,10 @@
 editorWidget::editorWidget(MainWindow* mainwindow, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::editorWidget)
-    , mainWindow(mainWindow)
+    , mainWindow(mainwindow)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose,true);
 
     ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -40,6 +41,9 @@ editorWidget::editorWidget(MainWindow* mainwindow, QWidget *parent)
 
     ui->editorSaveButton->setIcon(QIcon(":/images/saveIcon.svg"));
     ui->editorSaveButton->setIconSize(QSize(19, 19));
+
+    ui->tabCloseButton->setIcon(QIcon(":/images/closeIcon.svg"));
+    ui->tabCloseButton->setIconSize(QSize(20,20));
 }
 
 editorWidget::~editorWidget()
@@ -79,6 +83,10 @@ void editorWidget::assign(snippetBaseClass* snipObj, bool isOld){
     else ui->textEdit->setText("");
 }
 
+void editorWidget::tellIdx(int i){
+    idx=i;
+}
+
 void editorWidget::on_editorSnippetSettingsButton_clicked()
 {
 
@@ -99,3 +107,9 @@ void editorWidget::on_editorSaveButton_clicked()
     }
 }
 
+
+void editorWidget::on_tabCloseButton_clicked()
+{
+    mainWindow->closeTab();
+
+}

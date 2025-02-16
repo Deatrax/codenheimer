@@ -20,6 +20,7 @@ public:
 
     QTextDocument *syntaxHighlightTarget();
     void assign(snippetBaseClass *snipObj, bool isOld);
+    void tellIdx(int i);
 private slots:
     void on_textEdit_textChanged();
     void on_editorSnippetSettingsButton_clicked();
@@ -28,11 +29,14 @@ private slots:
 
     void on_editorSaveButton_clicked();
 
+    void on_tabCloseButton_clicked();
+
 private:
     Ui::editorWidget *ui;
     void synchronizeScroll(int value);
     snippetBaseClass* thisSnippet;
     MainWindow* mainWindow;
+    int idx;
 };
 
 #endif // EDITORWIDGET_H
