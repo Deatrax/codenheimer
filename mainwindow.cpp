@@ -479,7 +479,7 @@ void MainWindow::sandBox(){
             }
 
             if (i > 0) {
-                filename = name.toStdString() + std::to_string(i) + ".cdh";
+                filename = name.toStdString() + lang.toStdString() + std::to_string(i) + ".cdh";
             }
 
             i++;

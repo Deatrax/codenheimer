@@ -490,7 +490,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -529,6 +529,12 @@ QPushButton:hover{
               </property>
               <item>
                <widget class="QGroupBox" name="newSnippet">
+                <property name="maximumSize">
+                 <size>
+                  <width>401</width>
+                  <height>63</height>
+                 </size>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background:#2B3663;
 border-radius:7px;</string>
