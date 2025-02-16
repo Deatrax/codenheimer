@@ -993,13 +993,15 @@ QPushButton:hover{
             <string>settings page</string>
            </property>
           </widget>
+         </widget>
+         <widget class="QWidget" name="testPage">
           <widget class="QScrollArea" name="scrollArea">
            <property name="geometry">
             <rect>
-             <x>110</x>
-             <y>50</y>
-             <width>691</width>
-             <height>321</height>
+             <x>70</x>
+             <y>150</y>
+             <width>751</width>
+             <height>381</height>
             </rect>
            </property>
            <property name="widgetResizable">
@@ -1010,8 +1012,8 @@ QPushButton:hover{
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>689</width>
-              <height>319</height>
+              <width>749</width>
+              <height>379</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1020,6 +1022,24 @@ QPushButton:hover{
              </item>
             </layout>
            </widget>
+          </widget>
+          <widget class="QLabel" name="label_2">
+           <property name="geometry">
+            <rect>
+             <x>100</x>
+             <y>20</y>
+             <width>711</width>
+             <height>91</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>15</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>⚠⚠⚠THIS PAGE IS ONLY FOR DEBUGGING PURPOSES ONLY⚠⚠⚠</string>
+           </property>
           </widget>
          </widget>
         </widget>

@@ -659,3 +659,15 @@ void MainWindow::on_EditorsDefaultTabButton_clicked()
     setMainIndex(3);
 }
 
+
+void MainWindow::on_downarrow_clicked()
+{
+    ui->maincontentsStack->setCurrentIndex(5);
+}
+
+
+void MainWindow::on_centralBrowseButton_clicked()
+{
+    setMainIndex(3);
+}
+

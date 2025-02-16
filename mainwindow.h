@@ -98,6 +98,10 @@ private slots:
 
     void on_EditorsDefaultTabButton_clicked();
 
+    void on_downarrow_clicked();
+
+    void on_centralBrowseButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QFont CutiveMonoFont;
