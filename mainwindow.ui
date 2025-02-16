@@ -977,7 +977,7 @@ QPushButton:hover{
                 </rect>
                </property>
                <property name="text">
-                <string>Browse page</string>
+                <string>Browse page but alfi is lazy</string>
                </property>
               </widget>
              </widget>
@@ -1045,7 +1045,7 @@ QPushButton:hover{
             </font>
            </property>
            <property name="text">
-            <string>⚠⚠⚠THIS PAGE IS ONLY FOR DEBUGGING PURPOSES ONLY⚠⚠⚠</string>
+            <string>⚠⚠⚠THIS PAGE IS  FOR DEBUGGING PURPOSES ONLY⚠⚠⚠</string>
            </property>
           </widget>
          </widget>
