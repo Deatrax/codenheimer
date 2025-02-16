@@ -44,6 +44,8 @@ public:
     std::string& EditSnippet() override;
 
     bool saveSnippetToFile(std::string snippet) override;
+    
+    bool updateSnippetDetails() override;
 };
 
 #endif // SNIPPETLIVECLASS_H

@@ -169,3 +169,22 @@ bool snippetLiveClass::saveSnippetToFile(string snippet)
 
     return true;
 }
+
+bool snippetLiveClass::updateSnippetDetails(){
+
+    std::string vaultDat=name+","+filename+","+lang+",";
+    if(tags.size()>0){
+        vaultDat+="tags";
+        for ( auto& tag : tags) {
+            vaultDat+=tag;
+        }
+    }
+    else vaultDat+="noTags";
+
+    qDebug()<<"gonna write to vault file: "<<vaultDat;
+    char vaultFilePath[assist::PATH_SIZE];
+    std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+    vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+    assist::make_appData_filePath(vaultFilePath);
+    return assist::editLine(vaultFilePath,lineNum,vaultDat);
+}
