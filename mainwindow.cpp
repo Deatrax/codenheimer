@@ -377,7 +377,6 @@ void MainWindow::sandBox(){
             getline(ss,name,',');
             getline(ss,filename,',');
             getline(ss,lang,',');
-
             getline(ss,ifTags,',');
             if (ifTags == "tags") {
 
@@ -522,7 +521,7 @@ void MainWindow::sandBox(){
 
     void MainWindow::openEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
     {
-        editorWidget* newEditor=new editorWidget;
+        editorWidget* newEditor=new editorWidget(this);
         newEditor->assign(snipObj,false);
         ui->editorTabs->addTab(newEditor,tabname);
         setMainIndex(2);

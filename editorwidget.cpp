@@ -2,9 +2,10 @@
 #include "ui_editorwidget.h"
 #include <qscrollbar.h>
 
-editorWidget::editorWidget(QWidget *parent)
+editorWidget::editorWidget(MainWindow* mainwindow, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::editorWidget)
+    , mainWindow(mainWindow)
 {
     ui->setupUi(this);
 
@@ -93,6 +94,8 @@ void editorWidget::on_editorCopyButton_clicked()
 void editorWidget::on_editorSaveButton_clicked()
 {
     QString str=ui->textEdit->toPlainText();
-    thisSnippet->saveSnippetToFile(str.toStdString());
+    if(thisSnippet->saveSnippetToFile(str.toStdString())){
+        mainWindow->showAutoCloseMessageBox(this, "Success!","The snippet was saved successfully!");
+    }
 }
 

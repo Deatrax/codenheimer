@@ -70,6 +70,8 @@ public:
     void addNewAction();
     void showAutoCloseMessageBox(QWidget *parent, QString errTitle, QString msg);
     void openSnippetInEditor(std::string &str);
+    void warnUser(QString str);
+
 private slots:
     void on_sidebarButton_clicked();
 
@@ -117,7 +119,6 @@ private:
 
     void sandBox();
     void prepareAddNewComboBox();
-    void warnUser(QString str);
     void openEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
 protected:
 

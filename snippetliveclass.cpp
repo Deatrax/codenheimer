@@ -160,6 +160,7 @@ bool snippetLiveClass::saveSnippetToFile(string snippet)
     if (!file) {
         throw std::runtime_error("Failed to open file for writing: " + filename);
         assist::errLog(std::string("Failed to open file for writing: " + filename).c_str());
+        return false;
     }
 
     file << snippet;  // Write snippet content to file
@@ -180,5 +181,7 @@ bool snippetLiveClass::saveSnippetToFile(string snippet)
     std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
     vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
     assist::make_appData_filePath(vaultFilePath);
-    assist::addLine(vaultFilePath,-1,vaultDat);
+    return assist::addLine(vaultFilePath,-1,vaultDat);
+
+    return true;
 }

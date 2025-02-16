@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTextDocument>
 #include "snippetbaseclass.h"
+#include "mainwindow.h"
 
 namespace Ui {
 class editorWidget;
@@ -14,7 +15,7 @@ class editorWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit editorWidget(QWidget *parent = nullptr);
+    explicit editorWidget(MainWindow* mainwindow, QWidget *parent = nullptr);
     ~editorWidget();
 
     QTextDocument *syntaxHighlightTarget();
@@ -31,6 +32,7 @@ private:
     Ui::editorWidget *ui;
     void synchronizeScroll(int value);
     snippetBaseClass* thisSnippet;
+    MainWindow* mainWindow;
 };
 
 #endif // EDITORWIDGET_H
