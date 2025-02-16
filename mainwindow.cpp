@@ -57,10 +57,11 @@ void MainWindow::sandBox(){
         "}"
         );
 
-    for (int i = 0; i < 12; i++) {
+    for (snippetBaseClass*& snip: mainStorage) {
+
         // Create the custom widget
         snippetPreviewBox* pb = new snippetPreviewBox(this, this);
-        pb->assignSnippet(mainStorage[i]);
+        pb->assignSnippet(snip);
 
         // Create a QListWidgetItem to hold the custom widget
         QListWidgetItem* item = new QListWidgetItem(ui->sandBox);
