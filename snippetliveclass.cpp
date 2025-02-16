@@ -163,7 +163,7 @@ bool snippetLiveClass::saveSnippetToFile(string snippet)
         return false;
     }
 
-    file << snippet;  // Write snippet content to file
+    file << snippet;
     file.close();
 
 
