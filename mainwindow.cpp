@@ -57,10 +57,11 @@ void MainWindow::sandBox(){
         "}"
         );
 
-    for (int i = 0; i < 12; i++) {
+    for (snippetBaseClass*& snip: mainStorage) {
+
         // Create the custom widget
         snippetPreviewBox* pb = new snippetPreviewBox(this, this);
-        pb->assignSnippet(mainStorage[i]);
+        pb->assignSnippet(snip);
 
         // Create a QListWidgetItem to hold the custom widget
         QListWidgetItem* item = new QListWidgetItem(ui->sandBox);
@@ -377,7 +378,6 @@ void MainWindow::sandBox(){
             getline(ss,name,',');
             getline(ss,filename,',');
             getline(ss,lang,',');
-
             getline(ss,ifTags,',');
             if (ifTags == "tags") {
 
@@ -444,7 +444,7 @@ void MainWindow::sandBox(){
             passedName = it->tagName;
             passedColor = it->tagColor;
         } else {
-            qDebug("Error: Tag not found for name ");
+            qDebug("Error: Tag not found for name: %s",tagName.c_str());
             passedName = "NoTag";
             passedColor = "";
         }
@@ -454,6 +454,11 @@ void MainWindow::sandBox(){
         
         //qDebug("copy to clipboard called");
         clipboard->setText(text); 
+        if(QApplication::clipboard()->text() == text){
+            ui->statusBar->showMessage("Copied to clipboard!", 2500); 
+        } else {
+            warnUser("Text copy to clipboard failed! Please contact devs to report bug");
+        }
     }
 
     void MainWindow::addNewAction(){
@@ -471,7 +476,7 @@ void MainWindow::sandBox(){
         qDebug()<<"Add new final reached: "<<name<<" "<<lang;
 
         //generate filename
-        std::string filename = name.toStdString() + ".cdh";
+        std::string filename = name.toStdString() + lang.toStdString() + ".cdh";
         int i = 0;  // Start from 0 to check `name+".cdh"` first
         do {
             if (i == 3) {
@@ -480,7 +485,7 @@ void MainWindow::sandBox(){
             }
 
             if (i > 0) {
-                filename = name.toStdString() + std::to_string(i) + ".cdh";
+                filename = name.toStdString() + lang.toStdString() + std::to_string(i) + ".cdh";
             }
 
             i++;
@@ -493,7 +498,25 @@ void MainWindow::sandBox(){
         mainStorage.push_back(obj);
         //Insert into search here
 
-        openEditor(obj,name,false);
+        //=====updating the vault file
+        std::string vaultDat=name.toStdString() + "," + filename + "," + lang.toStdString() + "," + "noTags";
+        qDebug()<<"gonna write to vault file: "<<vaultDat;
+        char vaultFilePath[assist::PATH_SIZE];
+        std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+        vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+        assist::make_appData_filePath(vaultFilePath);
+        if(assist::addLine(vaultFilePath,-1,vaultDat))
+            showAutoCloseMessageBox(this,"Success!","Snippet added to vault success!");
+        else{
+            warnUser("Snippets failed to add in vault! \n Please check logs and contact devs");
+            return;
+        }
+        //=============
+
+        //======making the snippet code file
+        obj->saveSnippetToFile("");
+
+        openSnippetInEditor(obj,name,false);
     }
 
 
@@ -520,13 +543,46 @@ void MainWindow::sandBox(){
         qDebug()<<"User was warned: "<<str;
     }
 
-    void MainWindow::openEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
+    void MainWindow::closeTab()
     {
-        editorWidget* newEditor=new editorWidget;
+        //int idx = ui->editorTabs->indexOf(tab);
+        // if (idx != -1) {  // Ensure the tab exists
+        //     ui->editorTabs->removeTab(idx);
+        // }
+
+        // editorWidget* editor = qobject_cast<editorWidget*>(ui->editorTabs->widget(idx));
+        // if (editor) {
+        //     editor->close();
+        // }
+
+        qDebug() << "Tab count: " << ui->editorTabs->count();
+        // ui->editorTabs->setCurrentIndex(0);
+        // if (!ui->editorTabs) {
+        //     qDebug() << "ERROR: ui->editorTabs is NULL!";
+        //     return;
+        // }
+        // qDebug() << "Editor tabs pointer:" << ui->editorTabs;
+
+        QWidget* currentTab = ui->editorTabs->currentWidget();
+        if (!currentTab) {
+            qDebug() << "No current tab selected!";
+            return;
+        }
+        int currentIdx=ui->editorTabs->indexOf(currentTab);
+        ui->editorTabs->removeTab(currentIdx);
+        currentTab->close();
+
+    }
+
+    void MainWindow::openSnippetInEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
+    {
+        editorWidget* newEditor=new editorWidget(this,this);
         newEditor->assign(snipObj,false);
         ui->editorTabs->addTab(newEditor,tabname);
+        newEditor->tellIdx(ui->editorTabs->indexOf(newEditor));
         setMainIndex(2);
         ui->editorTabs->setCurrentWidget(newEditor);
+        // ui->editorTabs->setCurrentIndex(ui->editorTabs->indexOf(newEditor));
 
         if(ui->editorTabs->currentWidget()==ui->defaultTab) {
             qDebug()<<"the current tab is default tab";
@@ -537,9 +593,7 @@ void MainWindow::sandBox(){
         }
     }
 
-    void MainWindow::openSnippetInEditor(std::string& str){
 
-    }
 
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
 
@@ -612,6 +666,18 @@ void MainWindow::on_addNewButton_clicked()
 
 
 void MainWindow::on_EditorsDefaultTabButton_clicked()
+{
+    setMainIndex(3);
+}
+
+
+void MainWindow::on_downarrow_clicked()
+{
+    ui->maincontentsStack->setCurrentIndex(5);
+}
+
+
+void MainWindow::on_centralBrowseButton_clicked()
 {
     setMainIndex(3);
 }

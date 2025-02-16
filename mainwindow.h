@@ -37,7 +37,7 @@ QT_END_NAMESPACE
 
 
 
-
+// class editorWidget; //forward decleration
 
 
 
@@ -69,7 +69,10 @@ public:
     void copyToClipboard(const QString &text);
     void addNewAction();
     void showAutoCloseMessageBox(QWidget *parent, QString errTitle, QString msg);
-    void openSnippetInEditor(std::string &str);
+    void warnUser(QString str);
+    void closeTab();
+    friend class editorWidget;
+
 private slots:
     void on_sidebarButton_clicked();
 
@@ -95,6 +98,10 @@ private slots:
 
     void on_EditorsDefaultTabButton_clicked();
 
+    void on_downarrow_clicked();
+
+    void on_centralBrowseButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QFont CutiveMonoFont;
@@ -117,8 +124,7 @@ private:
 
     void sandBox();
     void prepareAddNewComboBox();
-    void warnUser(QString str);
-    void openEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
+    void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
 protected:
 
 

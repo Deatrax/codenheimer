@@ -2,11 +2,13 @@
 #include "ui_editorwidget.h"
 #include <qscrollbar.h>
 
-editorWidget::editorWidget(QWidget *parent)
+editorWidget::editorWidget(MainWindow* mainwindow, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::editorWidget)
+    , mainWindow(mainwindow)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose,true);
 
     ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -30,6 +32,18 @@ editorWidget::editorWidget(QWidget *parent)
     connect(ui->textEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, &editorWidget::synchronizeScroll);
     ui->lineNo->setContentsMargins(0, 5, 0, 0);  // Top margin of 5 pixels
     on_textEdit_textChanged();
+
+    ui->editorCopyButton->setIcon(QIcon(":images/copyButton.svg"));
+    ui->editorCopyButton->setIconSize(QSize(18,18));
+
+    ui->editorSnippetSettingsButton->setIcon(QIcon(":/images/settingsIcon.svg"));
+    ui->editorSnippetSettingsButton->setIconSize(QSize(21, 21));
+
+    ui->editorSaveButton->setIcon(QIcon(":/images/saveIcon.svg"));
+    ui->editorSaveButton->setIconSize(QSize(19, 19));
+
+    ui->tabCloseButton->setIcon(QIcon(":/images/closeIcon.svg"));
+    ui->tabCloseButton->setIconSize(QSize(20,20));
 }
 
 editorWidget::~editorWidget()
@@ -67,4 +81,37 @@ void editorWidget::assign(snippetBaseClass* snipObj, bool isOld){
     thisSnippet->setEditor(ui->textEdit->document());
     if(isOld) ui->textEdit->setText(QString(thisSnippet->getSnippet().c_str()));
     else ui->textEdit->setText("");
+}
+
+void editorWidget::tellIdx(int i){
+    idx=i;
+}
+
+void editorWidget::on_editorSnippetSettingsButton_clicked()
+{
+    mainWindow->warnUser("Jessan was supposed to make this!!");
+}
+
+
+void editorWidget::on_editorCopyButton_clicked()
+{
+    QString str=ui->textEdit->toPlainText();
+    thisSnippet->saveSnippetToFile(str.toStdString());
+    mainWindow->copyToClipboard(str);
+}
+
+
+void editorWidget::on_editorSaveButton_clicked()
+{
+    QString str=ui->textEdit->toPlainText();
+    if(thisSnippet->saveSnippetToFile(str.toStdString())){
+        mainWindow->showAutoCloseMessageBox(this, "Success!","The snippet was saved successfully!");
+    }
+}
+
+
+void editorWidget::on_tabCloseButton_clicked()
+{
+    mainWindow->closeTab();
+
 }

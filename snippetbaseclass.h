@@ -53,6 +53,10 @@ public:
     virtual void putTags(std::vector<std::string>&)=0;
 
     virtual bool isLocked()=0;
+
+    virtual bool saveSnippetToFile(std::string snippet)=0;
+
+    virtual bool updateSnippetDetails()=0;
     
 };
 
