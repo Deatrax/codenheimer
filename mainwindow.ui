@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1041</width>
-    <height>683</height>
+    <height>686</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,6 +56,12 @@ QWidget {
       <property name="minimumSize">
        <size>
         <width>1041</width>
+        <height>76</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
         <height>76</height>
        </size>
       </property>
@@ -191,7 +197,8 @@ QPushButton:hover{
          </property>
          <property name="styleSheet">
           <string notr="true">background:#303755;
-border-radius: 0px 0px 11px 11px;</string>
+border-radius: 0px 0px 11px 11px;
+border-bottom-right-radius:7px;</string>
          </property>
          <property name="title">
           <string/>

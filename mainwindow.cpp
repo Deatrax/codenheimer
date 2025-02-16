@@ -443,7 +443,7 @@ void MainWindow::sandBox(){
             passedName = it->tagName;
             passedColor = it->tagColor;
         } else {
-            qDebug("Error: Tag not found for name ");
+            qDebug("Error: Tag not found for name: %s",tagName.c_str());
             passedName = "NoTag";
             passedColor = "";
         }
@@ -453,6 +453,11 @@ void MainWindow::sandBox(){
         
         //qDebug("copy to clipboard called");
         clipboard->setText(text); 
+        if(QApplication::clipboard()->text() == text){
+            ui->statusBar->showMessage("Copied to clipboard!", 2500); 
+        } else {
+            warnUser("Text copy to clipboard failed! Please contact devs to report bug");
+        }
     }
 
     void MainWindow::addNewAction(){
