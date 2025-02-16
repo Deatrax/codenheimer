@@ -95,7 +95,9 @@ void editorWidget::on_editorSnippetSettingsButton_clicked()
 
 void editorWidget::on_editorCopyButton_clicked()
 {
-
+    QString str=ui->textEdit->toPlainText();
+    thisSnippet->saveSnippetToFile(str.toStdString());
+    mainWindow->copyToClipboard(str);
 }
 
 

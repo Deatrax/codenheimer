@@ -492,6 +492,19 @@ void MainWindow::sandBox(){
         mainStorage.push_back(obj);
         //Insert into search here
 
+
+        std::string vaultDat=name.toStdString() + "," + filename + "," + lang.toStdString() + "," + "noTags";
+        qDebug()<<"gonna write to vault file: "<<vaultDat;
+        char vaultFilePath[assist::PATH_SIZE];
+        std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+        vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+        assist::make_appData_filePath(vaultFilePath);
+        if(assist::addLine(vaultFilePath,-1,vaultDat))
+            showAutoCloseMessageBox(this,"Success!","Snippet added to vault success!");
+        else{
+            warnUser("Snippets failed to add in vault! \n Please check logs and contact devs");
+            return;
+        }
         openSnippetInEditor(obj,name,false);
     }
 
