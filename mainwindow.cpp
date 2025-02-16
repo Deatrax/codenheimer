@@ -470,7 +470,7 @@ void MainWindow::sandBox(){
         qDebug()<<"Add new final reached: "<<name<<" "<<lang;
 
         //generate filename
-        std::string filename = name.toStdString() + ".cdh";
+        std::string filename = name.toStdString() + lang.toStdString() + ".cdh";
         int i = 0;  // Start from 0 to check `name+".cdh"` first
         do {
             if (i == 3) {
