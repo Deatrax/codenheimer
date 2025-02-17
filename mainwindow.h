@@ -377,6 +377,8 @@ private slots:
 
     void on_centralSearchBoxLE_returnPressed();
 
+    void on_searchBoxLineEdit_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started

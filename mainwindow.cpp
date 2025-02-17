@@ -466,3 +466,34 @@ void MainWindow::on_centralSearchBoxLE_returnPressed()
 
 }
 
+
+void MainWindow::on_searchBoxLineEdit_textChanged(const QString &arg1)
+{
+    ui->snippetPreviewBoxAreaOnSearchPage->clear();
+    if(arg1!="" /*un comment this to see all*/ /*true*/) {
+        std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix(arg1.toStdString());
+        for (auto& itr : searchRet){
+            for (auto& itr2 : itr.second) {
+                // Create the custom widget
+                snippetPreviewBox* pb = new snippetPreviewBox(this, this);
+
+                pb->assignSnippet(itr2);
+
+                // Create a QListWidgetItem to hold the custom widget
+                QListWidgetItem* item = new QListWidgetItem(ui->snippetPreviewBoxAreaOnSearchPage);
+
+                // Set the size of the item to match the widget
+                item->setSizeHint(pb->sizeHint());
+
+                // Add the item to the list widget
+                ui->snippetPreviewBoxAreaOnSearchPage->addItem(item);
+
+                // Set the custom widget for this item
+                ui->snippetPreviewBoxAreaOnSearchPage->setItemWidget(item, pb);
+            }
+        }
+    }
+    else return;
+
+}
+

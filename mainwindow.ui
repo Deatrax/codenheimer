@@ -862,6 +862,9 @@ QPushButton::hover{
              <property name="styleSheet">
               <string notr="true">border:none;</string>
              </property>
+             <property name="spacing">
+              <number>3</number>
+             </property>
             </widget>
            </item>
           </layout>
