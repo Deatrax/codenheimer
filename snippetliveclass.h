@@ -8,6 +8,8 @@ class snippetLiveClass : public snippetBaseClass
 protected:
     std::vector<std::string> tags;
     bool isLockedVar;
+
+    lol* thisLol;
 public:
     snippetLiveClass();
     void innit
@@ -38,6 +40,13 @@ public:
     void putTags(std::vector<std::string>& foundTags) override;
 
     bool isLocked() override;
+
+    // search class
+    void insert(const std::string& str, snippetBaseClass* targ)override;
+
+    void insert(std::string str, int n);
+    bool search(const std::string &str,   std::vector<snippetBaseClass*> ret)override;
+    void getData(std::string &str, int &n);
 };
 
 #endif // SNIPPETLIVECLASS_H

@@ -16,7 +16,7 @@
 #include "snippetjava.h"
 #include "snippetpy.h"
 #include "snippetcustom.h"
-
+#include "searchsyetem.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -385,6 +385,7 @@ private:
 
     void sandBox();
     void searchPageSearchbar();
+    searchSystem *searchObj;
 protected:
     QFont CutiveMonoFont;
     QFont CreteRoundFont;

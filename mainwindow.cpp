@@ -3,7 +3,7 @@
 #include "ui_mainwindow.h"
 #include "predefines.h"
 #include "editorwidget.h"
-
+#include "searchsyetem.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -94,7 +94,7 @@ void MainWindow::sandBox(){
         mainTagHolder=new tagHolder(tagCount);
         mainLangHolder=new langHolder(additionalTypeCount);
         clipboard = QApplication::clipboard(); // Get the clipboard object
-
+        searchObj=new searchSystem;
         readData();
 
         //testing holders

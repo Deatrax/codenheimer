@@ -89,3 +89,17 @@ bool snippetLiveClass::isLocked()
 {
     return isLockedVar;
 }
+
+//search option
+void snippetLiveClass::insert(const std::string &str, snippetBaseClass *targ){
+    //absolutely nothing;
+}
+
+void snippetLiveClass::insert(std::string str, int n){
+    thisLol=new lol(str,n);
+}
+
+void snippetLiveClass::getData(std::string& str, int& n){
+    str=thisLol->str;
+    n=thisLol->num;
+}

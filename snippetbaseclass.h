@@ -6,6 +6,7 @@
 #include <iostream>
 #include <QTextDocument>
 
+
 /**
  * @brief 
  * 
@@ -19,6 +20,14 @@ protected:
     int lineNum;
     std::string lang;
     std::string SNIPPET;
+
+    typedef struct lol{
+        std::string str;
+        int num;
+
+        lol(std::string st, int n):str(st),num(n){};
+    }lol;
+    std::vector<snippetBaseClass*>vec;
 
 public:
     snippetBaseClass();
@@ -51,6 +60,13 @@ public:
     virtual void putTags(std::vector<std::string>&)=0;
 
     virtual bool isLocked()=0;
+
+    virtual void insert(const std::string& str, snippetBaseClass* targ)=0;
+
+    virtual void insert(std::string str, int n)=0;
+
+    virtual void getData(std::string& str,int& n)=0;
+    virtual bool search(const std::string &str,   std::vector<snippetBaseClass*> ret)=0;
     
 };
 
