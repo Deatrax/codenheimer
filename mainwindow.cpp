@@ -172,6 +172,28 @@ void MainWindow::sandBox(){
 
 
 
+            std::vector<std::string> filenames = {
+                "tagDat.cdh",
+                "langDat.cdh",
+                "snipDatVault.cdh"
+            };
+
+            char filePathBuffer[assist::PATH_SIZE];
+
+            for (const auto& filename : filenames) {
+                std::strncpy(filePathBuffer, filename.c_str(), sizeof(filePathBuffer) - 1);
+                filePathBuffer[sizeof(filePathBuffer) - 1] = '\0';
+
+                assist::make_appData_filePath(filePathBuffer);
+
+                if (assist::ensure_directory_and_open_file(str, filePathBuffer, mode.c_str())) {
+                    QMessageBox::critical(nullptr, "Error", "Failed to initialize the application, please contact devs: ERR_NO_CREATE:"+QString().fromStdString(filename));
+                    return -1;
+                }
+            }
+
+
+
             QSettings settings(company, appName);
 
             settings.setValue("username", "dummyUser");
