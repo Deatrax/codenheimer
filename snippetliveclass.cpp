@@ -52,7 +52,30 @@ std::vector<std::string>* snippetLiveClass::getInfo(std::string& nam, std::strin
 
 std::string snippetLiveClass::getSnippet()
 {
-    return SNIPPET;
+    if (!SNIPPET.empty()) {
+        return SNIPPET;
+    } else {
+        char snippetCodeFile[assist::PATH_SIZE];
+        // for now considering vaultLocation is default
+        if (true /*vaultLocation == "default"*/) {
+            qDebug("the vault location is default");
+            std::strncpy(snippetCodeFile, filename.c_str(), sizeof(snippetCodeFile) - 1);
+            snippetCodeFile[sizeof(snippetCodeFile) - 1] = '\0';
+            assist::make_appData_filePath(snippetCodeFile);
+        } else {
+            // Implement other vault location handling later
+        }
+
+        std::ifstream file(snippetCodeFile, std::ios::in);
+        if (!file) {
+            throw std::runtime_error("Failed to open file: " + filename);
+        }
+
+        std::ostringstream buffer;
+        buffer << file.rdbuf();
+        SNIPPET = buffer.str();
+        return SNIPPET;
+    }
 }
 
 std::vector<std::string> snippetLiveClass::getTags()
@@ -94,6 +117,7 @@ bool snippetLiveClass::isLocked()
     return isLockedVar;
 }
 
+// <<<<<<< ryexocious-making-search-page
 //search option
 void snippetLiveClass::insert(const std::string &str, snippetBaseClass *targ){
     //absolutely nothing;
@@ -116,4 +140,80 @@ void snippetLiveClass::getData(std::string& str, int& n){
 std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> snippetLiveClass::searchWithPrefix(const std::string &prefix)
 {
     return std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>>();
+}
+// =======
+std::string& snippetLiveClass::EditSnippet()
+{
+    if (!SNIPPET.empty()) {
+        return SNIPPET;
+    } else {
+        char snippetCodeFile[assist::PATH_SIZE];
+        // for now considering vaultLocation is default
+        if (true /*vaultLocation == "default"*/) {
+            qDebug("the vault location is default");
+            std::strncpy(snippetCodeFile, filename.c_str(), sizeof(snippetCodeFile) - 1);
+            snippetCodeFile[sizeof(snippetCodeFile) - 1] = '\0';
+            assist::make_appData_filePath(snippetCodeFile);
+        } else {
+            // Implement other vault location handling later
+        }
+
+        std::ifstream file(snippetCodeFile, std::ios::in);
+        if (!file) {
+            throw std::runtime_error("Failed to open file: " + filename);
+        }
+
+        std::ostringstream buffer;
+        buffer << file.rdbuf();
+        SNIPPET = buffer.str();
+        return SNIPPET;
+    }
+}
+
+bool snippetLiveClass::saveSnippetToFile(string snippet)
+{
+    char snippetCodeFile[assist::PATH_SIZE];
+
+    // Assuming vaultLocation is "default" for now
+    if (true /*vaultLocation == "default"*/) {
+        qDebug("The vault location is default");
+        std::strncpy(snippetCodeFile, filename.c_str(), sizeof(snippetCodeFile) - 1);
+        snippetCodeFile[sizeof(snippetCodeFile) - 1] = '\0';
+        assist::make_appData_filePath(snippetCodeFile);
+    } else {
+        // Implement other vault location handling later
+    }
+
+    // Open file for writing
+    std::ofstream file(snippetCodeFile, std::ios::out | std::ios::trunc);
+    if (!file) {
+        throw std::runtime_error("Failed to open file for writing: " + filename);
+        assist::errLog(std::string("Failed to open file for writing: " + filename).c_str());
+        return false;
+    }
+
+    file << snippet;
+    file.close();
+
+
+    return true;
+}
+
+bool snippetLiveClass::updateSnippetDetails(){
+
+    std::string vaultDat=name+","+filename+","+lang+",";
+    if(tags.size()>0){
+        vaultDat+="tags";
+        for ( auto& tag : tags) {
+            vaultDat+=tag;
+        }
+    }
+    else vaultDat+="noTags";
+
+    qDebug()<<"gonna write to vault file: "<<vaultDat;
+    char vaultFilePath[assist::PATH_SIZE];
+    std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+    vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+    assist::make_appData_filePath(vaultFilePath);
+    return assist::editLine(vaultFilePath,lineNum,vaultDat);
 }

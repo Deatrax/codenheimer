@@ -47,6 +47,8 @@ public:
 
     virtual std::string getSnippet()=0;
 
+    virtual std::string& EditSnippet()=0;
+
     virtual std::vector<std::string> getTags()=0;
 
     virtual void setEditor(QTextDocument*)=0;
@@ -61,6 +63,7 @@ public:
 
     virtual bool isLocked()=0;
 
+// <<<<<<< ryexocious-making-search-page
     virtual void insert(const std::string& str, snippetBaseClass* targ) =0;
 
     virtual void insert(std::string str, int n)=0;
@@ -70,6 +73,11 @@ public:
     virtual bool search(const std::string& str, std::vector<snippetBaseClass*>& ret)=0;
 
     virtual std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchWithPrefix(const std::string& prefix)=0;
+// =======
+    virtual bool saveSnippetToFile(std::string snippet)=0;
+
+    virtual bool updateSnippetDetails()=0;
+// >>>>>>> main
     
 };
 

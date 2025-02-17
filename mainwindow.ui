@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1041</width>
-    <height>683</height>
+    <height>686</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,6 +59,12 @@ QWidget {
         <height>76</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>76</height>
+       </size>
+      </property>
       <property name="styleSheet">
        <string notr="true">background:#22273B;
 border-radius:11px;</string>
@@ -80,6 +86,19 @@ border-radius:11px;</string>
            <width>73</width>
            <height>0</height>
           </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+	background:rgb(34, 39, 59);
+	margin-left:16px;
+	margin-right:16px;
+	padding-top:3px;
+	padding-bottom:3px;
+	border-radius:3px;
+}
+QPushButton:hover{
+	background:rgb(43, 54, 99);
+}</string>
          </property>
          <property name="text">
           <string/>
@@ -178,7 +197,8 @@ border-radius:11px;</string>
          </property>
          <property name="styleSheet">
           <string notr="true">background:#303755;
-border-radius: 0px 0px 11px 11px;</string>
+border-radius: 0px 0px 11px 11px;
+border-bottom-right-radius:7px;</string>
          </property>
          <property name="title">
           <string/>
@@ -477,7 +497,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -516,6 +536,12 @@ QPushButton:hover{
               </property>
               <item>
                <widget class="QGroupBox" name="newSnippet">
+                <property name="maximumSize">
+                 <size>
+                  <width>401</width>
+                  <height>63</height>
+                 </size>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">background:#2B3663;
 border-radius:7px;</string>
@@ -524,15 +550,39 @@ border-radius:7px;</string>
                  <string/>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <property name="spacing">
+                  <number>4</number>
+                 </property>
                  <item>
                   <widget class="QLineEdit" name="newSnippetNameBox">
                    <property name="placeholderText">
-                    <string>New Snippet...</string>
+                    <string>New Snippet Name...</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="comboBox">
+                  <widget class="QPushButton" name="addNewButton">
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton {
+    background: #2B3663; /* Normal background */
+    border-radius: 5px;  /* Border radius for normal state */
+    border: none;        /* Optional: removes any border */
+	padding:5px;
+
+}
+
+QPushButton:hover {
+    background: #3B4984; /* Background color on hover */
+    border-radius: 7px;  /* Keep the same border radius */
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>Go!</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="addNewLangDropdown">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -547,7 +597,10 @@ border-radius:7px;</string>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">
-border:3px solid black;</string>
+QComboBox{
+	border:3px solid black;
+}
+</string>
                    </property>
                   </widget>
                  </item>
@@ -556,6 +609,9 @@ border:3px solid black;</string>
               </item>
               <item>
                <widget class="QGroupBox" name="searchAndBrowse">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
                 <property name="title">
                  <string/>
                 </property>
@@ -928,7 +984,7 @@ QTabBar::close-button:hover {
                <string notr="true"/>
               </property>
               <attribute name="title">
-               <string>Tab 1</string>
+               <string>Default Tab</string>
               </attribute>
               <layout class="QHBoxLayout" name="horizontalLayout_12">
                <property name="spacing">
@@ -946,12 +1002,69 @@ QTabBar::close-button:hover {
                <property name="bottomMargin">
                 <number>0</number>
                </property>
+               <item>
+                <widget class="QWidget" name="widget" native="true">
+                 <property name="maximumSize">
+                  <size>
+                   <width>200</width>
+                   <height>250</height>
+                  </size>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <widget class="QLabel" name="defaultTabExplainer">
+                    <property name="text">
+                     <string>Open a snippet in search or 
+ browse to edit</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="widget_2" native="true">
+                    <layout class="QHBoxLayout" name="horizontalLayout_13">
+                     <item>
+                      <widget class="QPushButton" name="EditorsDefaultTabButton">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="minimumSize">
+                        <size>
+                         <width>129</width>
+                         <height>27</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QWidget{
+	font-size:14px;
+	color: white;
+	border-radius:5px
+}
+QPushButton{
+	background:black;
+}
+
+QPushButton:hover{
+	background:#1E1E1E;
+}</string>
+                       </property>
+                       <property name="text">
+                        <string>Browse</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
               </layout>
-             </widget>
-             <widget class="QWidget" name="tab_2">
-              <attribute name="title">
-               <string>Tab 2</string>
-              </attribute>
              </widget>
             </widget>
            </item>
@@ -990,7 +1103,7 @@ QTabBar::close-button:hover {
                 </rect>
                </property>
                <property name="text">
-                <string>Browse page</string>
+                <string>Browse page but alfi is lazy</string>
                </property>
               </widget>
              </widget>
@@ -1013,13 +1126,15 @@ QTabBar::close-button:hover {
             <string>settings page</string>
            </property>
           </widget>
+         </widget>
+         <widget class="QWidget" name="testPage">
           <widget class="QScrollArea" name="scrollArea">
            <property name="geometry">
             <rect>
-             <x>110</x>
-             <y>50</y>
-             <width>691</width>
-             <height>321</height>
+             <x>70</x>
+             <y>150</y>
+             <width>751</width>
+             <height>381</height>
             </rect>
            </property>
            <property name="widgetResizable">
@@ -1030,8 +1145,8 @@ QTabBar::close-button:hover {
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>689</width>
-              <height>319</height>
+              <width>749</width>
+              <height>379</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1041,6 +1156,24 @@ QTabBar::close-button:hover {
             </layout>
            </widget>
           </widget>
+          <widget class="QLabel" name="label_2">
+           <property name="geometry">
+            <rect>
+             <x>100</x>
+             <y>20</y>
+             <width>711</width>
+             <height>91</height>
+            </rect>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>15</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>⚠⚠⚠THIS PAGE IS  FOR DEBUGGING PURPOSES ONLY⚠⚠⚠</string>
+           </property>
+          </widget>
          </widget>
         </widget>
        </item>
@@ -1049,6 +1182,7 @@ QTabBar::close-button:hover {
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <resources/>
  <connections/>

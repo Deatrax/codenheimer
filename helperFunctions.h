@@ -6,6 +6,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <fstream>
+#include <vector>
 
 /*
     This is a critial supportive file that handles accessing the appdata folders and other stuff.
@@ -17,7 +19,21 @@
 using std::string;
 
 namespace assist{
-    
+    const int PATH_SIZE = 1024;
+
+    /**
+     * @brief Logs error messages to a file named "error_log.txt"
+     * 
+     * @param message The error message to log
+     */
+    static void errLog(const char* message) {
+        FILE* logFile = fopen("error_log.txt", "a");
+        if (logFile) {
+            fprintf(logFile, "Error: %s\n", message);
+            fclose(logFile);
+        }
+    }
+
     #ifdef _WIN32   //===========WINDOWS FUNCTIONS================
 
     /**
@@ -25,22 +41,34 @@ namespace assist{
      * 
      * @param str the c-string that will be populated with the derived path
      */
-    static void getAppData_folder(char* str){
-
-        sprintf(str,"%s\\AppData\\Roaming\\KCATDVWSPJD", getenv("USERPROFILE"));
+    static void getAppData_folder(char* str) {
+        const char* userProfile = getenv("USERPROFILE");
+        if (!userProfile) {
+            errLog("USERPROFILE environment variable is not set.");
+            str[0] = '\0'; // Ensure empty string if getenv fails
+            return;
+        }
+        snprintf(str, PATH_SIZE, "%s\\AppData\\Roaming\\KCATDVWSPJD", userProfile);
     }
-    
+
     /**
      * @brief function to make any folder name into a folder path in the appdata folder
      * 
      * @param filename the c-string that will be populated with the derived file path
      */
-    static void make_appData_filePath(char*  filename){
-        char str[257];
-        sprintf(str,"%s\\AppData\\Roaming\\KCATDVWSPJD\\%s\0",getenv("USERPROFILE"),filename);
-        strcpy(filename,str);
-    }
+    static void make_appData_filePath(char* filename) {
+        const char* userProfile = getenv("USERPROFILE");
+        if (!userProfile) {
+            errLog("USERPROFILE environment variable is not set.");
+            filename[0] = '\0'; // Ensure empty string if getenv fails
+            return;
+        }
 
+        char str[PATH_SIZE];
+        snprintf(str, sizeof(str), "%s\\AppData\\Roaming\\KCATDVWSPJD\\%s", userProfile, filename);
+        strncpy(filename, str, PATH_SIZE - 1);
+        filename[PATH_SIZE - 1] = '\0'; // Null-terminate
+    }
 
     #elif defined(__APPLE__)  //===========UNIX/MacOS FUNCTIONS================
 
@@ -50,7 +78,13 @@ namespace assist{
      * @param str 
      */
     static void getAppData_folder(char* str) {
-        sprintf(str, "%s/Library/Application Support/KCATDVWSPJD", getenv("HOME"));
+        const char* home = getenv("HOME");
+        if (!home) {
+            errLog("HOME environment variable is not set.");
+            str[0] = '\0'; // Ensure empty string if getenv fails
+            return;
+        }
+        snprintf(str, PATH_SIZE, "%s/Library/Application Support/KCATDVWSPJD", home);
     }
 
     /**
@@ -59,9 +93,17 @@ namespace assist{
      * @param filename the c-string that will be populated with the derived file path
      */
     static void make_appData_filePath(char* filename) {
-        char str[400];
-        sprintf(str, "%s/Library/Application Support/KCATDVWSPJD/%s", getenv("HOME"), filename);
-        strcpy(filename, str);
+        const char* home = getenv("HOME");
+        if (!home) {
+            errLog("HOME environment variable is not set.");
+            filename[0] = '\0'; // Ensure empty string if getenv fails
+            return;
+        }
+
+        char str[PATH_SIZE];
+        snprintf(str, sizeof(str), "%s/Library/Application Support/KCATDVWSPJD/%s", home, filename);
+        strncpy(filename, str, PATH_SIZE - 1);
+        filename[PATH_SIZE - 1] = '\0'; // Null-terminate
     }
 
     #endif
@@ -130,6 +172,124 @@ static int ensure_directory_and_open_file(const char *dir_path, const char *file
             return 0;  // Success
     }
 
+// ========================== NEW FILE I/O FUNCTIONS ==========================
+
+/**
+ * @brief Edits a specific line in a file.
+ * Ensures the modified file does not contain unexpected newlines.
+ *
+ * @param filename The file to modify.
+ * @param lineNumber The line number to modify (1-based index).
+ * @param newLine The new content for the specified line.
+ * @return true if successful, false if the operation fails.
+ */
+static bool editLine(const std::string& filename, int lineNumber, const std::string& newLine) {
+    std::ifstream fileIn(filename);
+    if (!fileIn) return false;
+
+    std::vector<std::string> lines;
+    std::string line;
+    int currentLine = 1;
+
+    while (std::getline(fileIn, line)) {
+        if (currentLine == lineNumber) {
+            lines.push_back(newLine);  // Replace the target line
+        } else {
+            lines.push_back(line);
+        }
+        currentLine++;
+    }
+    fileIn.close();
+
+    if (lineNumber > currentLine) return false;  // Line number out of range
+
+    std::ofstream fileOut(filename, std::ios::trunc);
+    if (!fileOut) return false;
+
+    for (size_t i = 0; i < lines.size(); i++) {
+        fileOut << lines[i];
+        if (i != lines.size() - 1) fileOut << '\n';  // Prevent unexpected newlines
+    }
+    fileOut.close();
+    return true;
+}
+
+/**
+ * @brief Adds a new line at a specific position or appends at the end.
+ *
+ * @param filename The file to modify.
+ * @param lineNumber The position to insert (-1 to append).
+ * @param newLine The content to insert.
+ * @return true if successful, false if operation fails.
+ */
+static bool addLine(const std::string& filename, int lineNumber, const std::string& newLine) {
+    std::ifstream fileIn(filename);
+    if (!fileIn) return false;
+
+    std::vector<std::string> lines;
+    std::string line;
+    int currentLine = 1;
+
+    while (std::getline(fileIn, line)) {
+        if (currentLine == lineNumber) {
+            lines.push_back(newLine); // Insert at the right position
+        }
+        lines.push_back(line);
+        currentLine++;
+    }
+    fileIn.close();
+
+    if (lineNumber == -1) {
+        lines.push_back(newLine); // Append at the end
+    }
+
+    std::ofstream fileOut(filename, std::ios::trunc);
+    if (!fileOut) return false;
+
+    for (size_t i = 0; i < lines.size(); i++) {
+        fileOut << lines[i];
+        if (i != lines.size() - 1) fileOut << '\n';  // Prevent unexpected newlines
+    }
+    fileOut.close();
+    return true;
+}
+
+/**
+ * @brief Removes a specific line from a file.
+ * Ensures that there are no unexpected newlines after deletion.
+ *
+ * @param filename The file to modify.
+ * @param lineNumber The line number to remove.
+ * @return true if successful, false if operation fails.
+ */
+static bool removeLine(const std::string& filename, int lineNumber) {
+    std::ifstream fileIn(filename);
+    if (!fileIn) return false;
+
+    std::vector<std::string> lines;
+    std::string line;
+    int currentLine = 1;
+
+    while (std::getline(fileIn, line)) {
+        if (currentLine != lineNumber) {
+            lines.push_back(line);
+        }
+        currentLine++;
+    }
+    fileIn.close();
+
+    if (lineNumber > currentLine) return false;
+
+    std::ofstream fileOut(filename, std::ios::trunc);
+    if (!fileOut) return false;
+
+    for (size_t i = 0; i < lines.size(); i++) {
+        fileOut << lines[i];
+        if (i != lines.size() - 1) fileOut << '\n';  // Prevent unexpected newlines
+    }
+    fileOut.close();
+    return true;
+}
 }
 
 

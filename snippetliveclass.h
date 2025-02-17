@@ -2,6 +2,8 @@
 #define SNIPPETLIVECLASS_H
 
 #include <snippetbaseclass.h>
+#include "helperFunctions.h"
+#include <sstream>
 
 class snippetLiveClass : public snippetBaseClass
 {
@@ -41,6 +43,7 @@ public:
 
     bool isLocked() override;
 
+// <<<<<<< ryexocious-making-search-page
     // search class
     void insert(const std::string& str, snippetBaseClass* targ) override;
 
@@ -51,6 +54,13 @@ public:
     void getData(std::string &str, int &n);
 
     std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchWithPrefix(const std::string& prefix) override;
+// =======
+    std::string& EditSnippet() override;
+
+    bool saveSnippetToFile(std::string snippet) override;
+    
+    bool updateSnippetDetails() override;
+// >>>>>>> main
 };
 
 #endif // SNIPPETLIVECLASS_H
