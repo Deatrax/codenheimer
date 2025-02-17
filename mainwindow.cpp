@@ -3,12 +3,17 @@
 #include "ui_mainwindow.h"
 #include "predefines.h"
 #include "editorwidget.h"
-//<<<<<<< ryexocious-making-search-page
 #include "searchsyetem.h"
-//=======
 #include <QSettings>
 
-//>>>>>>> main
+
+
+//Global and Static Space
+QString MainWindow::company="AronoxStudios";
+QString MainWindow::appName="Codenheimer";
+
+
+//==================
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -139,6 +144,17 @@ void MainWindow::sandBox(){
     }
 
 
+    void MainWindow::saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type) {
+        // Step 1: Create or open the QSettings object
+        QSettings settings(company, appName);
+
+        // Step 2: Write data to settings
+        settings.setValue("username", username);
+        settings.setValue("hashres", hashResult);
+        settings.setValue("vault", vault);
+        settings.setValue("tag", tag);
+        settings.setValue("type", type);
+    }
 
     int MainWindow::firstTimeInit()
     {
@@ -147,12 +163,22 @@ void MainWindow::sandBox(){
         if (!inFile.is_open()) { // Check if the file could not be opened and if not then this is the first time this is being run
             std::ofstream make("firstrun.txt");
             make.close();
-            std::cerr << "Error: File does not exist or cannot be opened!\n";
+            std::cerr << "Error: First time run checker File does not exist or cannot be opened!\n";
             std::string strn;
             char str[assist::PATH_SIZE];
             assist::getAppData_folder(str);
             std::string mode="wb";
             assist::ensure_directory_and_open_file(str,NULL,mode.c_str());
+
+
+
+            QSettings settings(company, appName);
+
+            settings.setValue("username", "dummyUser");
+            settings.setValue("hashres", "noHash");
+            settings.setValue("vault", "default");
+            settings.setValue("tag",  0);
+            settings.setValue("type", 0);
             return 1;
             //makeSampleFile();
         }
@@ -370,13 +396,13 @@ void MainWindow::sandBox(){
         //========================================
 
         //Qsettings system
-        QSettings settings("AronoxStudios", "Codenheimer");
+        QSettings settings(company, appName);
 
         QString u=settings.value("username","default_user").toString();
         QString hs=settings.value("hashres","default_val").toString();
-        QString va=settings.value("vault","locale").toString();
-        int ty=settings.value("type",69).toInt();
-        int tg=settings.value("tag",420).toInt();
+        QString va=settings.value("vault","default").toString();
+        int ty=settings.value("type",6).toInt();
+        int tg=settings.value("tag",6).toInt();
 
         username=u.toStdString();
         hashResult=hs.toStdString();

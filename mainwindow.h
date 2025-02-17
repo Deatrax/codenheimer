@@ -133,9 +133,12 @@ private:
     QClipboard *clipboard;
     std::unordered_map<std::string,bool> filenameStorage;
     int lineNum;
+    static QString company;
+    static QString appName;
 
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
+    void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
 protected:
 
 
