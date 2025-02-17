@@ -124,7 +124,7 @@ void MainWindow::sandBox(){
         ui->maincontentsStack->setCurrentIndex(0);
     }
 
-    
+
 
     int MainWindow::firstTimeInit()
     {
@@ -353,7 +353,7 @@ void MainWindow::sandBox(){
             if(ifTags=="tags")mainTagHolder->insert(obj);
             mainStorage.push_back(obj);
             //THIS IS WHERE JESSAN WILL ADD INSERT OF SEARCH CLASS
-
+            searchObj->insert(name,obj);
             // Output or use the tags for testing
             std::cout << "Name: " << name << ", Filename: " << filename
                       << ", Lang: " << lang << ", Tags: ";
@@ -411,9 +411,9 @@ void MainWindow::sandBox(){
     }
 
     void MainWindow::copyToClipboard(const QString& text){
-        
+
         //qDebug("copy to clipboard called");
-        clipboard->setText(text); 
+        clipboard->setText(text);
     }
 
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS

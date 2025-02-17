@@ -42,11 +42,15 @@ public:
     bool isLocked() override;
 
     // search class
-    void insert(const std::string& str, snippetBaseClass* targ)override;
+    void insert(const std::string& str, snippetBaseClass* targ) override;
 
     void insert(std::string str, int n);
-    bool search(const std::string &str,   std::vector<snippetBaseClass*> ret)override;
+    
+    bool search(const std::string& str, std::vector<snippetBaseClass*>& ret) override;
+    
     void getData(std::string &str, int &n);
+
+    std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchWithPrefix(const std::string& prefix) override;
 };
 
 #endif // SNIPPETLIVECLASS_H

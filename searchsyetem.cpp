@@ -18,7 +18,7 @@ void searchSystem::clear(Node *curr) {
     delete curr;
 }
 
-void searchSystem::collectAll(Node *curr, std::string prefix, std::vector<std::pair<std::string, snippetBaseClass *> > &results) {
+void searchSystem::collectAll(Node *curr, std::string prefix, std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> &results) {
     if (!curr) return;
     if (curr->endpoint) {
         results.emplace_back(prefix, curr->target);
@@ -43,52 +43,44 @@ searchSystem::~searchSystem() {
     clear(root);
 }
 
-std::string searchSystem::getSnippet()
+void searchSystem::innit(std::string nam, std::string filenam, int linNum, std::string lng, std::vector<std::string> tgs)
 {
-    return NULL;
 }
 
-std::vector<std::string> searchSystem::getTags()
+std::vector<std::string> *searchSystem::getInfo(std::string &nam, std::string &lng)
 {
-    return std::vector<std::string>() ;
+    return nullptr;
 }
 
-void searchSystem::setEditor(QTextDocument *)
-{
-
+std::string searchSystem::getSnippet() {
+    return "";
 }
 
-std::string searchSystem::getLang()
-{
-    return NULL;
+std::vector<std::string> searchSystem::getTags() {
+    return {};
 }
 
-bool searchSystem::isCustom()
-{
+void searchSystem::setEditor(QTextDocument *) {}
+
+std::string searchSystem::getLang() {
+    return "";
+}
+
+bool searchSystem::isCustom() {
     return true;
 }
 
-void searchSystem::putColors(std::unordered_map<std::string, std::vector<std::string> > &colorsData)
-{
+void searchSystem::putColors(std::unordered_map<std::string, std::vector<std::string>> &colorsData) {}
 
-}
+void searchSystem::putTags(std::vector<std::string> &) {}
 
-void searchSystem::putTags(std::vector<std::string> &)
-{
-
-}
-
-bool searchSystem::isLocked()
-{
+bool searchSystem::isLocked() {
     return true;
 }
 
-void searchSystem::insert(std::string str, int n){
-    //absolutely nothing
-}
+void searchSystem::insert(std::string str, int n) {}
 
-void searchSystem::insert(const std::string &str,   snippetBaseClass *targ) {
-    qDebug("entered the insert");
+void searchSystem::insert(const std::string &str, snippetBaseClass *targ) {
     Node* curr = root;
     for (char ch : str) {
         int idx = getIndex(ch);
@@ -102,7 +94,7 @@ void searchSystem::insert(const std::string &str,   snippetBaseClass *targ) {
     curr->target.push_back(targ);
 }
 
-bool searchSystem::search(const std::string &str,   std::vector<snippetBaseClass*> ret) {
+bool searchSystem::search(const std::string &str, std::vector<snippetBaseClass*>& ret) {
     Node* curr = root;
     for (char ch : str) {
         int idx = getIndex(ch);
@@ -111,16 +103,14 @@ bool searchSystem::search(const std::string &str,   std::vector<snippetBaseClass
         }
         curr = curr->next[idx];
     }
-    ret=curr->target;
+    ret = curr->target;
     return curr->endpoint;
 }
 
-std::vector<std::pair<std::string, snippetBaseClass *> > searchSystem::searchWithPrefix(const std::string &prefix) {
-    qDebug("this was called 222\n");
+std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchSystem::searchWithPrefix(const std::string &prefix) {
     Node* curr = root;
-    std::vector<std::pair<std::string, snippetBaseClass*>> results;
+    std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> results;
 
-    // Traverse to the end of the prefix
     for (char ch : prefix) {
         int idx = getIndex(ch);
         if (idx == -1 || !curr->next[idx]) {
@@ -129,7 +119,6 @@ std::vector<std::pair<std::string, snippetBaseClass *> > searchSystem::searchWit
         curr = curr->next[idx];
     }
 
-    // Collect all strings and targets under this node
     collectAll(curr, prefix, results);
     return results;
 }
@@ -154,7 +143,4 @@ void searchSystem::display(Node *curr, std::string str) {
     }
 }
 
-void searchSystem::getData(std::string& str, int& n)
-{
-    //fuck you
-}
+void searchSystem::getData(std::string& str, int& n) {}
