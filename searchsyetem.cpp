@@ -148,3 +148,18 @@ void searchSystem::display(Node *curr, std::string str) {
 }
 
 void searchSystem::getData(std::string& str, int& n) {}
+
+bool searchSystem::saveSnippetToFile(std::string snippet)
+{
+    return false;
+}
+
+bool searchSystem::updateSnippetDetails()
+{
+    return false;
+}
+
+std::string &searchSystem::EditSnippet()
+{
+    // TODO: insert return statement here
+}
