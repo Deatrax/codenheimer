@@ -65,6 +65,11 @@ public:
 
     void display(Node* curr = nullptr, std::string str = "");
     void getData(std::string &str, int &n) override;
+
+    bool saveSnippetToFile(std::string snippet) override;
+    bool updateSnippetDetails() override;
+    std::string& EditSnippet() override;
+
 };
 
 #endif // SEARCHSYSTEM_H

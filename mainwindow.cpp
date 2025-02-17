@@ -534,7 +534,7 @@ void MainWindow::sandBox(){
         mainLangHolder->insert(obj);
         mainStorage.push_back(obj);
         //Insert into search here
-
+        searchObj->insert(name.toStdString(),obj);
         //=====updating the vault file
         std::string vaultDat=name.toStdString() + "," + filename + "," + lang.toStdString() + "," + "noTags";
         qDebug()<<"gonna write to vault file: "<<vaultDat;
