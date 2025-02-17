@@ -785,19 +785,145 @@ QPushButton:hover {
           </layout>
          </widget>
          <widget class="QWidget" name="searchPage">
-          <widget class="QLabel" name="label_3">
-           <property name="geometry">
-            <rect>
-             <x>210</x>
-             <y>250</y>
-             <width>331</width>
-             <height>131</height>
-            </rect>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="spacing">
+            <number>18</number>
            </property>
-           <property name="text">
-            <string>Search page</string>
+           <property name="leftMargin">
+            <number>26</number>
            </property>
-          </widget>
+           <property name="topMargin">
+            <number>26</number>
+           </property>
+           <property name="rightMargin">
+            <number>26</number>
+           </property>
+           <property name="bottomMargin">
+            <number>5</number>
+           </property>
+           <item>
+            <widget class="QWidget" name="topSearchBarWidget" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>810</width>
+               <height>57</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QWidget#topSearchBarWidget{
+	background:#2B3663;
+	border-radius:7px;
+}</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_13">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLineEdit" name="searchBoxLineEdit">
+                <property name="font">
+                 <font>
+                  <pointsize>26</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background:#2B3663;
+padding-left:12px;
+border:none;</string>
+                </property>
+                <property name="placeholderText">
+                 <string>Search...</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="searchDummyIcon">
+                <property name="minimumSize">
+                 <size>
+                  <width>46</width>
+                  <height>57</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>46</width>
+                  <height>57</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background:#2B3663;
+padding-right:15px;
+border:none;</string>
+                </property>
+                <property name="text">
+                 <string>🔍</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="snippetSettingsOnSearchPage">
+                <property name="minimumSize">
+                 <size>
+                  <width>36</width>
+                  <height>57</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>36</width>
+                  <height>57</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">
+
+QPushButton{
+background:#3D4D8C;
+border-top-right-radius:7px;
+border-bottom-right-radius:7px;
+}
+
+QPushButton::hover{
+	background:#495FB6;
+}</string>
+                </property>
+                <property name="text">
+                 <string>⚙️</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QListWidget" name="snippetPreviewBoxAreaOnSearchPage">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
+             <property name="spacing">
+              <number>3</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
          <widget class="QWidget" name="editorsPage">
           <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -851,7 +977,7 @@ QTabBar::close-button:hover {
 }</string>
              </property>
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="defaultTab">
               <property name="styleSheet">

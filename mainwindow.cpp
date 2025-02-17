@@ -3,8 +3,12 @@
 #include "ui_mainwindow.h"
 #include "predefines.h"
 #include "editorwidget.h"
+//<<<<<<< ryexocious-making-search-page
+#include "searchsyetem.h"
+//=======
 #include <QSettings>
 
+//>>>>>>> main
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -98,7 +102,7 @@ void MainWindow::sandBox(){
         mainTagHolder=new tagHolder(tagCount);
         mainLangHolder=new langHolder(additionalTypeCount);
         clipboard = QApplication::clipboard(); // Get the clipboard object
-
+        searchObj=new searchSystem;
         readData();
 
         //testing holders
@@ -112,8 +116,14 @@ void MainWindow::sandBox(){
         //     ui->testbox->layout()->addWidget(snp);
         // }
 
+        //custom UI styling calls
         prepareCentralArea();
+//<<<<<<< ryexocious-making-search-page
+        searchPageSearchbar();
+
+//=======
         prepareAddNewComboBox();
+//>>>>>>> main
         sandBox();
 
 
@@ -128,7 +138,7 @@ void MainWindow::sandBox(){
         ui->maincontentsStack->setCurrentIndex(0);
     }
 
-    
+
 
     int MainWindow::firstTimeInit()
     {
@@ -290,6 +300,32 @@ void MainWindow::sandBox(){
         ui->addNewLangDropdown->setFont(centralElementsFont);
     }
 
+// <<<<<<< ryexocious-making-search-page
+    void MainWindow::searchPageSearchbar(){
+        //the useless dummy icon
+        ui->searchDummyIcon->setText("");
+        ui->searchDummyIcon->setIcon(QIcon(":/images/searchIcon.svg"));
+        ui->searchDummyIcon->setIconSize(QSize(25, 25));
+
+        //the search box font
+        QFont searchBoxFont=CutiveMonoFont;
+        searchBoxFont.setPointSize(26);
+        ui->searchBoxLineEdit->setFont(searchBoxFont);
+
+        //the snippet settings icon
+        ui->snippetSettingsOnSearchPage->setText("");
+        ui->snippetSettingsOnSearchPage->setIcon(QIcon(":/images/settingsIcon.svg"));
+        ui->snippetSettingsOnSearchPage->setIconSize(QSize(23,23));
+    }
+
+//     void MainWindow::readUconfig(){
+//         char uconfigFile[500]="uconfig.cdh";
+//         assist::make_appData_filePath(uconfigFile);
+//         std::ifstream uconfigStream(uconfigFile, std::ios::in);
+//         if(!uconfigStream.is_open()){
+//             qDebug("Failed to open uconfig.cdh");
+//             return;
+// =======
 
 
     void MainWindow::prepareAddNewComboBox()
@@ -297,6 +333,7 @@ void MainWindow::sandBox(){
         std::vector<string> langs=mainLangHolder->getLangList();
         for(auto& it:langs){
             ui->addNewLangDropdown->addItem(QString(it.c_str()));
+// >>>>>>> main
         }
         ui->addNewLangDropdown->addItem("Select");
         ui->addNewLangDropdown->setCurrentText("Select");
@@ -393,7 +430,7 @@ void MainWindow::sandBox(){
             if(ifTags=="tags")mainTagHolder->insert(obj);
             mainStorage.push_back(obj);
             //THIS IS WHERE JESSAN WILL ADD INSERT OF SEARCH CLASS
-
+            searchObj->insert(name,obj);
             // Output or use the tags for testing
             std::cout << "Name: " << name << ", Filename: " << filename
                       << ", Lang: " << lang << ", Tags: ";
@@ -541,6 +578,7 @@ void MainWindow::sandBox(){
         // /*Using tooltip to warn user*/ QToolTip::showText(QCursor::pos(), str, nullptr, QRect(), 2000);
         showAutoCloseMessageBox(this, "Waring!!",str);
         qDebug()<<"User was warned: "<<str;
+// >>>>>>> main
     }
 
     void MainWindow::closeTab()
@@ -646,6 +684,37 @@ void MainWindow::on_centralSearchBoxLE_returnPressed()
 }
 
 
+// <<<<<<< ryexocious-making-search-page
+void MainWindow::on_searchBoxLineEdit_textChanged(const QString &arg1)
+{
+    ui->snippetPreviewBoxAreaOnSearchPage->clear();
+    if(arg1!="" /*un comment this to see all*/ /*true*/) {
+        std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix(arg1.toStdString());
+        for (auto& itr : searchRet){
+            for (auto& itr2 : itr.second) {
+                // Create the custom widget
+                snippetPreviewBox* pb = new snippetPreviewBox(this, this);
+
+                pb->assignSnippet(itr2);
+
+                // Create a QListWidgetItem to hold the custom widget
+                QListWidgetItem* item = new QListWidgetItem(ui->snippetPreviewBoxAreaOnSearchPage);
+
+                // Set the size of the item to match the widget
+                item->setSizeHint(pb->sizeHint());
+
+                // Add the item to the list widget
+                ui->snippetPreviewBoxAreaOnSearchPage->addItem(item);
+
+                // Set the custom widget for this item
+                ui->snippetPreviewBoxAreaOnSearchPage->setItemWidget(item, pb);
+            }
+        }
+    }
+    else return;
+}
+
+// =======
 void MainWindow::on_newSnippetNameBox_textChanged(const QString &arg1)
 {
     if(arg1!="") ui->addNewButton->show();
@@ -680,5 +749,6 @@ void MainWindow::on_downarrow_clicked()
 void MainWindow::on_centralBrowseButton_clicked()
 {
     setMainIndex(3);
+// >>>>>>> main
 }
 

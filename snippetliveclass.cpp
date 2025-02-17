@@ -83,6 +83,10 @@ std::vector<std::string> snippetLiveClass::getTags()
     return tags;
 }
 
+bool search(const std::string &str,   std::vector<snippetBaseClass*> ret){
+    return true;
+}
+
 // void snippetLiveClass::setEditor(QTextDocument *)
 // {
 
@@ -113,7 +117,32 @@ bool snippetLiveClass::isLocked()
     return isLockedVar;
 }
 
-string &snippetLiveClass::EditSnippet()
+// <<<<<<< ryexocious-making-search-page
+//search option
+void snippetLiveClass::insert(const std::string &str, snippetBaseClass *targ){
+    //absolutely nothing;
+}
+
+void snippetLiveClass::insert(std::string str, int n){
+    thisLol=new lol(str,n);
+}
+
+bool snippetLiveClass::search(const std::string& str, std::vector<snippetBaseClass*>& ret)
+{
+    return false;
+}
+
+void snippetLiveClass::getData(std::string& str, int& n){
+    str=thisLol->str;
+    n=thisLol->num;
+}
+
+std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> snippetLiveClass::searchWithPrefix(const std::string &prefix)
+{
+    return std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>>();
+}
+// =======
+std::string& snippetLiveClass::EditSnippet()
 {
     if (!SNIPPET.empty()) {
         return SNIPPET;

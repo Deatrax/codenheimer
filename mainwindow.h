@@ -21,10 +21,14 @@
 #include "snippetjava.h"
 #include "snippetpy.h"
 #include "snippetcustom.h"
+// <<<<<<< ryexocious-making-search-page
+#include "searchsyetem.h"
+// =======
 
 #include "langholder.h"
 #include "tagholder.h"
 
+// >>>>>>> main
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -90,6 +94,9 @@ private slots:
 
     void on_centralSearchBoxLE_returnPressed();
 
+// <<<<<<< ryexocious-making-search-page
+    void on_searchBoxLineEdit_textChanged(const QString &arg1);
+    
     void on_newSnippetNameBox_textChanged(const QString &arg1);
 
     void on_newSnippetNameBox_returnPressed();
@@ -104,6 +111,15 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
+    void loadConfig();
+    char coreUserConfig[1000];
+
+    void sandBox();
+    void searchPageSearchbar();
+    searchSystem *searchObj;
+
+// >>>>>>> main
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
     int tagCount; //the number of tags that exists
@@ -118,11 +134,6 @@ private:
     std::unordered_map<std::string,bool> filenameStorage;
     int lineNum;
 
-    /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
-    void loadConfig();
-    char coreUserConfig[1000];
-
-    void sandBox();
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
 protected:

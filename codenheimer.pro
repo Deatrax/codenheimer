@@ -13,6 +13,7 @@ SOURCES += \
     langholder.cpp \
     main.cpp \
     mainwindow.cpp \
+    searchsyetem.cpp \
     snippetbaseclass.cpp \
     snippetc.cpp \
     snippetcpp.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     langholder.h \
     mainwindow.h \
     predefines.h \
+    searchsyetem.h \
     snippetbaseclass.h \
     snippetc.h \
     snippetcpp.h \
