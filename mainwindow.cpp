@@ -171,7 +171,7 @@ void MainWindow::sandBox(){
             assist::ensure_directory_and_open_file(str,NULL,mode.c_str());
 
 
-
+            mode="a";
             std::vector<std::string> filenames = {
                 "tagDat.cdh",
                 "langDat.cdh",

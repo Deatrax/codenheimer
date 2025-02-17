@@ -12,6 +12,9 @@ int main(int argc, char *argv[])
     if(ret==-1){
         return -1;
     }
+    if(ret==1){
+        //launch onboarding flow
+    }
     MainWindow w;
     w.show();
     return a.exec();
