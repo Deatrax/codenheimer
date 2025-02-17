@@ -5,8 +5,12 @@
 int searchSystem::getIndex(char ch) {
     if (ch == ' ') return 54;
     if (ch == '-') return 53;
+    if(ch =='_') return 55;
     if (isupper(ch)) return ch - 'A';
     if (islower(ch)) return ch - 'a' + 26;
+    if(std::isdigit(ch)){
+        return ch-'0'+56;
+    }
     return -1; // Invalid character
 }
 

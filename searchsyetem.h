@@ -10,7 +10,7 @@ class searchSystem : public snippetBaseClass
 {
 
 private:
-    static const int ALPHABET_SIZE = 54;
+    static const int ALPHABET_SIZE = 66;
 
     struct Node {
         Node* next[ALPHABET_SIZE];
