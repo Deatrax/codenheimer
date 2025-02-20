@@ -57,6 +57,20 @@ RESOURCES += \
     images/ \
     fonts/
 
+
+#-------------------------------------------------
+# OpenSSL configuration - Platform-Specific
+#-------------------------------------------------
+win32 {
+    INCLUDEPATH += $$PWD/openssl_libs/windows/include
+    LIBS += -L$$PWD/openssl_libs/windows/lib64 -lssl -lcrypto -lws2_32 -lcrypt32
+}
+
+macx {
+    INCLUDEPATH += $$PWD/openssl_libs/mac/include
+    LIBS += -L$$PWD/openssl_libs/mac/lib -lssl -lcrypto
+}
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

@@ -12,6 +12,14 @@
 #include <QToolTip>
 #include <QMessageBox>
 #include <QTimer>
+#include <QFileDialog>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QMessageBox>
+#include <openssl/evp.h>
+#include <openssl/aes.h>
+#include <openssl/rand.h>
 #include <unordered_map>
 
 #include "snippetbaseclass.h"
