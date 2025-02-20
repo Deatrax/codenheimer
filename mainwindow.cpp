@@ -425,7 +425,11 @@ void MainWindow::sandBox(){
             }
             snippetBaseClass* obj=generateSnippetObject(lang);
             obj->innit(name,filename,lineNum,lang,tags);
-            filenameStorage[filename]=true;
+            size_t lastDot = filename.find_last_of('.');
+            if (lastDot != std::string::npos) {
+                filename = filename.substr(0, lastDot);  // Remove extension
+            }
+            filenameStorage[filename] = true;
             mainLangHolder->insert(obj);
             if(ifTags=="tags")mainTagHolder->insert(obj);
             mainStorage.push_back(obj);
@@ -513,7 +517,7 @@ void MainWindow::sandBox(){
         qDebug()<<"Add new final reached: "<<name<<" "<<lang;
 
         //generate filename
-        std::string filename = name.toStdString() + lang.toStdString() + ".cdh";
+        std::string filename = name.toStdString() + lang.toStdString();
         int i = 0;  // Start from 0 to check `name+".cdh"` first
         do {
             if (i == 3) {
@@ -522,15 +526,15 @@ void MainWindow::sandBox(){
             }
 
             if (i > 0) {
-                filename = name.toStdString() + lang.toStdString() + std::to_string(i) + ".cdh";
+                filename = name.toStdString() + lang.toStdString() + std::to_string(i);
             }
 
             i++;
         } while (filenameStorage.find(filename) != filenameStorage.end());
         filenameStorage[filename]=true;
-
+        filename+=".cdh";
         snippetBaseClass* obj=generateSnippetObject(lang.toStdString());
-        obj->innit(name.toStdString(),filename,lineNum,lang.toStdString(),std::vector<std::string>());
+        obj->innit( name.toStdString() , filename , lineNum , lang.toStdString() , std::vector<std::string>() );
         mainLangHolder->insert(obj);
         mainStorage.push_back(obj);
         //Insert into search here
