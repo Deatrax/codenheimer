@@ -69,6 +69,7 @@ win32 {
 macx {
     INCLUDEPATH += $$PWD/openssl_libs/mac/include
     LIBS += -L$$PWD/openssl_libs/mac/lib -lssl -lcrypto
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 15.0
 }
 
 # Default rules for deployment.

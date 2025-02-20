@@ -117,6 +117,10 @@ private slots:
 
     void on_centralBrowseButton_clicked();
 
+    void on_testCryptoButton_clicked();
+
+    void on_testDecryptButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -144,6 +148,8 @@ private:
 
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
+    void encryptText();
+    void decryptText();
 protected:
 
 

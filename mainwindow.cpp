@@ -756,3 +756,235 @@ void MainWindow::on_centralBrowseButton_clicked()
 // >>>>>>> main
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void MainWindow::on_testCryptoButton_clicked()
+{
+    encryptText();
+}
+
+// Derive encryption key and IV from password
+bool deriveKeyAndIV(const QString &password, QByteArray &key, QByteArray &iv) {
+    key.resize(32); // 256-bit key
+    iv.resize(16);  // 128-bit IV
+    QByteArray salt = "example_salt"; // You can generate a random salt for stronger security
+
+    // Use PBKDF2 to derive the key and IV
+    if (!PKCS5_PBKDF2_HMAC(password.toUtf8().data(),
+                           password.length(),
+                           reinterpret_cast<const unsigned char*>(salt.data()), salt.size(),
+                           10000, // Iteration count
+                           EVP_sha256(),
+                           key.size() + iv.size(),
+                           reinterpret_cast<unsigned char*>(key.data()))) {
+        qWarning() << "Failed to derive key/IV.";
+        return false;
+    }
+
+    iv = key.mid(32, 16); // Extract the last 16 bytes as IV
+    key = key.left(32);   // First 32 bytes as the key
+    return true;
+}
+
+void encryptStringToFile(const QString &data, const QString &filePath, const QByteArray &key, const QByteArray &iv) {
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        throw std::runtime_error("Failed to open file for writing.");
+    }
+
+    // OpenSSL encryption context
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        throw std::runtime_error("Failed to create OpenSSL context.");
+    }
+
+    if (!EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr,
+                            reinterpret_cast<const unsigned char *>(key.data()),
+                            reinterpret_cast<const unsigned char *>(iv.data()))) {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("Failed to initialize encryption.");
+    }
+
+    QByteArray inputData = data.toUtf8();
+    QByteArray encryptedData(inputData.size() + EVP_CIPHER_block_size(EVP_aes_256_cbc()), 0);
+    int encryptedLength = 0;
+    int finalLength = 0;
+
+    // Perform encryption
+    if (!EVP_EncryptUpdate(ctx, reinterpret_cast<unsigned char *>(encryptedData.data()), &encryptedLength,
+                           reinterpret_cast<const unsigned char *>(inputData.data()), inputData.size())) {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("Error during encryption.");
+    }
+
+    if (!EVP_EncryptFinal_ex(ctx, reinterpret_cast<unsigned char *>(encryptedData.data()) + encryptedLength, &finalLength)) {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("Error finalizing encryption.");
+    }
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    encryptedData.resize(encryptedLength + finalLength);
+
+    // Write encrypted data to file
+    if (file.write(encryptedData) != encryptedData.size()) {
+        throw std::runtime_error("Failed to write encrypted data to file.");
+    }
+
+    file.close();
+}
+
+void MainWindow::encryptText()
+{
+    QString password = "password" /*ui->OnlyFilePassword->text()*/;
+    if (password.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter a password.");
+        return;
+    }
+
+    QString fileName = "testFILE" /*ui->Filename->text()*/;
+    if (fileName.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter a file name.");
+        return;
+    }
+
+    QString filePath = QFileDialog::getSaveFileName(this, "Save Encrypted File", QDir::homePath() + "/" + fileName);
+    if (filePath.isEmpty()) {
+        return; // User canceled the save dialog
+    }
+
+    QByteArray key, iv;
+    if (!deriveKeyAndIV(password, key, iv)) {
+        QMessageBox::warning(this, "Error", "Failed to generate encryption key and IV.");
+        return;
+    }
+
+    QString dataToEncrypt = "this is some experimental text";
+    if (dataToEncrypt.isEmpty()) {
+        QMessageBox::warning(this, "Error", "No content to encrypt.");
+        return;
+    }
+
+    try {
+        encryptStringToFile(dataToEncrypt, filePath, key, iv);
+        QMessageBox::information(this, "Success", "File encrypted successfully.");
+    } catch (const std::runtime_error &e) {
+        QMessageBox::warning(this, "Error", e.what());
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void MainWindow::on_testDecryptButton_clicked()
+{
+    decryptText();
+}
+
+QString decryptFileToString(const QString &filePath, const QByteArray &key, const QByteArray &iv) {
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        throw std::runtime_error("Failed to open encrypted file.");
+    }
+
+    // OpenSSL decryption context
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        throw std::runtime_error("Failed to create OpenSSL context.");
+    }
+
+    if (!EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr,
+                            reinterpret_cast<const unsigned char *>(key.data()),
+                            reinterpret_cast<const unsigned char *>(iv.data()))) {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("Failed to initialize decryption.");
+    }
+
+    QByteArray encryptedData;
+    QByteArray buffer(4096, 0);
+    while (!file.atEnd()) {
+        qint64 bytesRead = file.read(buffer.data(), buffer.size());
+        if (bytesRead > 0) {
+            encryptedData.append(buffer.left(bytesRead));
+        } else if (bytesRead < 0) {
+            EVP_CIPHER_CTX_free(ctx);
+            throw std::runtime_error("Error reading encrypted file.");
+        }
+    }
+    file.close();
+
+    // Perform decryption
+    QByteArray decryptedData(encryptedData.size() + EVP_CIPHER_block_size(EVP_aes_256_cbc()), 0);
+    int decryptedLength = 0;
+    int finalLength = 0;
+
+    if (!EVP_DecryptUpdate(ctx, reinterpret_cast<unsigned char *>(decryptedData.data()), &decryptedLength,
+                           reinterpret_cast<const unsigned char *>(encryptedData.data()), encryptedData.size())) {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("Error during decryption.");
+    }
+
+    if (!EVP_DecryptFinal_ex(ctx, reinterpret_cast<unsigned char *>(decryptedData.data()) + decryptedLength, &finalLength)) {
+        EVP_CIPHER_CTX_free(ctx);
+        throw std::runtime_error("Error finalizing decryption. Wrong key/IV?");
+    }
+
+    EVP_CIPHER_CTX_free(ctx);
+    decryptedData.resize(decryptedLength + finalLength);
+
+    return QString::fromUtf8(decryptedData);
+}
+
+void MainWindow::decryptText()
+{
+    QString password = "password" /*ui->OnlyFilePassword->text()*/;
+    if (password.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter a password.");
+        return;
+    }
+
+    QString filePath = QFileDialog::getOpenFileName(this, "Select Encrypted File", QDir::homePath());
+    if (filePath.isEmpty()) {
+        return; // User canceled the file dialog
+    }
+
+    QByteArray key, iv;
+    if (!deriveKeyAndIV(password, key, iv)) {
+        QMessageBox::warning(this, "Error", "Failed to generate decryption key and IV.");
+        return;
+    }
+
+    try {
+        QString decryptedContent = decryptFileToString(filePath, key, iv);
+        // ui->FileContents->setPlainText(decryptedContent); // Display decrypted content
+        QMessageBox::information(this, "Success", "File decrypted successfully. CONTENTS:"+decryptedContent);
+    } catch (const std::runtime_error &e) {
+        QMessageBox::warning(this, "Error", e.what());
+    }
+}
