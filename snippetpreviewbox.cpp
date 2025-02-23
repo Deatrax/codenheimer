@@ -33,6 +33,11 @@ void snippetPreviewBox::assignSnippet(snippetBaseClass* snippet){
     setTags();
 }
 
+snippetBaseClass *snippetPreviewBox::getSnippetObj()
+{
+    return assignedSnippet;
+}
+
 void snippetPreviewBox::setTags(){
 
     FlowLayout* fl=new FlowLayout(10,3,1);
@@ -78,11 +83,11 @@ void snippetPreviewBox::addCopyButton()
 bool snippetPreviewBox::eventFilter(QObject *watched, QEvent *event) {
     if (watched == ui->groupBox) { // Ensure ui->groupBox is accessible
         if (event->type() == QEvent::Enter) {
-            qDebug() << "Mouse entered the group box";
+            // qDebug() << "Mouse entered the group box";
             ui->copyButton->show();
             return true; // Event handled
         } else if (event->type() == QEvent::Leave) {
-            qDebug() << "Mouse left the group box";
+            // qDebug() << "Mouse left the group box";
             ui->copyButton->hide();
             return true; // Event handled
         }

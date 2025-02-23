@@ -78,6 +78,18 @@ private:
         virtual std::unordered_map<std::string,std::vector<std::string>>& returnCustomColors(){
             //lol
         }
+
+        bool deleteSnippet(snippetBaseClass* snippet) {
+            auto it = std::find(snippetsStorage.begin(), snippetsStorage.end(), snippet);
+            if (it != snippetsStorage.end()) {
+                snippetsStorage.erase(it);
+                qDebug() << "Snippet deleted from language: " << QString::fromStdString(langName);
+                return true;
+            } else {
+                qDebug() << "Snippet not found in language: " << QString::fromStdString(langName);
+                return false;
+            }
+        }
     };
 
     class customLang: public lang{
@@ -138,5 +150,7 @@ public:
     lang *getLangFromString(std::string str);
 
     std::vector<std::string> getLangList();
+
+    bool removeSnippet(snippetBaseClass *obj);
 };
 #endif // LANGHOLDER_H

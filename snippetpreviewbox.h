@@ -18,6 +18,7 @@ public:
     ~snippetPreviewBox();
 
     void assignSnippet(snippetBaseClass *snippet);
+    snippetBaseClass *getSnippetObj();
 protected:
     void setTags();
     void addCopyButton();

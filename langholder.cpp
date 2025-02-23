@@ -132,3 +132,6 @@ std::vector<string> langHolder::getLangList()
     return keys;
 }
 
+bool langHolder::removeSnippet(snippetBaseClass* obj){
+    return stringTolang[obj->getLang()]->deleteSnippet(obj);
+}

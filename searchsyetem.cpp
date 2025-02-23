@@ -127,6 +127,24 @@ std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchSystem
     return results;
 }
 
+bool searchSystem::remove(snippetBaseClass* obj){
+    std::string name;
+    std::string str;
+    obj->getInfo(name,str);
+
+    Node* curr = root;
+    for (char ch : str) {
+        int idx = getIndex(ch);
+        if (idx == -1 || !curr->next[idx]) {
+            return false;
+        }
+        curr = curr->next[idx];
+    }
+    curr->target.erase( std::find( curr->target.begin() , curr->target.end() , obj ) );
+    if(curr->target.size() <=0 ) curr->endpoint=false;
+    return true;
+}
+
 void searchSystem::display(Node *curr, std::string str) {
     if (!curr) {
         std::cout << "\nTree has:\n";
@@ -154,7 +172,7 @@ bool searchSystem::saveSnippetToFile(std::string snippet)
     return false;
 }
 
-bool searchSystem::updateSnippetDetails()
+bool searchSystem::updateSnippetDetails(std::string nam, std::string filenam, std::vector<std::string> tgs, std::string lng, bool lock)
 {
     return false;
 }
@@ -162,4 +180,19 @@ bool searchSystem::updateSnippetDetails()
 std::string &searchSystem::EditSnippet()
 {
     // TODO: insert return statement here
+}
+
+bool searchSystem::updateSnippetFilename(std::string nam)
+{
+    return false;
+}
+
+std::string searchSystem::getOldFilename()
+{
+    return "";
+}
+
+bool searchSystem::deleteFromVault()
+{
+    return false;
 }

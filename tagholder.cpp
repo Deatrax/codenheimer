@@ -51,10 +51,37 @@ void tagHolder::getTagInfo(string tagName, std::string &passedName, std::string&
     passedColor=tagStorage[tagName]->tagColor;
 }
 
+std::vector<string> tagHolder::getTagList()
+{
+    std::vector<std::string> vec;
+    for (auto& it : tagStorage) {
+        vec.push_back(it.first);
+    }
+    return vec;
+}
+
 tagHolder::tag* tagHolder::operator[](std::string str) {
     auto it = tagStorage.find(str);
     if (it != tagStorage.end()) {
         return it->second; // Return the pointer if found
     }
     return nullptr;
+}
+
+bool tagHolder::removeSnippet(snippetBaseClass *obj)
+{
+
+    auto vec = obj->getTags();
+    for (auto &it : vec) {
+        auto &tagVector = storage[it];  // Reference to the vector for efficiency
+        auto pos = std::find(tagVector.begin(), tagVector.end(), obj);
+
+        if (pos != tagVector.end()) {
+            tagVector.erase(pos);
+            qDebug() << "Removed from tag hash-vector: " << it;
+        } else {
+            qDebug() << "Unexpected tag encountered: " << it;
+        }
+    }
+    return true;
 }

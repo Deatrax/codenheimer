@@ -76,9 +76,15 @@ public:
 // =======
     virtual bool saveSnippetToFile(std::string snippet)=0;
 
-    virtual bool updateSnippetDetails()=0;
+    virtual bool updateSnippetDetails(std::string nam,std::string filenam, std::vector<std::string> tgs, std::string lng, bool lock)=0;
 // >>>>>>> main
+    virtual bool updateSnippetFilename(std::string nam)=0;
     
+    virtual std::string getOldFilename()=0;
+
+    virtual bool deleteFromVault()=0;
+
+    virtual bool remove(snippetBaseClass *obj)=0;
 };
 
 #endif // SNIPPETBASECLASS_H
