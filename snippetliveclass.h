@@ -59,8 +59,17 @@ public:
 
     bool saveSnippetToFile(std::string snippet) override;
     
-    bool updateSnippetDetails() override;
-// >>>>>>> main
+    bool updateSnippetDetails(string nam,std::string filenam, std::vector<string> tgs, string lng, bool lock) override;
+    // >>>>>>> main
+    std::string getOldFilename();
+
+    bool deleteFromVault() override;
+
+    bool remove(snippetBaseClass *obj) override;
+private:
+    bool updateSnippetFilename(std::string newFilename) override;
+
+
 };
 
 #endif // SNIPPETLIVECLASS_H

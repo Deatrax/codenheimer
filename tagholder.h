@@ -68,7 +68,11 @@ class tagHolder{
 
         void getTagInfo(string tagName, std::string &passedName, std::string& passedColor);
 
+        std::vector<std::string> getTagList();
+
         tag* operator[](std::string str);
+
+        bool removeSnippet(snippetBaseClass* obj);
     //END OF PUBLIC
 };
 

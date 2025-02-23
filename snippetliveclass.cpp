@@ -17,9 +17,9 @@ void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, s
         std::string extension = filename.substr(pos + 1);
         qDebug("got the file extension: %s",extension.c_str());
         // Perform actions based on the extension
-        if (extension == "scdh") {
+        if (extension == "cdh") {
             isLockedVar=false;
-        } else if (extension == "pcdh") {
+        } else if (extension == "scdh") {
             isLockedVar=true;
         }
     }
@@ -142,6 +142,8 @@ std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> snippetLive
     return std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>>();
 }
 // =======
+
+
 std::string& snippetLiveClass::EditSnippet()
 {
     if (!SNIPPET.empty()) {
@@ -199,13 +201,28 @@ bool snippetLiveClass::saveSnippetToFile(string snippet)
     return true;
 }
 
-bool snippetLiveClass::updateSnippetDetails(){
+bool snippetLiveClass::updateSnippetDetails(std::string nam,std::string filenam, std::vector<std::string> tgs, std::string lng, bool lock ){
+
+
+    if (lock) {
+        filenam+=".scdh";
+    }
+    else{
+        filenam+=".cdh";
+    }
+    if(updateSnippetFilename(filenam) ) filename=filenam;
+
+    tags.clear();
+    tags=tgs;
+    if(name!=nam) name=nam;
+    if(lang!=lng) lang=lng;
+
 
     std::string vaultDat=name+","+filename+","+lang+",";
     if(tags.size()>0){
         vaultDat+="tags";
         for ( auto& tag : tags) {
-            vaultDat+=tag;
+            vaultDat+=","+tag;
         }
     }
     else vaultDat+="noTags";
@@ -216,4 +233,85 @@ bool snippetLiveClass::updateSnippetDetails(){
     vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
     assist::make_appData_filePath(vaultFilePath);
     return assist::editLine(vaultFilePath,lineNum,vaultDat);
+}
+
+bool snippetLiveClass::updateSnippetFilename(std::string newFilename) {
+    if(filename==newFilename){
+        return false;
+    }
+    // Attempt to rename the file
+    char snippetCodeFileOld[assist::PATH_SIZE];
+    if (true /*vaultLocation == "default"*/) {
+        qDebug("The vault location is default");
+        std::strncpy(snippetCodeFileOld, filename.c_str(), sizeof(snippetCodeFileOld) - 1);
+        snippetCodeFileOld[sizeof(snippetCodeFileOld) - 1] = '\0';
+        assist::make_appData_filePath(snippetCodeFileOld);
+    } else {
+        // Implement other vault location handling later
+    }
+
+
+    char snippetCodeFileNew[assist::PATH_SIZE];
+    if (true /*vaultLocation == "default"*/) {
+        qDebug("The vault location is default");
+        std::strncpy(snippetCodeFileNew, newFilename.c_str(), sizeof(snippetCodeFileNew) - 1);
+        snippetCodeFileNew[sizeof(snippetCodeFileNew) - 1] = '\0';
+        assist::make_appData_filePath(snippetCodeFileNew);
+    } else {
+        // Implement other vault location handling later
+    }
+
+
+
+    std::string oldFilePath = snippetCodeFileOld;
+    std::string newFilePath = snippetCodeFileNew;
+
+    if (std::rename(oldFilePath.c_str(), newFilePath.c_str()) != 0) {
+        qDebug() << "Error renaming file: " << strerror(errno);
+        return false;
+    }
+    qDebug()<<"the code file name was updated successfully";
+    return true;
+}
+
+std::string snippetLiveClass::getOldFilename(){
+    size_t lastDot = filename.find_last_of(".");
+    std::string nameWithoutExt = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
+    return nameWithoutExt;
+}
+
+bool snippetLiveClass::deleteFromVault()
+{
+    char vaultFilePath[assist::PATH_SIZE];
+    std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+    vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+    assist::make_appData_filePath(vaultFilePath);
+    if(assist::removeLine(vaultFilePath,lineNum)){
+
+        char snippetCodeFileOld[assist::PATH_SIZE];
+        if (true /*vaultLocation == "default"*/) {
+            qDebug("The vault location is default");
+            std::strncpy(snippetCodeFileOld, filename.c_str(), sizeof(snippetCodeFileOld) - 1);
+            snippetCodeFileOld[sizeof(snippetCodeFileOld) - 1] = '\0';
+            assist::make_appData_filePath(snippetCodeFileOld);
+
+            if (std::remove(snippetCodeFileOld) == 0) {
+                qDebug() << "File deleted successfully.\n";
+            } else {
+                std::perror("Error deleting file");
+                return false;
+            }
+            return true;
+        } else {
+            // Implement other vault location handling later
+        }
+    }
+    else{
+        return false;
+    }
+}
+
+bool snippetLiveClass::remove(snippetBaseClass *obj)
+{
+    return false;
 }

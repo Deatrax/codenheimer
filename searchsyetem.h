@@ -67,9 +67,13 @@ public:
     void getData(std::string &str, int &n) override;
 
     bool saveSnippetToFile(std::string snippet) override;
-    bool updateSnippetDetails() override;
+    bool updateSnippetDetails(std::string nam,std::string filenam, std::vector<std::string> tgs, std::string lng, bool lock) override;
     std::string& EditSnippet() override;
-
+    bool updateSnippetFilename(std::string nam) override;
+    std::string getOldFilename() override;
+    bool deleteFromVault() override;
+    bool remove(snippetBaseClass *obj) override;
+    bool rename(snippetBaseClass *obj);
 };
 
 #endif // SEARCHSYSTEM_H

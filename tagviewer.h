@@ -16,6 +16,7 @@ public:
     ~tagViewer();
 
     void setTag(std::string Name, std::string Color);
+    QString getTagName();
 private:
     Ui::tagViewer *ui;
     QString tagName;

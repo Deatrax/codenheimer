@@ -1,4 +1,7 @@
 #include "editorwidget.h"
+#include "qlistwidget.h"
+#include "snippetpreviewbox.h"
+#include "snippetsettingspopup.h"
 #include "ui_editorwidget.h"
 #include <qscrollbar.h>
 
@@ -89,7 +92,10 @@ void editorWidget::tellIdx(int i){
 
 void editorWidget::on_editorSnippetSettingsButton_clicked()
 {
-    mainWindow->warnUser("Jessan was supposed to make this!!");
+    mainWindow->warnUser("Jessan was supposed to make this!! but now i did");
+    snippetSettingsPopup* pop=new snippetSettingsPopup(mainWindow);
+    pop->assign(thisSnippet);
+    pop->show();
 }
 
 
