@@ -47,6 +47,7 @@ private:
     std::string name;
     std::string lang;
     std::set<std::string> presentTags;
+    std::set<std::string> initialTags;
     void animate();
     void closeEvent(QCloseEvent *event) override;
     bool isEdited;
@@ -54,6 +55,7 @@ private:
     bool initialLock;
     FlowLayout* fl;
 
+    bool isTagChanged();
 };
 
 #endif // SNIPPETSETTINGSPOPUP_H

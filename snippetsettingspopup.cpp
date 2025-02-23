@@ -93,6 +93,7 @@ void snippetSettingsPopup::assign(snippetBaseClass* snippet){
         fl->addWidget(tv);
         presentTags.insert(str);
     }
+    initialTags=presentTags;
     ui->tagsScrollArea->setLayout(fl);
 
     isEdited=false;
@@ -112,9 +113,43 @@ void snippetSettingsPopup::on_isLockedCheckbox_stateChanged(int arg1)
     isEdited=true;
 }
 
+bool snippetSettingsPopup::isTagChanged() {
+    bool tagsAreSame = true;
+
+    auto it1 = presentTags.begin();
+    auto it2 = initialTags.begin();
+
+    while (it1 != presentTags.end() && it2 != initialTags.end()) {
+        if (*it1 < *it2) {
+            tagsAreSame = false;
+            break;  // Early exit
+        } else if (*it1 > *it2) {
+            tagsAreSame = false;
+            break;  // Early exit
+        } else {
+            ++it1;
+            ++it2;
+        }
+    }
+
+    // If extra elements remain in either set, tags have changed
+    if (it1 != presentTags.end() || it2 != initialTags.end()) {
+        tagsAreSame = false;
+    }
+
+    return !tagsAreSame;  // Return true if tags are different
+}
+
 
 void snippetSettingsPopup::on_commitChangesButton_clicked()
 {
+    QString str= ui->newNameBox->text();
+    if(masterWindow->containsSpaces(str)) {
+        masterWindow->warnUser("Please use name without spaces");
+        return;
+    }
+
+
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Confirm Exit",
                                   "Are you sure you want to save?",
@@ -122,22 +157,37 @@ void snippetSettingsPopup::on_commitChangesButton_clicked()
 
     if (reply == QMessageBox::Yes) {
 
+        bool nameCH=false;
+        bool langCH=false;
         std::string filename;
+
         if(name!=ui->newNameBox->text().toStdString() && ui->newNameBox->text().toStdString()!=""){
-            filename = masterWindow->generateUniqueFilename(ui->newNameBox->text(), ui->langComboBox->currentText() , 2 , assignedSnippet->getOldFilename() );
+            filename = masterWindow->generateUniqueFilename(ui->newNameBox->text(), ui->langComboBox->currentText() , 2 , assignedSnippet->getOldFilename() , assignedSnippet );
+            nameCH=true;
             name = ui->newNameBox->text().toStdString();
         }
         else{
             filename=assignedSnippet->getOldFilename();
         }
-        lang=ui->langComboBox->currentText().toStdString();
+
+
+        if(lang != ui->langComboBox->currentText().toStdString()){
+            lang=ui->langComboBox->currentText().toStdString();
+            masterWindow->snipetLangChanged( assignedSnippet, lang);
+        }
+
         std::vector<std::string> newTags;
         for (auto &it : presentTags) {
             newTags.push_back(it);
         }
+
         initialLock=ui->isLockedCheckbox->checkState();
 
         assignedSnippet->updateSnippetDetails(name,filename,newTags,lang,initialLock);
+
+        if(nameCH) masterWindow->renameSnippet(assignedSnippet);
+        if(isTagChanged()) masterWindow->tagChanged(assignedSnippet);
+
         ui->titleLabel->setText(QString(name.c_str())+"'s settings");
         isEdited=false;
     } else {

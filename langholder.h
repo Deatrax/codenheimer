@@ -141,6 +141,8 @@ public:
 
     void insert(snippetBaseClass* snippet);
 
+    void insert(snippetBaseClass *snippet, std::string lang);
+
     std::vector<snippetBaseClass*>& getSnippetsFromLang(std::string lang);
 
     void testPrintCustomLang(const std::string& lng);
@@ -152,5 +154,7 @@ public:
     std::vector<std::string> getLangList();
 
     bool removeSnippet(snippetBaseClass *obj);
+
+    bool rename(snippetBaseClass* obj);
 };
 #endif // LANGHOLDER_H

@@ -497,7 +497,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -555,6 +555,9 @@ border-radius:7px;</string>
                  </property>
                  <item>
                   <widget class="QLineEdit" name="newSnippetNameBox">
+                   <property name="maxLength">
+                    <number>20</number>
+                   </property>
                    <property name="placeholderText">
                     <string>New Snippet Name...</string>
                    </property>

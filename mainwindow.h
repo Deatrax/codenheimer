@@ -81,6 +81,10 @@ public:
     std::vector<std::string> getTagList();
     std::string generateUniqueFilename(const QString &name, const QString &lang, int mode,std::string oldFilename="",snippetBaseClass *obj=std::nullptr_t());
     void deleteSnippet(snippetBaseClass *obj);
+    void renameSnippet(snippetBaseClass *obj);
+    void snipetLangChanged(snippetBaseClass *obj, string lang);
+    void tagChanged(snippetBaseClass *obj);
+    bool containsSpaces(QString &str);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -114,6 +118,8 @@ private slots:
     void on_centralBrowseButton_clicked();
 
     void on_snippetSettingsTestButton_clicked();
+
+    void on_snippetSettingsOnSearchPage_clicked();
 
 private:
     Ui::MainWindow *ui;

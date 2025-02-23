@@ -133,7 +133,7 @@ bool searchSystem::remove(snippetBaseClass* obj){
     obj->getInfo(name,str);
 
     Node* curr = root;
-    for (char ch : str) {
+    for (char ch : name) {
         int idx = getIndex(ch);
         if (idx == -1 || !curr->next[idx]) {
             return false;
@@ -144,6 +144,15 @@ bool searchSystem::remove(snippetBaseClass* obj){
     if(curr->target.size() <=0 ) curr->endpoint=false;
     return true;
 }
+
+bool searchSystem::rename(snippetBaseClass* obj){
+    remove(obj);
+    std::string nam;
+    std::string str;
+    obj->getInfo(nam,str);
+    insert(nam,obj);
+}
+
 
 void searchSystem::display(Node *curr, std::string str) {
     if (!curr) {

@@ -80,7 +80,7 @@ bool tagHolder::removeSnippet(snippetBaseClass *obj)
             tagVector.erase(pos);
             qDebug() << "Removed from tag hash-vector: " << it;
         } else {
-            qDebug() << "Unexpected tag encountered: " << it;
+            qDebug() << "not found in tag: " << it;
         }
     }
     return true;

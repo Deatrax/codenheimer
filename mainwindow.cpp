@@ -14,7 +14,20 @@ QString MainWindow::company="AronoxStudios";
 QString MainWindow::appName="Codenheimer";
 
 
+
+
+
 //==================
+
+
+
+
+
+
+
+
+
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -374,6 +387,22 @@ void MainWindow::sandBox(){
         ui->snippetSettingsOnSearchPage->setText("");
         ui->snippetSettingsOnSearchPage->setIcon(QIcon(":/images/settingsIcon.svg"));
         ui->snippetSettingsOnSearchPage->setIconSize(QSize(23,23));
+
+        ui->snippetPreviewBoxAreaOnSearchPage->setStyleSheet(
+            "QListWidget{"
+            "border:none;"
+            "}"
+            "QListWidget::item {"
+            "   border: 0px solid black;"
+            // "   border-radius: 5px;"
+            // "   padding: 5px;"
+            // "   margin: 3px;"
+            "}"
+            "QListWidget::item:selected {"
+            "   color: white;"
+            "   border: 1px solid red;"
+            "}"
+            );
     }
 
 //     void MainWindow::readUconfig(){
@@ -561,6 +590,11 @@ void MainWindow::sandBox(){
     void MainWindow::addNewAction(){
         QString newName=ui->newSnippetNameBox->text();
         if(newName!=""){
+            if(containsSpaces(newName)){
+                warnUser("Please use name without spaces!!");
+                return;
+            }
+
             if(ui->addNewLangDropdown->currentText()!="Select")
             addNewSnippet(newName,ui->addNewLangDropdown->currentText());
             else warnUser("Please Select Language");
@@ -750,6 +784,37 @@ void MainWindow::sandBox(){
         delete obj;
     }
 
+    void MainWindow::renameSnippet(snippetBaseClass *obj)
+    {
+        //change name in lang holder
+            //names are not stored here lol
+
+        //change name in tag holder
+            //names are not stored here lol
+
+        //name was already changed in filename holder
+
+        //change name in search trie
+        searchObj->rename(obj);
+    }
+
+    void MainWindow::snipetLangChanged( snippetBaseClass *obj, std::string lang)
+    {
+        mainLangHolder->removeSnippet(obj);
+        mainLangHolder->insert(obj, lang);
+    }
+
+    void MainWindow::tagChanged(snippetBaseClass *obj)
+    {
+        mainTagHolder->removeSnippet(obj);
+        mainTagHolder->insert(obj);
+    }
+
+    bool MainWindow::containsSpaces(QString& str) {
+        return str.indexOf(' ') != -1; // indexOf returns -1 if no match is found
+    }
+
+
 
 //END OF ADDITIONAL NON-SLOT BASED FUNCTIONS
 
@@ -812,7 +877,6 @@ void MainWindow::on_searchBoxLineEdit_textChanged(const QString &arg1)
             for (auto& itr2 : itr.second) {
                 // Create the custom widget
                 snippetPreviewBox* pb = new snippetPreviewBox(this, this);
-
                 pb->assignSnippet(itr2);
 
                 // Create a QListWidgetItem to hold the custom widget
@@ -821,10 +885,13 @@ void MainWindow::on_searchBoxLineEdit_textChanged(const QString &arg1)
                 // Set the size of the item to match the widget
                 item->setSizeHint(pb->sizeHint());
 
+                // Store snippetPreviewBox pointer inside Qt::UserRole
+                item->setData(Qt::UserRole, QVariant::fromValue(pb));
+
                 // Add the item to the list widget
                 ui->snippetPreviewBoxAreaOnSearchPage->addItem(item);
 
-                // Set the custom widget for this item
+                // Set the custom widget for this item (for display only)
                 ui->snippetPreviewBoxAreaOnSearchPage->setItemWidget(item, pb);
             }
         }
@@ -901,3 +968,27 @@ void MainWindow::on_snippetSettingsTestButton_clicked()
 std::vector<std::string> MainWindow::getTagList(){
     return mainTagHolder->getTagList();
 }
+
+void MainWindow::on_snippetSettingsOnSearchPage_clicked()
+{
+    snippetSettingsPopup* pop=new snippetSettingsPopup(this);
+    QListWidgetItem *selectedItem = ui->snippetPreviewBoxAreaOnSearchPage->currentItem();
+    if (selectedItem) {
+        QVariant data = selectedItem->data(Qt::UserRole);
+        snippetPreviewBox *previewBox = data.value<snippetPreviewBox*>();
+
+        if (previewBox) {
+            // Do something with previewBox
+            qDebug() << "Snippet Preview Box retrieved!";
+            pop->assign(previewBox->getSnippetObj());
+            pop->show();
+        } else {
+            qDebug() << "No snippetPreviewBox associated with this item.";
+            delete pop;
+        }
+    } else {
+        ui->statusBar->showMessage("Please select snippet first!", 2500);
+        delete pop;
+    }
+}
+
