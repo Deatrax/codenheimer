@@ -73,7 +73,7 @@ public:
     std::string getOldFilename() override;
     bool deleteFromVault() override;
     bool remove(snippetBaseClass *obj) override;
-    bool rename(snippetBaseClass *obj);
+    bool rename(std::string newName, snippetBaseClass *obj);
 };
 
 #endif // SEARCHSYSTEM_H

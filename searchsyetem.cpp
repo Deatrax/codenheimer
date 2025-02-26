@@ -145,12 +145,12 @@ bool searchSystem::remove(snippetBaseClass* obj){
     return true;
 }
 
-bool searchSystem::rename(snippetBaseClass* obj){
+bool searchSystem::rename(std::string newName , snippetBaseClass* obj){
     remove(obj);
-    std::string nam;
-    std::string str;
-    obj->getInfo(nam,str);
-    insert(nam,obj);
+    // std::string nam;
+    // std::string str;
+    // obj->getInfo(nam,str);
+    insert(newName,obj);
 }
 
 

@@ -164,6 +164,7 @@ void snippetSettingsPopup::on_commitChangesButton_clicked()
         if(name!=ui->newNameBox->text().toStdString() && ui->newNameBox->text().toStdString()!=""){
             filename = masterWindow->generateUniqueFilename(ui->newNameBox->text(), ui->langComboBox->currentText() , 2 , assignedSnippet->getOldFilename() , assignedSnippet );
             nameCH=true;
+            masterWindow->renameSnippet(ui->newNameBox->text().toStdString() , assignedSnippet);
             name = ui->newNameBox->text().toStdString();
         }
         else{
@@ -185,7 +186,7 @@ void snippetSettingsPopup::on_commitChangesButton_clicked()
 
         assignedSnippet->updateSnippetDetails(name,filename,newTags,lang,initialLock);
 
-        if(nameCH) masterWindow->renameSnippet(assignedSnippet);
+        // if(nameCH)
         if(isTagChanged()) masterWindow->tagChanged(assignedSnippet);
 
         ui->titleLabel->setText(QString(name.c_str())+"'s settings");

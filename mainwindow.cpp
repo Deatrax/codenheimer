@@ -784,7 +784,7 @@ void MainWindow::sandBox(){
         delete obj;
     }
 
-    void MainWindow::renameSnippet(snippetBaseClass *obj)
+    void MainWindow::renameSnippet(std::string newName, snippetBaseClass *obj)
     {
         //change name in lang holder
             //names are not stored here lol
@@ -795,7 +795,7 @@ void MainWindow::sandBox(){
         //name was already changed in filename holder
 
         //change name in search trie
-        searchObj->rename(obj);
+        searchObj->rename(newName , obj);
     }
 
     void MainWindow::snipetLangChanged( snippetBaseClass *obj, std::string lang)

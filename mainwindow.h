@@ -89,7 +89,7 @@ public:
     std::vector<std::string> getTagList();
     std::string generateUniqueFilename(const QString &name, const QString &lang, int mode,std::string oldFilename="",snippetBaseClass *obj=std::nullptr_t());
     void deleteSnippet(snippetBaseClass *obj);
-    void renameSnippet(snippetBaseClass *obj);
+    void renameSnippet(std::string newName , snippetBaseClass *obj);
     void snipetLangChanged(snippetBaseClass *obj, string lang);
     void tagChanged(snippetBaseClass *obj);
     bool containsSpaces(QString &str);
