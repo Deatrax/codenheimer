@@ -85,6 +85,14 @@ public:
     void closeTab();
     friend class editorWidget;
 
+    std::vector<string> getLangList();
+    std::vector<std::string> getTagList();
+    std::string generateUniqueFilename(const QString &name, const QString &lang, int mode,std::string oldFilename="",snippetBaseClass *obj=std::nullptr_t());
+    void deleteSnippet(snippetBaseClass *obj);
+    void renameSnippet(snippetBaseClass *obj);
+    void snipetLangChanged(snippetBaseClass *obj, string lang);
+    void tagChanged(snippetBaseClass *obj);
+    bool containsSpaces(QString &str);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -121,6 +129,10 @@ private slots:
 
     void on_testDecryptButton_clicked();
 
+    void on_snippetSettingsTestButton_clicked();
+
+    void on_snippetSettingsOnSearchPage_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -141,15 +153,18 @@ private:
     std::string hashResult; //hashresult of the password
     tagHolder* mainTagHolder; //pointer to hold a tagHolder object to be added in readData() function
     langHolder* mainLangHolder; //pointer to hold a langHolder object to be added in readData() function
-    std::vector<snippetBaseClass*> mainStorage; // a vector to hold all the snippet's pointers
+    // this was deprecated because filne name storage was already doing it = std::vector<snippetBaseClass*> mainStorage; // a vector to hold all the snippet's pointers
     QClipboard *clipboard;
-    std::unordered_map<std::string,bool> filenameStorage;
+    std::unordered_map<std::string,snippetBaseClass*> filenameStorage;
     int lineNum;
+    static QString company;
+    static QString appName;
 
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
     void encryptText();
     void decryptText();
+    void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
 protected:
 
 

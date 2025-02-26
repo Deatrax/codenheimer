@@ -497,7 +497,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -555,6 +555,9 @@ border-radius:7px;</string>
                  </property>
                  <item>
                   <widget class="QLineEdit" name="newSnippetNameBox">
+                   <property name="maxLength">
+                    <number>20</number>
+                   </property>
                    <property name="placeholderText">
                     <string>New Snippet Name...</string>
                    </property>
@@ -1226,6 +1229,33 @@ QPushButton:hover{
            </property>
            <property name="text">
             <string>Decrypt it</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="snippetSettingsTestButton">
+           <property name="geometry">
+            <rect>
+             <x>660</x>
+             <y>550</y>
+             <width>151</width>
+             <height>24</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QWidget{
+	font-size:14px;
+	color: white;
+	border-radius:5px
+}
+QPushButton{
+	background:black;
+}
+
+QPushButton:hover{
+	background:#1E1E1E;
+}</string>
+           </property>
+           <property name="text">
+            <string>Show snippet settings</string>
            </property>
           </widget>
          </widget>

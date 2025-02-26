@@ -1,14 +1,33 @@
 #include "mainwindow.h"
 #include "snippetpreviewbox.h"
+#include "snippetsettingspopup.h"
 #include "ui_mainwindow.h"
 #include "predefines.h"
 #include "editorwidget.h"
-//<<<<<<< ryexocious-making-search-page
 #include "searchsyetem.h"
-//=======
 #include <QSettings>
 
-//>>>>>>> main
+
+
+//Global and Static Space
+QString MainWindow::company="AronoxStudios";
+QString MainWindow::appName="Codenheimer";
+
+
+
+
+
+//==================
+
+
+
+
+
+
+
+
+
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -35,6 +54,7 @@ MainWindow::~MainWindow()
  */
 void MainWindow::sandBox(){
 
+    ui->sandBox->clear();
     // ********Implementation using QGroupBox
     // for(int i=0;i<12;i++){
     //     snippetPreviewBox* pb=new snippetPreviewBox(this,this);
@@ -47,6 +67,8 @@ void MainWindow::sandBox(){
 
     //*********implementation using list widget
     //ui->sandBox->clear();
+
+
     ui->sandBox->setSpacing(3);
     ui->sandBox->setStyleSheet(
         "QListWidget::item {"
@@ -61,7 +83,9 @@ void MainWindow::sandBox(){
         "}"
         );
 
-    for (snippetBaseClass*& snip: mainStorage) {
+
+    for (auto& itr: filenameStorage) {
+        snippetBaseClass*& snip = itr.second;
 
         // Create the custom widget
         snippetPreviewBox* pb = new snippetPreviewBox(this, this);
@@ -73,12 +97,16 @@ void MainWindow::sandBox(){
         // Set the size of the item to match the widget
         item->setSizeHint(pb->sizeHint());
 
+        // Store snippetPreviewBox pointer inside Qt::UserRole
+        item->setData(Qt::UserRole, QVariant::fromValue(pb));
+
         // Add the item to the list widget
         ui->sandBox->addItem(item);
 
-        // Set the custom widget for this item
+        // Set the custom widget for this item (for display only)
         ui->sandBox->setItemWidget(item, pb);
     }
+
 
 
 }
@@ -124,7 +152,7 @@ void MainWindow::sandBox(){
 //=======
         prepareAddNewComboBox();
 //>>>>>>> main
-        sandBox();
+
 
 
         //testing the editor
@@ -139,6 +167,17 @@ void MainWindow::sandBox(){
     }
 
 
+    void MainWindow::saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type) {
+        // Step 1: Create or open the QSettings object
+        QSettings settings(company, appName);
+
+        // Step 2: Write data to settings
+        settings.setValue("username", username);
+        settings.setValue("hashres", hashResult);
+        settings.setValue("vault", vault);
+        settings.setValue("tag", tag);
+        settings.setValue("type", type);
+    }
 
     int MainWindow::firstTimeInit()
     {
@@ -147,12 +186,44 @@ void MainWindow::sandBox(){
         if (!inFile.is_open()) { // Check if the file could not be opened and if not then this is the first time this is being run
             std::ofstream make("firstrun.txt");
             make.close();
-            std::cerr << "Error: File does not exist or cannot be opened!\n";
+            std::cerr << "Error: First time run checker File does not exist or cannot be opened!\n";
             std::string strn;
             char str[assist::PATH_SIZE];
             assist::getAppData_folder(str);
             std::string mode="wb";
             assist::ensure_directory_and_open_file(str,NULL,mode.c_str());
+
+
+            mode="a";
+            std::vector<std::string> filenames = {
+                "tagDat.cdh",
+                "langDat.cdh",
+                "snipDatVault.cdh"
+            };
+
+            char filePathBuffer[assist::PATH_SIZE];
+
+            for (const auto& filename : filenames) {
+                std::strncpy(filePathBuffer, filename.c_str(), sizeof(filePathBuffer) - 1);
+                filePathBuffer[sizeof(filePathBuffer) - 1] = '\0';
+
+                assist::make_appData_filePath(filePathBuffer);
+
+                if (assist::ensure_directory_and_open_file(str, filePathBuffer, mode.c_str())) {
+                    QMessageBox::critical(nullptr, "Error", "Failed to initialize the application, please contact devs: ERR_NO_CREATE:"+QString().fromStdString(filename));
+                    return -1;
+                }
+            }
+
+
+
+            QSettings settings(company, appName);
+
+            settings.setValue("username", "dummyUser");
+            settings.setValue("hashres", "noHash");
+            settings.setValue("vault", "default");
+            settings.setValue("tag",  0);
+            settings.setValue("type", 0);
             return 1;
             //makeSampleFile();
         }
@@ -316,6 +387,22 @@ void MainWindow::sandBox(){
         ui->snippetSettingsOnSearchPage->setText("");
         ui->snippetSettingsOnSearchPage->setIcon(QIcon(":/images/settingsIcon.svg"));
         ui->snippetSettingsOnSearchPage->setIconSize(QSize(23,23));
+
+        ui->snippetPreviewBoxAreaOnSearchPage->setStyleSheet(
+            "QListWidget{"
+            "border:none;"
+            "}"
+            "QListWidget::item {"
+            "   border: 0px solid black;"
+            // "   border-radius: 5px;"
+            // "   padding: 5px;"
+            // "   margin: 3px;"
+            "}"
+            "QListWidget::item:selected {"
+            "   color: white;"
+            "   border: 1px solid red;"
+            "}"
+            );
     }
 
 //     void MainWindow::readUconfig(){
@@ -333,7 +420,7 @@ void MainWindow::sandBox(){
         std::vector<string> langs=mainLangHolder->getLangList();
         for(auto& it:langs){
             ui->addNewLangDropdown->addItem(QString(it.c_str()));
-// >>>>>>> main
+
         }
         ui->addNewLangDropdown->addItem("Select");
         ui->addNewLangDropdown->setCurrentText("Select");
@@ -370,13 +457,13 @@ void MainWindow::sandBox(){
         //========================================
 
         //Qsettings system
-        QSettings settings("AronoxStudios", "Codenheimer");
+        QSettings settings(company, appName);
 
         QString u=settings.value("username","default_user").toString();
         QString hs=settings.value("hashres","default_val").toString();
-        QString va=settings.value("vault","locale").toString();
-        int ty=settings.value("type",69).toInt();
-        int tg=settings.value("tag",420).toInt();
+        QString va=settings.value("vault","default").toString();
+        int ty=settings.value("type",6).toInt();
+        int tg=settings.value("tag",6).toInt();
 
         username=u.toStdString();
         hashResult=hs.toStdString();
@@ -425,14 +512,12 @@ void MainWindow::sandBox(){
             }
             snippetBaseClass* obj=generateSnippetObject(lang);
             obj->innit(name,filename,lineNum,lang,tags);
-            size_t lastDot = filename.find_last_of('.');
-            if (lastDot != std::string::npos) {
-                filename = filename.substr(0, lastDot);  // Remove extension
-            }
-            filenameStorage[filename] = true;
+            size_t lastDot = filename.find_last_of(".");
+            std::string nameWithoutExt = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
+            filenameStorage[nameWithoutExt] = obj;
             mainLangHolder->insert(obj);
             if(ifTags=="tags")mainTagHolder->insert(obj);
-            mainStorage.push_back(obj);
+            // deprecated mainStorage.push_back(obj);
             //THIS IS WHERE JESSAN WILL ADD INSERT OF SEARCH CLASS
             searchObj->insert(name,obj);
             // Output or use the tags for testing
@@ -505,6 +590,11 @@ void MainWindow::sandBox(){
     void MainWindow::addNewAction(){
         QString newName=ui->newSnippetNameBox->text();
         if(newName!=""){
+            if(containsSpaces(newName)){
+                warnUser("Please use name without spaces!!");
+                return;
+            }
+
             if(ui->addNewLangDropdown->currentText()!="Select")
             addNewSnippet(newName,ui->addNewLangDropdown->currentText());
             else warnUser("Please Select Language");
@@ -517,26 +607,14 @@ void MainWindow::sandBox(){
         qDebug()<<"Add new final reached: "<<name<<" "<<lang;
 
         //generate filename
-        std::string filename = name.toStdString() + lang.toStdString();
-        int i = 0;  // Start from 0 to check `name+".cdh"` first
-        do {
-            if (i == 3) {
-                warnUser("This name has been used 3 times, please use another name");
-                return;
-            }
-
-            if (i > 0) {
-                filename = name.toStdString() + lang.toStdString() + std::to_string(i);
-            }
-
-            i++;
-        } while (filenameStorage.find(filename) != filenameStorage.end());
-        filenameStorage[filename]=true;
+        std::string filename =generateUniqueFilename(name,lang,1);
+        if (filename == "stop") return;
+        std::string filenameWithoutExt= filename;
         filename+=".cdh";
         snippetBaseClass* obj=generateSnippetObject(lang.toStdString());
         obj->innit( name.toStdString() , filename , lineNum , lang.toStdString() , std::vector<std::string>() );
         mainLangHolder->insert(obj);
-        mainStorage.push_back(obj);
+        filenameStorage[filenameWithoutExt]=obj;
         //Insert into search here
         searchObj->insert(name.toStdString(),obj);
         //=====updating the vault file
@@ -558,6 +636,42 @@ void MainWindow::sandBox(){
         obj->saveSnippetToFile("");
 
         openSnippetInEditor(obj,name,false);
+    }
+
+
+    ///
+    /// \brief MainWindow::generateUniqueFilename a function for the careful and well considered generation of filename for snippets
+    /// \param name the name of the snippet
+    /// \param lang the lang of the snippet
+    /// \param mode if mode =1, new snippet no obj exists yet, if mode =2, generating for renamed snippet
+    /// \return the generated filename
+    ///
+    std::string MainWindow::generateUniqueFilename(const QString& name, const QString& lang, int mode, std::string oldFilename, snippetBaseClass *obj) {
+
+        std::string filename = name.toStdString() + lang.toStdString();
+        int i = 0;  // Start from 0 to check `name+".cdh"` first
+        do {
+            if (i == 3) {
+                warnUser("This name has been used 3 times, please use another name");
+                return "stop";
+            }
+
+            if (i > 0) {
+                filename = name.toStdString() + lang.toStdString() + std::to_string(i);
+            }
+
+            i++;
+        } while (filenameStorage.find(filename) != filenameStorage.end());
+
+        if(mode==1){
+            //filenameStorage[filename]=obj;
+            return filename;
+        }
+        if(mode ==2){
+            filenameStorage.erase(oldFilename);
+            filenameStorage[filename]=obj;
+            return filename;
+        }
     }
 
 
@@ -616,6 +730,10 @@ void MainWindow::sandBox(){
 
     }
 
+    std::vector<string> MainWindow::getLangList(){
+        return mainLangHolder->getLangList();
+    }
+
     void MainWindow::openSnippetInEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
     {
         editorWidget* newEditor=new editorWidget(this,this);
@@ -633,6 +751,67 @@ void MainWindow::sandBox(){
         if(ui->editorTabs->isTabVisible(i)){
             ui->editorTabs->setTabVisible(i,false);
         }
+    }
+
+
+    void MainWindow::deleteSnippet(snippetBaseClass* obj){
+        //remove from tag holder
+        if(mainTagHolder->removeSnippet(obj)) qDebug()<<"removed from tagHolder";
+        else qDebug()<<"Snippet failed to remove from or didn't exist in tag holder";
+
+        //remove from lang holder
+        if(mainLangHolder->removeSnippet(obj)) qDebug()<<"snippet removed from lang holder";
+        else qDebug()<<"snippet should have been in the lang holder";
+
+        //remove from search trie
+        searchObj->remove(obj);
+
+        //remove from filehashmap
+        if (filenameStorage.erase(obj->getOldFilename()))  qDebug() << "Filename removed from storage: " << QString::fromStdString(obj->getOldFilename());
+        else qDebug() << "Filename not found in storage: " << QString::fromStdString(obj->getOldFilename());
+
+
+        //delete from file
+        if(obj->deleteFromVault())
+            showAutoCloseMessageBox(this,"Success!","Snippet deleted from vault success!");
+        else{
+            warnUser("Snippets failed to delete from vault! \n Please check logs and contact devs");
+            return;
+        }
+
+
+        //delete the snippet itself that is call it's destructor
+        delete obj;
+    }
+
+    void MainWindow::renameSnippet(snippetBaseClass *obj)
+    {
+        //change name in lang holder
+            //names are not stored here lol
+
+        //change name in tag holder
+            //names are not stored here lol
+
+        //name was already changed in filename holder
+
+        //change name in search trie
+        searchObj->rename(obj);
+    }
+
+    void MainWindow::snipetLangChanged( snippetBaseClass *obj, std::string lang)
+    {
+        mainLangHolder->removeSnippet(obj);
+        mainLangHolder->insert(obj, lang);
+    }
+
+    void MainWindow::tagChanged(snippetBaseClass *obj)
+    {
+        mainTagHolder->removeSnippet(obj);
+        mainTagHolder->insert(obj);
+    }
+
+    bool MainWindow::containsSpaces(QString& str) {
+        return str.indexOf(' ') != -1; // indexOf returns -1 if no match is found
     }
 
 
@@ -698,7 +877,6 @@ void MainWindow::on_searchBoxLineEdit_textChanged(const QString &arg1)
             for (auto& itr2 : itr.second) {
                 // Create the custom widget
                 snippetPreviewBox* pb = new snippetPreviewBox(this, this);
-
                 pb->assignSnippet(itr2);
 
                 // Create a QListWidgetItem to hold the custom widget
@@ -707,10 +885,13 @@ void MainWindow::on_searchBoxLineEdit_textChanged(const QString &arg1)
                 // Set the size of the item to match the widget
                 item->setSizeHint(pb->sizeHint());
 
+                // Store snippetPreviewBox pointer inside Qt::UserRole
+                item->setData(Qt::UserRole, QVariant::fromValue(pb));
+
                 // Add the item to the list widget
                 ui->snippetPreviewBoxAreaOnSearchPage->addItem(item);
 
-                // Set the custom widget for this item
+                // Set the custom widget for this item (for display only)
                 ui->snippetPreviewBoxAreaOnSearchPage->setItemWidget(item, pb);
             }
         }
@@ -746,6 +927,7 @@ void MainWindow::on_EditorsDefaultTabButton_clicked()
 
 void MainWindow::on_downarrow_clicked()
 {
+    sandBox();
     ui->maincontentsStack->setCurrentIndex(5);
 }
 
@@ -755,6 +937,61 @@ void MainWindow::on_centralBrowseButton_clicked()
     setMainIndex(3);
 // >>>>>>> main
 }
+
+
+void MainWindow::on_snippetSettingsTestButton_clicked()
+{
+    snippetSettingsPopup* pop=new snippetSettingsPopup(this);
+    QListWidgetItem *selectedItem = ui->sandBox->currentItem();
+    if (selectedItem) {
+        QVariant data = selectedItem->data(Qt::UserRole);
+        snippetPreviewBox *previewBox = data.value<snippetPreviewBox*>();
+
+        if (previewBox) {
+            // Do something with previewBox
+            qDebug() << "Snippet Preview Box retrieved!";
+            pop->assign(previewBox->getSnippetObj());
+            pop->show();
+        } else {
+            qDebug() << "No snippetPreviewBox associated with this item.";
+            delete pop;
+        }
+    } else {
+        qDebug() << "No item selected.";
+        delete pop;
+    }
+
+
+
+}
+
+std::vector<std::string> MainWindow::getTagList(){
+    return mainTagHolder->getTagList();
+}
+
+void MainWindow::on_snippetSettingsOnSearchPage_clicked()
+{
+    snippetSettingsPopup* pop=new snippetSettingsPopup(this);
+    QListWidgetItem *selectedItem = ui->snippetPreviewBoxAreaOnSearchPage->currentItem();
+    if (selectedItem) {
+        QVariant data = selectedItem->data(Qt::UserRole);
+        snippetPreviewBox *previewBox = data.value<snippetPreviewBox*>();
+
+        if (previewBox) {
+            // Do something with previewBox
+            qDebug() << "Snippet Preview Box retrieved!";
+            pop->assign(previewBox->getSnippetObj());
+            pop->show();
+        } else {
+            qDebug() << "No snippetPreviewBox associated with this item.";
+            delete pop;
+        }
+    } else {
+        ui->statusBar->showMessage("Please select snippet first!", 2500);
+        delete pop;
+    }
+}
+
 
 
 

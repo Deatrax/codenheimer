@@ -93,6 +93,24 @@ void langHolder::insert(snippetBaseClass* snippet){
     //DEBUGstd::cerr<<"exiting insert of lang holder"<<std::endl;
 }
 
+void langHolder::insert(snippetBaseClass* snippet, std::string lang){
+
+    if (stringTolang.find(lang) != stringTolang.end()) {
+        //DEBUG std::cerr<<"find condition passed in the lang holder"<<std::endl;
+        stringTolang[lang]->snippetsStorage.push_back(snippet);
+    } else {
+        //DEBUG std::cerr << "Language " << snippet->getLang() << " not found in stringTolang!" << std::endl;
+        return;
+    }
+    //DEBUG std::cerr<<"pushed back the snippet to where it belongs"<<std::endl;
+    if (snippet->isCustom())
+    {
+        std::cerr<<"snippet is custom"<<std::endl;
+        snippet->putColors(stringTolang[lang]->returnCustomColors());
+    }
+    //DEBUGstd::cerr<<"exiting insert of lang holder"<<std::endl;
+}
+
 std::vector<snippetBaseClass*>& langHolder::getSnippetsFromLang(std::string lang){
     return stringTolang[lang]->snippetsStorage;
 }
@@ -132,3 +150,11 @@ std::vector<string> langHolder::getLangList()
     return keys;
 }
 
+bool langHolder::removeSnippet(snippetBaseClass* obj){
+    return stringTolang[obj->getLang()]->deleteSnippet(obj);
+}
+
+bool langHolder::rename(snippetBaseClass *obj)
+{
+    //lol names are not stored here
+}
