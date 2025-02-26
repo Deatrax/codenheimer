@@ -26,7 +26,8 @@ SOURCES += \
     snippetsettingspopup.cpp \
     tagholder.cpp \
     tagviewer.cpp \
-    flowlayout.cpp
+    flowlayout.cpp \
+    cryptographicagent.cpp
 
 HEADERS += \
     editorwidget.h \
@@ -47,14 +48,16 @@ HEADERS += \
     snippetsettingspopup.h \
     tagholder.h \
     tagviewer.h \
-    flowlayout.h
+    flowlayout.h \
+    cryptographicagent.h
 
 FORMS += \
     editorwidget.ui \
     mainwindow.ui \
     snippetpreviewbox.ui \
     snippetsettingspopup.ui \
-    tagviewer.ui
+    tagviewer.ui \
+    cryptographicagent.ui
 
 RESOURCES += \
     images/ \

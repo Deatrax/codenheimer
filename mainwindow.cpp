@@ -511,7 +511,7 @@ void MainWindow::sandBox(){
                 }
             }
             snippetBaseClass* obj=generateSnippetObject(lang);
-            obj->innit(name,filename,lineNum,lang,tags);
+            obj->innit(name,filename,lineNum,lang,tags,this);
             size_t lastDot = filename.find_last_of(".");
             std::string nameWithoutExt = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
             filenameStorage[nameWithoutExt] = obj;
@@ -612,7 +612,7 @@ void MainWindow::sandBox(){
         std::string filenameWithoutExt= filename;
         filename+=".cdh";
         snippetBaseClass* obj=generateSnippetObject(lang.toStdString());
-        obj->innit( name.toStdString() , filename , lineNum , lang.toStdString() , std::vector<std::string>() );
+        obj->innit( name.toStdString() , filename , lineNum , lang.toStdString() , std::vector<std::string>() ,this);
         mainLangHolder->insert(obj);
         filenameStorage[filenameWithoutExt]=obj;
         //Insert into search here
@@ -1224,4 +1224,8 @@ void MainWindow::decryptText()
     } catch (const std::runtime_error &e) {
         QMessageBox::warning(this, "Error", e.what());
     }
+}
+
+void MainWindow::test(){
+    qDebug()<<"this is some test text\n";
 }

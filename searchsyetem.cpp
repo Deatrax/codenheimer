@@ -47,7 +47,7 @@ searchSystem::~searchSystem() {
     clear(root);
 }
 
-void searchSystem::innit(std::string nam, std::string filenam, int linNum, std::string lng, std::vector<std::string> tgs)
+void searchSystem::innit(std::string nam, std::string filenam, int linNum, std::string lng, std::vector<std::string> tgs, QMainWindow *MM)
 {
 }
 
@@ -82,7 +82,7 @@ bool searchSystem::isLocked() {
     return true;
 }
 
-void searchSystem::insert(std::string str, int n) {}
+
 
 void searchSystem::insert(const std::string &str, snippetBaseClass *targ) {
     Node* curr = root;
@@ -174,7 +174,7 @@ void searchSystem::display(Node *curr, std::string str) {
     }
 }
 
-void searchSystem::getData(std::string& str, int& n) {}
+
 
 bool searchSystem::saveSnippetToFile(std::string snippet)
 {

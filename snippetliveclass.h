@@ -11,7 +11,7 @@ protected:
     std::vector<std::string> tags;
     bool isLockedVar;
 
-    lol* thisLol;
+
 public:
     snippetLiveClass();
     void innit
@@ -20,7 +20,8 @@ public:
         std::string filenam,
         int linNum,
         std::string lng,
-        std::vector<std::string> tgs
+        std::vector<std::string> tgs,
+        QMainWindow* MM
     ) override;
 
     std::vector<std::string> *getInfo(
@@ -46,12 +47,8 @@ public:
 // <<<<<<< ryexocious-making-search-page
     // search class
     void insert(const std::string& str, snippetBaseClass* targ) override;
-
-    void insert(std::string str, int n);
     
     bool search(const std::string& str, std::vector<snippetBaseClass*>& ret) override;
-    
-    void getData(std::string &str, int &n);
 
     std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchWithPrefix(const std::string& prefix) override;
 // =======

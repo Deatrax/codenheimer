@@ -1,14 +1,25 @@
 #include "snippetliveclass.h"
+#include "mainwindow.h"
 
 snippetLiveClass::snippetLiveClass() {}
 
-void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, std::string lng, std::vector<std::string> tgs)
+void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, std::string lng, std::vector<std::string> tgs, QMainWindow *MM)
+    // : name(nam)
+    // , filename(filenam)
+    // , lineNum(linNum)
+    // , lang(lng)
+    // , tags(tgs)
 {
     name=nam;
     filename=filenam;
     lineNum=linNum;
     lang=lng;
     tags=tgs;
+    masterWindow=MM;
+    MainWindow* mm=static_cast<MainWindow*>(masterWindow);
+    if (mm) {
+        mm->test();  // Now you can call MainWindow-specific functions
+    }
 
     size_t pos = filename.find_last_of('.');
 
@@ -123,18 +134,9 @@ void snippetLiveClass::insert(const std::string &str, snippetBaseClass *targ){
     //absolutely nothing;
 }
 
-void snippetLiveClass::insert(std::string str, int n){
-    thisLol=new lol(str,n);
-}
-
 bool snippetLiveClass::search(const std::string& str, std::vector<snippetBaseClass*>& ret)
 {
     return false;
-}
-
-void snippetLiveClass::getData(std::string& str, int& n){
-    str=thisLol->str;
-    n=thisLol->num;
 }
 
 std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> snippetLiveClass::searchWithPrefix(const std::string &prefix)

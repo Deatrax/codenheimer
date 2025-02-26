@@ -41,7 +41,8 @@ public:
         std::string filenam,
         int linNum,
         std::string lng,
-        std::vector<std::string> tgs
+        std::vector<std::string> tgs,
+        QMainWindow* MM
     ) override;
 
     std::vector<std::string> *getInfo(
@@ -58,13 +59,12 @@ public:
     void putTags(std::vector<std::string>&) override;
     bool isLocked() override;
 
-    void insert(std::string str, int n) override;
+
     void insert(const std::string& str, snippetBaseClass* targ) override;
     bool search(const std::string& str, std::vector<snippetBaseClass*>& ret) override;
     std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchWithPrefix(const std::string& prefix) override;
 
     void display(Node* curr = nullptr, std::string str = "");
-    void getData(std::string &str, int &n) override;
 
     bool saveSnippetToFile(std::string snippet) override;
     bool updateSnippetDetails(std::string nam,std::string filenam, std::vector<std::string> tgs, std::string lng, bool lock) override;

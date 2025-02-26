@@ -93,6 +93,7 @@ public:
     void snipetLangChanged(snippetBaseClass *obj, string lang);
     void tagChanged(snippetBaseClass *obj);
     bool containsSpaces(QString &str);
+    void test();
 private slots:
     void on_sidebarButton_clicked();
 

@@ -26,7 +26,7 @@ namespace assist{
      * 
      * @param message The error message to log
      */
-    static void errLog(const char* message) {
+    inline void errLog(const char* message) {
         FILE* logFile = fopen("error_log.txt", "a");
         if (logFile) {
             fprintf(logFile, "Error: %s\n", message);
@@ -41,7 +41,7 @@ namespace assist{
      * 
      * @param str the c-string that will be populated with the derived path
      */
-    static void getAppData_folder(char* str) {
+    inline void getAppData_folder(char* str) {
         const char* userProfile = getenv("USERPROFILE");
         if (!userProfile) {
             errLog("USERPROFILE environment variable is not set.");
@@ -56,7 +56,7 @@ namespace assist{
      * 
      * @param filename the c-string that will be populated with the derived file path
      */
-    static void make_appData_filePath(char* filename) {
+    inline void make_appData_filePath(char* filename) {
         const char* userProfile = getenv("USERPROFILE");
         if (!userProfile) {
             errLog("USERPROFILE environment variable is not set.");
@@ -77,7 +77,7 @@ namespace assist{
      * 
      * @param str 
      */
-    static void getAppData_folder(char* str) {
+    inline void getAppData_folder(char* str) {
         const char* home = getenv("HOME");
         if (!home) {
             errLog("HOME environment variable is not set.");
@@ -92,7 +92,7 @@ namespace assist{
      * 
      * @param filename the c-string that will be populated with the derived file path
      */
-    static void make_appData_filePath(char* filename) {
+    inline void make_appData_filePath(char* filename) {
         const char* home = getenv("HOME");
         if (!home) {
             errLog("HOME environment variable is not set.");
@@ -133,7 +133,7 @@ namespace assist{
  * @param mode The file open mode, determining destructive or non-destructive opening.
  * @return int Returns 0 if successful, or -1 if failed to create either one of the targets.
  */
-static int ensure_directory_and_open_file(const char *dir_path, const char *file_path, const char *mode) {
+inline int ensure_directory_and_open_file(const char *dir_path, const char *file_path, const char *mode) {
             //skip if null passed BECOZ this means that directory making is to be skipped
             if (dir_path == NULL || strlen(dir_path) == 0) {
                 goto fileCheck;
@@ -183,7 +183,7 @@ static int ensure_directory_and_open_file(const char *dir_path, const char *file
  * @param newLine The new content for the specified line.
  * @return true if successful, false if the operation fails.
  */
-static bool editLine(const std::string& filename, int lineNumber, const std::string& newLine) {
+inline bool editLine(const std::string& filename, int lineNumber, const std::string& newLine) {
     std::ifstream fileIn(filename);
     if (!fileIn) return false;
 
@@ -222,7 +222,7 @@ static bool editLine(const std::string& filename, int lineNumber, const std::str
  * @param newLine The content to insert.
  * @return true if successful, false if operation fails.
  */
-static bool addLine(const std::string& filename, int lineNumber, const std::string& newLine) {
+inline bool addLine(const std::string& filename, int lineNumber, const std::string& newLine) {
     std::ifstream fileIn(filename);
     if (!fileIn) return false;
 
@@ -262,7 +262,7 @@ static bool addLine(const std::string& filename, int lineNumber, const std::stri
  * @param lineNumber The line number to remove.
  * @return true if successful, false if operation fails.
  */
-static bool removeLine(const std::string& filename, int lineNumber) {
+inline bool removeLine(const std::string& filename, int lineNumber) {
     std::ifstream fileIn(filename);
     if (!fileIn) return false;
 
