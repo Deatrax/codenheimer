@@ -17,10 +17,10 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <unordered_map>
 #include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/rand.h>
-#include <unordered_map>
 
 #include "snippetbaseclass.h"
 #include "snippetc.h"
@@ -29,24 +29,20 @@
 #include "snippetjava.h"
 #include "snippetpy.h"
 #include "snippetcustom.h"
-// <<<<<<< ryexocious-making-search-page
 #include "searchsyetem.h"
-// =======
 
 #include "langholder.h"
 #include "tagholder.h"
+#include "cryptographicagent.h"
 
-// >>>>>>> main
+
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
-
-
-
-
-
 
 
 // class editorWidget; //forward decleration
@@ -160,6 +156,7 @@ private:
     int lineNum;
     static QString company;
     static QString appName;
+    cryptographicAgent* Julius;
 
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
