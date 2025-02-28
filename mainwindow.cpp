@@ -122,6 +122,7 @@ void MainWindow::sandBox(){
         ui->sidebar->layout()->setAlignment(ui->usernameAndMainSettingsButton, Qt::AlignHCenter); //align the settings button at the centre
         centreSidebarButtons();
         setSidebarButtonIcons();
+        prepareSettingsPage();
 
         readUconfig();
         ui->usernameAndMainSettingsButton->setText(QString(username.c_str())+"  ");
@@ -430,6 +431,26 @@ void MainWindow::sandBox(){
             "   border:3px solid black;"
             "}"
             );
+    }
+
+    void MainWindow::prepareSettingsPage(){
+        ui->settingsBackButton->setIcon(QIcon(":/images/backArrowIcon.svg"));
+        ui->settingsBackButton->setIconSize(QSize(20,23));
+        CreteRoundFont.setPointSize(23);
+        ui->settingsTitle->setFont(CreteRoundFont);
+        ui->generalSettingsTitle->setFont(CreteRoundFont);
+        ui->snLSettingTitle->setFont(CreteRoundFont);
+        ui->fileSettingsTitle->setFont(CreteRoundFont);
+        CreteRoundFont.setPointSize(12);
+        ui->usernameTitle->setFont(CreteRoundFont);
+        ui->oldPasswordTitle->setFont(CreteRoundFont);
+        ui->newPasswordTitle->setFont(CreteRoundFont);
+        ui->usernameEdit->setFont(CreteRoundFont);
+        ui->oldPasswordEdit->setFont(CreteRoundFont);
+        ui->newPasswordEdit->setFont(CreteRoundFont);
+        ui->vaultLocationTitle->setFont(CreteRoundFont);
+        ui->vaultLocationEdit->setFont(CreteRoundFont);
+
     }
 
 
