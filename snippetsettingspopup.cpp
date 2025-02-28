@@ -184,7 +184,11 @@ void snippetSettingsPopup::on_commitChangesButton_clicked()
 
         initialLock=ui->isLockedCheckbox->checkState();
 
+        // this->setWindowModality(Qt::NonModal);
+        this->hide();
         assignedSnippet->updateSnippetDetails(name,filename,newTags,lang,initialLock);
+        this->show();
+        // this->setWindowModality(Qt::ApplicationModal);
 
         // if(nameCH)
         if(isTagChanged()) masterWindow->tagChanged(assignedSnippet);

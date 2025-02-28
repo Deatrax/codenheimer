@@ -44,27 +44,30 @@ public:
 
     bool isLocked() override;
 
-// <<<<<<< ryexocious-making-search-page
+
     // search class
     void insert(const std::string& str, snippetBaseClass* targ) override;
     
     bool search(const std::string& str, std::vector<snippetBaseClass*>& ret) override;
 
     std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchWithPrefix(const std::string& prefix) override;
-// =======
+
     std::string& EditSnippet() override;
 
     bool saveSnippetToFile(std::string snippet) override;
     
     bool updateSnippetDetails(string nam,std::string filenam, std::vector<string> tgs, string lng, bool lock) override;
-    // >>>>>>> main
+
     std::string getOldFilename() override;
 
     bool deleteFromVault() override;
 
     bool remove(snippetBaseClass *obj) override;
+
 private:
     bool updateSnippetFilename(std::string newFilename) override;
+
+    void updateFileSecurity(bool lock);
 
 
 };

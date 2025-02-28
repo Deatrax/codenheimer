@@ -131,13 +131,13 @@ void MainWindow::sandBox(){
         mainLangHolder=new langHolder(additionalTypeCount);
         clipboard = QApplication::clipboard(); // Get the clipboard object
         searchObj=new searchSystem;
-        Julius= new cryptographicAgent(this);
+        Julius= new cryptographicAgent();
+        Julius->setHash(hashResult);
         readData();
 
         //testing holders
         // mainLangHolder->testPrintCustomLang("typeName5");
         // mainLangHolder->testPrintCustomLang("typeName4");
-
 
         //testing the snippet previewBox
         // for(int i=0;i<5;i++){
@@ -999,66 +999,71 @@ void MainWindow::on_snippetSettingsOnSearchPage_clicked()
 
 
 
-
-
-
-
-
-
-
-
-
 void MainWindow::on_testCryptoButton_clicked()
 {
-    encryptText();
+    // encryptText();
 }
 
-void MainWindow::encryptText()
+void MainWindow::encryptText(QString file, QString data)
 {
-    QString password = "password" /*ui->OnlyFilePassword->text()*/;
-    if (password.isEmpty()) {
-        QMessageBox::warning(this, "Error", "Please enter a password.");
-        return;
-    }
+    // QString password = "password" /*ui->OnlyFilePassword->text()*/;
+    // if (password.isEmpty()) {
+    //     QMessageBox::warning(this, "Error", "Please enter a password.");
+    //     return;
+    // }
+    // QString fileName = "testFILE" /*ui->Filename->text()*/;
+    // if (fileName.isEmpty()) {
+    //     QMessageBox::warning(this, "Error", "Please enter a file name.");
+    //     return;
+    // }
+    // QString filePath = QFileDialog::getSaveFileName(this, "Save Encrypted File", QDir::homePath() + "/" + fileName);
+    // if (filePath.isEmpty()) {
+    //     return; // User canceled the save dialog
+    // }
 
-    QString fileName = "testFILE" /*ui->Filename->text()*/;
-    if (fileName.isEmpty()) {
-        QMessageBox::warning(this, "Error", "Please enter a file name.");
-        return;
-    }
-
-    QString filePath = QFileDialog::getSaveFileName(this, "Save Encrypted File", QDir::homePath() + "/" + fileName);
-    if (filePath.isEmpty()) {
-        return; // User canceled the save dialog
-    }
-
-    
+    Julius->encryptToFile(file , data );
 }
 
 
 
 void MainWindow::on_testDecryptButton_clicked()
 {
-    decryptText();
+    // decryptText();
 }
 
 
-void MainWindow::decryptText()
+QString MainWindow::decryptText(QString fileName)
 {
-    QString password = "password" /*ui->OnlyFilePassword->text()*/;
-    if (password.isEmpty()) {
-        QMessageBox::warning(this, "Error", "Please enter a password.");
-        return;
-    }
+    // QString password = "password" /*ui->OnlyFilePassword->text()*/;
+    // if (password.isEmpty()) {
+    //     QMessageBox::warning(this, "Error", "Please enter a password.");
+    //     return;
+    // }
+    // QString filePath = QFileDialog::getOpenFileName(this, "Select Encrypted File", QDir::homePath());
+    // if (filePath.isEmpty()) {
+    //     return; // User canceled the file dialog
+    // }
 
-    QString filePath = QFileDialog::getOpenFileName(this, "Select Encrypted File", QDir::homePath());
-    if (filePath.isEmpty()) {
-        return; // User canceled the file dialog
-    }
-
-
+    return Julius->decryptFromFile( fileName );
 }
 
 void MainWindow::test(){
     qDebug()<<"this is some test text\n";
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    hashResult=Julius->setPassFirstTime();
+    qDebug()<<"the hash result is: "<<hashResult;
+    QSettings settings(company, appName);
+    settings.setValue("hashres", QString(hashResult.c_str() ) );
+}
+
+
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+
+}
+

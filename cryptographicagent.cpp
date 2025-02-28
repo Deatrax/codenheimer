@@ -18,7 +18,7 @@ cryptographicAgent::~cryptographicAgent()
 
 void cryptographicAgent::storePassword(QString pass) {
 
-    strncpy(password, "MySuperSecretPassword", sizeof(password) - 1);
+    strncpy(password, pass.toStdString().c_str() , sizeof(password) - 1);
     qDebug() << "Password stored in memory.";
 
     // Schedule secureErase() to run in 5 minutes (300,000 ms)
@@ -32,8 +32,28 @@ void cryptographicAgent::secureErase(char* buffer, size_t size) {
     while (size--) {
         *p++ = 0;
     }
-    qDebug() << "Password securely erased.";
+    qDebug() << "Session timed out, Password securely erased.";
     hasPassword=false;
+}
+
+QString cryptographicAgent::getAppDataFilePath(const QString& filename) {
+    QString appDataPath;
+
+#ifdef _WIN32
+    appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+#elif defined(__APPLE__)
+    appDataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/KCATDVWSPJD";
+#else
+    appDataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/KCATDVWSPJD";
+#endif
+    // Ensure filename is safe (no directory traversal)
+    QString safeFilename = QFileInfo(filename).fileName();
+
+    // Construct full path
+    QString fullPath = QDir::cleanPath(appDataPath + "/" + safeFilename);
+
+    // Ensure compatibility with OpenSSL (use forward slashes)
+    return QDir::toNativeSeparators(fullPath);
 }
 
 
@@ -164,7 +184,7 @@ void cryptographicAgent::encryptStringToFile(const QString &data, const QString 
     file.close();
 }
 
-int cryptographicAgent::encryptToFile(QString filePath, QString data){
+int cryptographicAgent::encryptToFile(QString fileName, QString data){
 
 
     if (!hasPassword) {
@@ -186,9 +206,11 @@ int cryptographicAgent::encryptToFile(QString filePath, QString data){
         return -2;
     }
 
+    QString filePath = getAppDataFilePath(fileName);
+
     try {
         encryptStringToFile(dataToEncrypt, filePath, key, iv);
-        QMessageBox::information(this, "Success", "File encrypted successfully.");
+        //QMessageBox::information(this, "Success", "File encrypted successfully.");
     } catch (const std::runtime_error &e) {
         QMessageBox::warning(this, "Error", e.what());
         return -3;
@@ -196,7 +218,7 @@ int cryptographicAgent::encryptToFile(QString filePath, QString data){
     return 0;
 }
 
-QString cryptographicAgent::decryptFromFile(QString filePath, QString data)
+QString cryptographicAgent::decryptFromFile(QString fileName)
 {
     if (!hasPassword) {
         QEventLoop loop;
@@ -212,14 +234,26 @@ QString cryptographicAgent::decryptFromFile(QString filePath, QString data)
         return QString();
     }
 
+    QString filePath = getAppDataFilePath(fileName);
+
     try {
         decryptedContent = decryptFileToString(filePath, key, iv);
         // ui->FileContents->setPlainText(decryptedContent); // Display decrypted content
-        QMessageBox::information(this, "Success", "File decrypted successfully. CONTENTS:"+decryptedContent);
+        //QMessageBox::information(this, "Success", "File decrypted successfully. CONTENTS:"+decryptedContent);
     } catch (const std::runtime_error &e) {
         QMessageBox::warning(this, "Error", e.what());
     }
     return decryptedContent;
+}
+
+std::string cryptographicAgent::setPassFirstTime()
+{
+    firstTime=true;
+    QEventLoop loop;
+    connect(this, &cryptographicAgent::passwordSet, &loop, &QEventLoop::quit);
+    showUI(2);
+    loop.exec();
+    return hashResult=hashPassword(ui->passwordField->text()).toStdString();
 }
 
 QString cryptographicAgent::hashPassword(const QString& pass){
@@ -228,10 +262,13 @@ QString cryptographicAgent::hashPassword(const QString& pass){
 
 void cryptographicAgent::showUI(int mode){
     connect(ui->cofirmButton, &QPushButton::clicked, this, [&]() {
-        hasPassword = true;
-        emit passwordSet();  // Notify that password is set
+
+          // Notify that password is set
         // this->hide();  // Close UI
     });
+
+    ui->passwordConfirmField->clear();
+    ui->passwordField->clear();
     switch (mode) {
     case 1:
         ui->confrimPassText->hide();
@@ -242,7 +279,6 @@ void cryptographicAgent::showUI(int mode){
     case 2:
         this->show();
         break;
-
     default:
         break;
     }
@@ -257,14 +293,27 @@ void cryptographicAgent::on_cofirmButton_clicked()
             return;
         }
     }
-
-    if( hashResult != hashPassword(pass).toStdString() ){
+    if(firstTime){
+        storePassword( ui->passwordField->text() );
+        this->hide();
+        return;
+    }
+    else if( hashResult != hashPassword(pass).toStdString()  ){  //CRITIAL password hash verification
         QMessageBox::warning(this, "Error", "Wrong Password!!");
         return;
     }
     else{
         storePassword( ui->passwordField->text() );
+        emit passwordSet();
         this->hide();
     }
+}
+
+void cryptographicAgent::setHash(std::string str){
+    hashResult=str;
+}
+
+std::string cryptographicAgent::getHash(){
+    return hashResult;
 }
 

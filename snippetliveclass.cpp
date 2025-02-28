@@ -65,7 +65,14 @@ std::string snippetLiveClass::getSnippet()
 {
     if (!SNIPPET.empty()) {
         return SNIPPET;
-    } else {
+    }
+    else if( isLocked() ){
+        MainWindow* mainW=static_cast<MainWindow*>(masterWindow);
+        if (mainW) {
+            return mainW->decryptText(filename.c_str()).toStdString();  // Now you can call MainWindow-specific functions
+        }
+    }
+    else {
         char snippetCodeFile[assist::PATH_SIZE];
         // for now considering vaultLocation is default
         if (true /*vaultLocation == "default"*/) {
@@ -234,7 +241,10 @@ bool snippetLiveClass::updateSnippetDetails(std::string nam,std::string filenam,
     std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
     vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
     assist::make_appData_filePath(vaultFilePath);
-    return assist::editLine(vaultFilePath,lineNum,vaultDat);
+    /*return*/ assist::editLine(vaultFilePath,lineNum,vaultDat);
+
+
+    if( isLockedVar != lock) updateFileSecurity(lock);
 }
 
 bool snippetLiveClass::updateSnippetFilename(std::string newFilename) {
@@ -274,6 +284,22 @@ bool snippetLiveClass::updateSnippetFilename(std::string newFilename) {
     }
     qDebug()<<"the code file name was updated successfully";
     return true;
+}
+
+void snippetLiveClass::updateFileSecurity(bool lock)
+{
+    MainWindow* mainW=static_cast<MainWindow*>(masterWindow);
+    if (mainW) {
+        if(lock){
+            mainW->encryptText( QString( filename.c_str() ) , QString( getSnippet().c_str() ) );
+        }
+
+        else if(!lock){
+            SNIPPET = mainW->decryptText( QString( filename.c_str() ) ).toStdString();
+            saveSnippetToFile(SNIPPET);
+        }
+    }
+    isLockedVar = lock;
 }
 
 std::string snippetLiveClass::getOldFilename(){

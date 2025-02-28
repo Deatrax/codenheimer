@@ -6,6 +6,10 @@
 #include <QMessageBox>
 #include <QCryptographicHash>
 #include <QTimer>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QStandardPaths>
 
 #include <openssl/evp.h>
 #include <openssl/aes.h>
@@ -23,14 +27,17 @@ public:
     explicit cryptographicAgent(QWidget *parent = nullptr);
     ~cryptographicAgent();
 
-    int encryptToFile(QString filePath, QString data);
-    QString decryptFromFile(QString filePath, QString data);
+    int encryptToFile(QString fileName, QString data);
+    QString decryptFromFile(QString fileName);
 
 
+    std::string setPassFirstTime();
+    void setHash(std::string str);
+    std::string getHash();
 private slots:
     void on_cofirmButton_clicked();
 
-    QString hashPassword(const QString &pass);
+
 
 private:
 
@@ -51,6 +58,10 @@ private:
     bool hasPassword;
     std::string hashResult;
     int actionContinue;
+    bool firstTime=false;
+
+    QString getAppDataFilePath(const QString &filename);
+    QString hashPassword(const QString &pass);
 signals:
     void passwordSet();
 };

@@ -90,6 +90,9 @@ public:
     void tagChanged(snippetBaseClass *obj);
     bool containsSpaces(QString &str);
     void test();
+    void encryptText(QString file, QString data);
+    QString decryptText(QString fileName);
+
 private slots:
     void on_sidebarButton_clicked();
 
@@ -130,6 +133,10 @@ private slots:
 
     void on_snippetSettingsOnSearchPage_clicked();
 
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -140,7 +147,7 @@ private:
     void searchPageSearchbar();
     searchSystem *searchObj;
 
-// >>>>>>> main
+
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
     int tagCount; //the number of tags that exists
@@ -160,8 +167,6 @@ private:
 
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
-    void encryptText();
-    void decryptText();
     void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
 protected:
 
