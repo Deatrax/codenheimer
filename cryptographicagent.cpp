@@ -40,7 +40,8 @@ QString cryptographicAgent::getAppDataFilePath(const QString& filename) {
     QString appDataPath;
 
 #ifdef _WIN32
-    appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    appDataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/KCATDVWSPJD";
+
 #elif defined(__APPLE__)
     appDataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/KCATDVWSPJD";
 #else
@@ -51,6 +52,13 @@ QString cryptographicAgent::getAppDataFilePath(const QString& filename) {
 
     // Construct full path
     QString fullPath = QDir::cleanPath(appDataPath + "/" + safeFilename);
+
+    qDebug()<<"File path before repair: "<<fullPath;
+
+    // Replace "Local" with "Roaming" to get the correct path
+    fullPath.replace("Local", "Roaming");
+
+    qDebug() << "Corrected AppDataPath:" << appDataPath;
 
     // Ensure compatibility with OpenSSL (use forward slashes)
     return QDir::toNativeSeparators(fullPath);
@@ -207,6 +215,7 @@ int cryptographicAgent::encryptToFile(QString fileName, QString data){
     }
 
     QString filePath = getAppDataFilePath(fileName);
+    qDebug()<<"the filepath that was generated: "<<filePath;
 
     try {
         encryptStringToFile(dataToEncrypt, filePath, key, iv);
