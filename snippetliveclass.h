@@ -14,6 +14,7 @@ protected:
 
 public:
     snippetLiveClass();
+    ~snippetLiveClass();
     void innit
     (
         std::string nam,

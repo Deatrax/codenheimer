@@ -92,6 +92,7 @@ public:
     void test();
     void encryptText(QString file, QString data);
     QString decryptText(QString fileName);
+    void scheduleDeletion(int lineNumber, const QString &filePath);
 
 private slots:
     void on_sidebarButton_clicked();
@@ -169,6 +170,15 @@ private:
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
     void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
 protected:
+    
+    void completeDeletes();
+    void loadPendingDeletes();
+    void savePendingDeletes();
+    void closeEvent(QCloseEvent *event) override;
+
+
+    std::map<int, QString, std::greater<int>> pendingDeletions;
+    QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/pending_deletes.tmp";
 
 
 

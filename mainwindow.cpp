@@ -1067,3 +1067,74 @@ void MainWindow::on_pushButton_2_clicked()
 
 }
 
+
+
+
+
+
+// Schedule deletion (add to map and save to temp file)
+void MainWindow::scheduleDeletion(int lineNumber, const QString &filePath) {
+    pendingDeletions[lineNumber] = filePath;
+    qDebug()<<"the snippet has been scheduled for removal from the file";
+    savePendingDeletes();
+}
+
+// Save pending deletions to temp file
+void MainWindow::savePendingDeletes() {
+    QFile file(tempFilePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        for (const auto &[lineNumber, filePath] : pendingDeletions) {
+            out << lineNumber << "|" << filePath << "\n";
+        }
+        file.close();
+    }
+    qDebug()<<"the snippet has been added to temp file for deletetion";
+}
+
+// Load pending deletions from temp file (on startup)
+void MainWindow::loadPendingDeletes() {
+    QFile file(tempFilePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList parts = line.split("|");
+            if (parts.size() == 2) {
+                int lineNumber = parts[0].toInt();
+                QString filePath = parts[1];
+                pendingDeletions[lineNumber] = filePath;
+            }
+        }
+        file.close();
+    }
+}
+
+// Delete lines and corresponding snippet files before closing
+void MainWindow::completeDeletes() {
+    //QString vaultFilePath = "path/to/snipDatVault.cdh";  // Update with actual path
+
+    char vaultFilePath[assist::PATH_SIZE];
+    std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+    vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+    assist::make_appData_filePath(vaultFilePath);
+
+    for (const auto &[lineNumber, filePath] : pendingDeletions) {
+        assist::removeLine(vaultFilePath, lineNumber);
+
+        if (QFile::remove(filePath)) {
+            qDebug() << "Snippet file deleted: " << filePath;
+        } else {
+            qDebug() << "Failed to delete: " << filePath;
+        }
+    }
+
+    pendingDeletions.clear();
+    QFile::remove(tempFilePath);  // Remove temp file after processing
+}
+
+// Override close event to complete deletions
+void MainWindow::closeEvent(QCloseEvent *event) {
+    completeDeletes();
+    event->accept();
+}

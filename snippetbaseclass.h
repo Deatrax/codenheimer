@@ -27,6 +27,7 @@ protected:
 
 public:
     snippetBaseClass();
+    virtual ~snippetBaseClass();
 
     virtual void innit(
         std::string nam,

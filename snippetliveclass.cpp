@@ -3,6 +3,16 @@
 
 snippetLiveClass::snippetLiveClass() {}
 
+snippetLiveClass::~snippetLiveClass()
+{
+    //nothing to delete coz no dynamic memory was allocated  here
+
+    SNIPPET.clear();
+    name.clear();
+    filename.clear();
+    lang.clear();
+}
+
 void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, std::string lng, std::vector<std::string> tgs, QMainWindow *MM)
     // : name(nam)
     // , filename(filenam)
@@ -310,11 +320,13 @@ std::string snippetLiveClass::getOldFilename(){
 
 bool snippetLiveClass::deleteFromVault()
 {
-    char vaultFilePath[assist::PATH_SIZE];
-    std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
-    vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
-    assist::make_appData_filePath(vaultFilePath);
-    if(assist::removeLine(vaultFilePath,lineNum)){
+    // char vaultFilePath[assist::PATH_SIZE];
+    // std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+    // vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+    // assist::make_appData_filePath(vaultFilePath);
+
+
+    //if(assist::removeLine(vaultFilePath,lineNum)){
 
         char snippetCodeFileOld[assist::PATH_SIZE];
         if (true /*vaultLocation == "default"*/) {
@@ -323,20 +335,26 @@ bool snippetLiveClass::deleteFromVault()
             snippetCodeFileOld[sizeof(snippetCodeFileOld) - 1] = '\0';
             assist::make_appData_filePath(snippetCodeFileOld);
 
-            if (std::remove(snippetCodeFileOld) == 0) {
-                qDebug() << "File deleted successfully.\n";
-            } else {
-                std::perror("Error deleting file");
-                return false;
+            // if (std::remove(snippetCodeFileOld) == 0) {
+                // qDebug() << "File deleted successfully.\n";
+            // } else {
+                // std::perror("Error deleting file");
+                // return false;
+            // }
+            MainWindow* mainW=static_cast<MainWindow*>(masterWindow);
+            if (mainW) {
+                mainW->scheduleDeletion(lineNum, QString(snippetCodeFileOld));
             }
+
+            
             return true;
         } else {
             // Implement other vault location handling later
         }
-    }
-    else{
-        return false;
-    }
+    // }
+    // else{
+    //     return false;
+    // }
 }
 
 bool snippetLiveClass::remove(snippetBaseClass *obj)
