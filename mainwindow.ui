@@ -1131,10 +1131,16 @@ QPushButton:hover{
            </property>
            <item>
             <widget class="QWidget" name="widget_4" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>49</height>
+               <height>0</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -1149,6 +1155,9 @@ QPushButton:hover{
               </property>
               <property name="leftMargin">
                <number>17</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
               </property>
               <item>
                <widget class="QPushButton" name="settingsBackButton">
@@ -1191,6 +1200,12 @@ QPushButton:hover{
               </item>
               <item>
                <widget class="QLabel" name="settingsTitle">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>Settings</string>
                 </property>
@@ -1253,7 +1268,7 @@ QPushButton:hover{
                    <property name="minimumSize">
                     <size>
                      <width>834</width>
-                     <height>121</height>
+                     <height>135</height>
                     </size>
                    </property>
                    <property name="maximumSize">
@@ -1275,16 +1290,25 @@ QPushButton:hover{
                     <property name="rightMargin">
                      <number>0</number>
                     </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QLabel" name="generalSettingsTitle">
                       <property name="sizePolicy">
-                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                         <horstretch>0</horstretch>
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="layoutDirection">
+                       <enum>Qt::LeftToRight</enum>
+                      </property>
                       <property name="text">
                        <string>General Settings</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                       </property>
                      </widget>
                     </item>
@@ -1710,6 +1734,7 @@ border-radius:7px;</string>
 }
 QPushButton{
 	background:#2B3663;
+	font-family: 'Crete Round';
 }
 
 QPushButton:hover{
@@ -1948,10 +1973,8 @@ border-radius:7px;</string>
                        </size>
                       </property>
                       <property name="styleSheet">
-                       <string notr="true">TextLabel
-{
-	font-size: 11px;
-}</string>
+                       <string notr="true">font-size: 11px;
+font-family: 'Crete Round';</string>
                       </property>
                       <layout class="QHBoxLayout" name="horizontalLayout_24">
                        <property name="spacing">
@@ -2160,19 +2183,26 @@ border-radius:7px;</string>
                        <item>
                         <widget class="QPushButton" name="changeButton">
                          <property name="sizePolicy">
-                          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                            <horstretch>0</horstretch>
                            <verstretch>0</verstretch>
                           </sizepolicy>
                          </property>
+                         <property name="minimumSize">
+                          <size>
+                           <width>50</width>
+                           <height>18</height>
+                          </size>
+                         </property>
                          <property name="styleSheet">
                           <string notr="true">QWidget{
-	font-size:14px;
+	font-size:13px;
 	color: white;
 	border-radius:5px
 }
 QPushButton{
 	background:#2B3663;
+	font-family: 'Crete Round';
 }
 
 QPushButton:hover{
@@ -2224,10 +2254,12 @@ QPushButton:hover{
                           <string notr="true">QWidget{
 	font-size:14px;
 	color: white;
-	border-radius:5px
+	border-radius:5px;
+	
 }
 QPushButton{
 	background:#2B3663;
+	font-family: 'Crete Round';
 }
 
 QPushButton:hover{
