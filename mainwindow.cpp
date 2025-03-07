@@ -1092,7 +1092,17 @@ void MainWindow::savePendingDeletes() {
     qDebug()<<"the snippet has been added to temp file for deletetion";
 }
 
-// Load pending deletions from temp file (on startup)
+// 
+/**
+ * @brief Load pending deletions from temp file (on startup)
+ * this is not being used right now because the are more bounds 
+ * checking needed to be done. like for example, 
+ *  when loading, the loading part needs to be done before the actual data loading
+ * also when the data load will happpend the ones scheduled for deletion will also 
+ * appear. this is not intended behaviour. in which case a crash detection mechanism needs to be 
+ * in place that will check for undeleted snippets, meaning thea application crashed last time a\
+ * and then will detelte them, inform the user and then restart the application
+ */
 void MainWindow::loadPendingDeletes() {
     QFile file(tempFilePath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
