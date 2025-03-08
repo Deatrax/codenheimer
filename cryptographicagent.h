@@ -42,6 +42,10 @@ private slots:
 
 
 
+    void on_passwordField_returnPressed();
+
+    void on_passwordConfirmField_returnPressed();
+
 private:
 
     Ui::cryptographicAgent *ui;

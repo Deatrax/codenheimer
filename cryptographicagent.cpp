@@ -365,3 +365,14 @@ bool cryptographicAgent::authenticate(){
 
     return ok;
 }
+void cryptographicAgent::on_passwordField_returnPressed()
+{
+    on_cofirmButton_clicked();
+}
+
+
+void cryptographicAgent::on_passwordConfirmField_returnPressed()
+{
+    on_cofirmButton_clicked();
+}
+

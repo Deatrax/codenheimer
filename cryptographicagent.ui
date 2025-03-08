@@ -25,6 +25,21 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow{
+	border-radius:11px;
+}
+
+QWidget { 
+        background-color: #0F111A;  /* Apply background to the main window */
+		color:white;
+    }
+    
+    /* Make QGroupBox transparent with no border, inheriting the main window's background color */
+    QGroupBox { 
+        border: none; 
+    }</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -51,6 +66,12 @@
      </property>
      <item row="1" column="1">
       <widget class="QLineEdit" name="passwordConfirmField">
+       <property name="styleSheet">
+        <string notr="true">background:#2B3663;
+border-radius:7px;
+
+</string>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::PasswordEchoOnEdit</enum>
        </property>
@@ -78,6 +99,12 @@
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="passwordField">
+       <property name="styleSheet">
+        <string notr="true">background:#2B3663;
+border-radius:7px;
+
+</string>
+       </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
        </property>
