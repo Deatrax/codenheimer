@@ -33,6 +33,7 @@ editorWidget::editorWidget(MainWindow* mainwindow, QWidget *parent)
     ui->textEdit->setPlainText("int main() { for (int i = 0; i < 10; ++i) {} }");
     ui->lineNo->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     connect(ui->textEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, &editorWidget::synchronizeScroll);
+    //connect(ui->textEdit, &QTextEdit::textChanged, this, &editorWidget::synchronizeScroll);
     ui->lineNo->setContentsMargins(0, 5, 0, 0);  // Top margin of 5 pixels
     on_textEdit_textChanged();
 
@@ -82,8 +83,11 @@ QTextDocument* editorWidget::syntaxHighlightTarget(){
 void editorWidget::assign(snippetBaseClass* snipObj, bool isOld){
     thisSnippet=snipObj;
     thisSnippet->setEditor(ui->textEdit->document());
-    if(isOld) ui->textEdit->setText(QString(thisSnippet->getSnippet().c_str()));
-    else ui->textEdit->setText("");
+    if(isOld) {
+        ui->textEdit->setPlainText(QString::fromStdString(thisSnippet->getSnippet()));
+    } else {
+        ui->textEdit->clear();
+    }
 }
 
 void editorWidget::tellIdx(int i){
