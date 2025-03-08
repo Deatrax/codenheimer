@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QCloseEvent>
 
 #include <openssl/evp.h>
 #include <openssl/aes.h>
@@ -34,6 +35,8 @@ public:
     std::string setPassFirstTime();
     void setHash(std::string str);
     std::string getHash();
+    bool authenticate();
+    void closeEvent(QCloseEvent *event) override;
 private slots:
     void on_cofirmButton_clicked();
 
@@ -50,8 +53,6 @@ private:
 
     void showUI(int mode);
 
-    void showUI();
-
     char password[256];
     void storePassword(QString pass);
     void secureErase(char *buffer, size_t size);
@@ -64,6 +65,8 @@ private:
     QString hashPassword(const QString &pass);
 signals:
     void passwordSet();
+    void windowClosed();
+
 };
 
 #endif // CRYPTOGRAPHICAGENT_H

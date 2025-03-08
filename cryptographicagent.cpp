@@ -270,22 +270,24 @@ QString cryptographicAgent::hashPassword(const QString& pass){
 }
 
 void cryptographicAgent::showUI(int mode){
-    connect(ui->cofirmButton, &QPushButton::clicked, this, [&]() {
 
-          // Notify that password is set
-        // this->hide();  // Close UI
-    });
+    // connect(ui->cofirmButton, &QPushButton::clicked, this, [&]() {
+    //       // Notify that password is set
+    //     // this->hide();  // Close UI
+    // });
 
     ui->passwordConfirmField->clear();
     ui->passwordField->clear();
     switch (mode) {
-    case 1:
+    case 1:  //for normal operation
         ui->confrimPassText->hide();
         ui->passwordConfirmField->hide();
         this->show();
 
         break;
-    case 2:
+    case 2: //for setting a new password
+        ui->confrimPassText->show();
+        ui->passwordConfirmField->show();
         this->show();
         break;
     default:
@@ -326,3 +328,40 @@ std::string cryptographicAgent::getHash(){
     return hashResult;
 }
 
+
+void cryptographicAgent::closeEvent(QCloseEvent *event) {
+    emit windowClosed();
+    event->accept();  // Accept the close event
+}
+
+
+
+/// @brief 
+/// @return 
+bool cryptographicAgent::authenticate(){
+    showUI(1);
+    bool ok = false;
+
+    // Create an event loop to halt execution
+    QEventLoop loop;
+    // Connect a signal (e.g., button clicked) to exit the loop when the user provides input
+    connect(ui->cofirmButton, &QPushButton::clicked, &loop, &QEventLoop::quit);
+    // Connect window close to exit loop
+    connect(this, &cryptographicAgent::windowClosed, &loop, &QEventLoop::quit);// Run the event loop (halts execution here until quit() is called)
+    loop.exec();
+    
+    // // Check if the window is still open (if closed, return false)
+    // if (!this->isVisible()) {
+    //     qDebug()<<"manual window close detected";
+    //     return false;
+    // }
+
+    this->hide();
+    QString pass = ui->passwordField->text();
+
+    if (hashPassword(pass).toStdString() == hashResult) {  
+        ok = true;
+    }
+
+    return ok;
+}

@@ -372,9 +372,15 @@ void snippetSettingsPopup::on_deleteSnippetButton_clicked()
                                   QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
-        masterWindow->deleteSnippet(assignedSnippet);
-        isEdited=false;
-        this->close();
+        this->hide();
+        if(masterWindow->deleteSnippet(assignedSnippet)){
+            isEdited=false;
+            this->close();
+        }
+        else{
+            this->show();
+            return;
+        }
     }
     else return;
 }

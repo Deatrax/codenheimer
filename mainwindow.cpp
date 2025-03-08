@@ -755,7 +755,16 @@ void MainWindow::sandBox(){
     }
 
 
-    void MainWindow::deleteSnippet(snippetBaseClass* obj){
+    bool MainWindow::deleteSnippet(snippetBaseClass* obj){
+
+        if(obj->isLocked()){
+            if( !Julius->authenticate() ){
+                warnUser("Delete attempt stopped bacsue of wrong password!!");
+                return false;
+            }
+        }
+
+        
         //remove from tag holder
         if(mainTagHolder->removeSnippet(obj)) qDebug()<<"removed from tagHolder";
         else qDebug()<<"Snippet failed to remove from or didn't exist in tag holder";
@@ -777,12 +786,14 @@ void MainWindow::sandBox(){
             showAutoCloseMessageBox(this,"Success!","Snippet deleted from vault success!");
         else{
             warnUser("Snippets failed to delete from vault! \n Please check logs and contact devs");
-            return;
+            return false;
         }
 
 
         //delete the snippet itself that is call it's destructor
         delete obj;
+
+        return true;
     }
 
     void MainWindow::renameSnippet(std::string newName, snippetBaseClass *obj)
