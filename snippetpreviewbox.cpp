@@ -79,6 +79,13 @@ void snippetPreviewBox::addCopyButton()
     ui->copyButton->hide();
 }
 
+void snippetPreviewBox::mouseDoubleClickEvent(QMouseEvent *event) {
+    qDebug() << "Widget double-clicked!";
+    QString nam=ui->Name->text();
+    masterWindow->openSnippetInEditor(assignedSnippet, nam  , true);
+    QWidget::mouseDoubleClickEvent(event);  // Call base class method
+}
+
 // Event filter implementation
 bool snippetPreviewBox::eventFilter(QObject *watched, QEvent *event) {
     if (watched == ui->groupBox) { // Ensure ui->groupBox is accessible

@@ -738,7 +738,7 @@ void MainWindow::sandBox(){
     void MainWindow::openSnippetInEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
     {
         editorWidget* newEditor=new editorWidget(this,this);
-        newEditor->assign(snipObj,false);
+        newEditor->assign(snipObj,isOld);
         ui->editorTabs->addTab(newEditor,tabname);
         newEditor->tellIdx(ui->editorTabs->indexOf(newEditor));
         setMainIndex(2);

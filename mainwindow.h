@@ -93,6 +93,8 @@ public:
     void encryptText(QString file, QString data);
     QString decryptText(QString fileName);
     void scheduleDeletion(int lineNumber, const QString &filePath);
+    void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
+
 
 private slots:
     void on_sidebarButton_clicked();
@@ -167,7 +169,6 @@ private:
     cryptographicAgent* Julius;
 
     void prepareAddNewComboBox();
-    void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
     void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
 protected:
     
