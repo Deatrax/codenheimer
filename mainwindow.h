@@ -12,7 +12,15 @@
 #include <QToolTip>
 #include <QMessageBox>
 #include <QTimer>
+#include <QFileDialog>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QMessageBox>
 #include <unordered_map>
+#include <openssl/evp.h>
+#include <openssl/aes.h>
+#include <openssl/rand.h>
 
 #include "snippetbaseclass.h"
 #include "snippetc.h"
@@ -21,24 +29,20 @@
 #include "snippetjava.h"
 #include "snippetpy.h"
 #include "snippetcustom.h"
-// <<<<<<< ryexocious-making-search-page
 #include "searchsyetem.h"
-// =======
 
 #include "langholder.h"
 #include "tagholder.h"
+#include "cryptographicagent.h"
 
-// >>>>>>> main
+
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
-
-
-
-
-
 
 
 // class editorWidget; //forward decleration
@@ -80,11 +84,16 @@ public:
     std::vector<string> getLangList();
     std::vector<std::string> getTagList();
     std::string generateUniqueFilename(const QString &name, const QString &lang, int mode,std::string oldFilename="",snippetBaseClass *obj=std::nullptr_t());
-    void deleteSnippet(snippetBaseClass *obj);
-    void renameSnippet(snippetBaseClass *obj);
+    bool deleteSnippet(snippetBaseClass *obj);
+    void renameSnippet(std::string newName , snippetBaseClass *obj);
     void snipetLangChanged(snippetBaseClass *obj, string lang);
     void tagChanged(snippetBaseClass *obj);
     bool containsSpaces(QString &str);
+    void test();
+    void encryptText(QString file, QString data);
+    QString decryptText(QString fileName);
+    void scheduleDeletion(int lineNumber, const QString &filePath);
+
 private slots:
     void on_sidebarButton_clicked();
 
@@ -117,9 +126,17 @@ private slots:
 
     void on_centralBrowseButton_clicked();
 
+    void on_testCryptoButton_clicked();
+
+    void on_testDecryptButton_clicked();
+
     void on_snippetSettingsTestButton_clicked();
 
     void on_snippetSettingsOnSearchPage_clicked();
+
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -131,7 +148,7 @@ private:
     void searchPageSearchbar();
     searchSystem *searchObj;
 
-// >>>>>>> main
+
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
     int tagCount; //the number of tags that exists
@@ -147,11 +164,21 @@ private:
     int lineNum;
     static QString company;
     static QString appName;
+    cryptographicAgent* Julius;
 
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
     void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
 protected:
+    
+    void completeDeletes();
+    void loadPendingDeletes();
+    void savePendingDeletes();
+    void closeEvent(QCloseEvent *event) override;
+
+
+    std::map<int, QString, std::greater<int>> pendingDeletions;
+    QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/pending_deletes.tmp";
 
 
 

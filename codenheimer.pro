@@ -26,7 +26,8 @@ SOURCES += \
     snippetsettingspopup.cpp \
     tagholder.cpp \
     tagviewer.cpp \
-    flowlayout.cpp
+    flowlayout.cpp \
+    cryptographicagent.cpp
 
 HEADERS += \
     editorwidget.h \
@@ -47,18 +48,35 @@ HEADERS += \
     snippetsettingspopup.h \
     tagholder.h \
     tagviewer.h \
-    flowlayout.h
+    flowlayout.h \
+    cryptographicagent.h
 
 FORMS += \
     editorwidget.ui \
     mainwindow.ui \
     snippetpreviewbox.ui \
     snippetsettingspopup.ui \
-    tagviewer.ui
+    tagviewer.ui \
+    cryptographicagent.ui
 
 RESOURCES += \
     images/ \
     fonts/
+
+
+#-------------------------------------------------
+# OpenSSL configuration - Platform-Specific
+#-------------------------------------------------
+win32 {
+    INCLUDEPATH += $$PWD/openssl_libs/windows/include
+    LIBS += -L$$PWD/openssl_libs/windows/lib64 -lssl -lcrypto -lws2_32 -lcrypt32
+}
+
+macx {
+    INCLUDEPATH += $$PWD/openssl_libs/mac/include
+    LIBS += -L$$PWD/openssl_libs/mac/lib -lssl -lcrypto
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 15.0
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

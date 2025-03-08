@@ -11,16 +11,18 @@ protected:
     std::vector<std::string> tags;
     bool isLockedVar;
 
-    lol* thisLol;
+
 public:
     snippetLiveClass();
+    ~snippetLiveClass();
     void innit
     (
         std::string nam,
         std::string filenam,
         int linNum,
         std::string lng,
-        std::vector<std::string> tgs
+        std::vector<std::string> tgs,
+        QMainWindow* MM
     ) override;
 
     std::vector<std::string> *getInfo(
@@ -43,31 +45,30 @@ public:
 
     bool isLocked() override;
 
-// <<<<<<< ryexocious-making-search-page
+
     // search class
     void insert(const std::string& str, snippetBaseClass* targ) override;
-
-    void insert(std::string str, int n);
     
     bool search(const std::string& str, std::vector<snippetBaseClass*>& ret) override;
-    
-    void getData(std::string &str, int &n);
 
     std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchWithPrefix(const std::string& prefix) override;
-// =======
+
     std::string& EditSnippet() override;
 
     bool saveSnippetToFile(std::string snippet) override;
     
     bool updateSnippetDetails(string nam,std::string filenam, std::vector<string> tgs, string lng, bool lock) override;
-    // >>>>>>> main
-    std::string getOldFilename();
+
+    std::string getOldFilename() override;
 
     bool deleteFromVault() override;
 
     bool remove(snippetBaseClass *obj) override;
+
 private:
     bool updateSnippetFilename(std::string newFilename) override;
+
+    void updateFileSecurity(bool lock);
 
 
 };

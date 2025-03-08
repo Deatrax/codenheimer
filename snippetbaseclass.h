@@ -5,6 +5,7 @@
 // #include <QString>
 #include <iostream>
 #include <QTextDocument>
+#include <QMainWindow>
 
 
 /**
@@ -20,24 +21,21 @@ protected:
     int lineNum;
     std::string lang;
     std::string SNIPPET;
+    QMainWindow* masterWindow;
 
-    typedef struct lol{
-        std::string str;
-        int num;
-
-        lol(std::string st, int n):str(st),num(n){};
-    }lol;
     // std::vector<snippetBaseClass*>vec;
 
 public:
     snippetBaseClass();
+    virtual ~snippetBaseClass();
 
     virtual void innit(
         std::string nam,
         std::string filenam,
         int linNum,
         std::string lng,
-        std::vector<std::string> tgs
+        std::vector<std::string> tgs,
+        QMainWindow* MM
     )=0;
 
     virtual     std::vector<std::string> *getInfo(
@@ -65,10 +63,6 @@ public:
 
 // <<<<<<< ryexocious-making-search-page
     virtual void insert(const std::string& str, snippetBaseClass* targ) =0;
-
-    virtual void insert(std::string str, int n)=0;
-
-    virtual void getData(std::string& str,int& n)=0;
     
     virtual bool search(const std::string& str, std::vector<snippetBaseClass*>& ret)=0;
 

@@ -126,17 +126,18 @@ void MainWindow::sandBox(){
         readUconfig();
         ui->usernameAndMainSettingsButton->setText(QString(username.c_str())+"  ");
 
-        //preparing the holders
+        //preparing the holders and other objects
         mainTagHolder=new tagHolder(tagCount);
         mainLangHolder=new langHolder(additionalTypeCount);
         clipboard = QApplication::clipboard(); // Get the clipboard object
         searchObj=new searchSystem;
+        Julius= new cryptographicAgent();
+        Julius->setHash(hashResult);
         readData();
 
         //testing holders
         // mainLangHolder->testPrintCustomLang("typeName5");
         // mainLangHolder->testPrintCustomLang("typeName4");
-
 
         //testing the snippet previewBox
         // for(int i=0;i<5;i++){
@@ -511,7 +512,7 @@ void MainWindow::sandBox(){
                 }
             }
             snippetBaseClass* obj=generateSnippetObject(lang);
-            obj->innit(name,filename,lineNum,lang,tags);
+            obj->innit(name,filename,lineNum,lang,tags,this);
             size_t lastDot = filename.find_last_of(".");
             std::string nameWithoutExt = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
             filenameStorage[nameWithoutExt] = obj;
@@ -612,7 +613,7 @@ void MainWindow::sandBox(){
         std::string filenameWithoutExt= filename;
         filename+=".cdh";
         snippetBaseClass* obj=generateSnippetObject(lang.toStdString());
-        obj->innit(name.toStdString(),filename,lineNum,lang.toStdString(),std::vector<std::string>());
+        obj->innit( name.toStdString() , filename , lineNum , lang.toStdString() , std::vector<std::string>() ,this);
         mainLangHolder->insert(obj);
         filenameStorage[filenameWithoutExt]=obj;
         //Insert into search here
@@ -754,7 +755,16 @@ void MainWindow::sandBox(){
     }
 
 
-    void MainWindow::deleteSnippet(snippetBaseClass* obj){
+    bool MainWindow::deleteSnippet(snippetBaseClass* obj){
+
+        if(obj->isLocked()){
+            if( !Julius->authenticate() ){
+                warnUser("Delete attempt stopped bacsue of wrong password!!");
+                return false;
+            }
+        }
+
+        
         //remove from tag holder
         if(mainTagHolder->removeSnippet(obj)) qDebug()<<"removed from tagHolder";
         else qDebug()<<"Snippet failed to remove from or didn't exist in tag holder";
@@ -776,15 +786,17 @@ void MainWindow::sandBox(){
             showAutoCloseMessageBox(this,"Success!","Snippet deleted from vault success!");
         else{
             warnUser("Snippets failed to delete from vault! \n Please check logs and contact devs");
-            return;
+            return false;
         }
 
 
         //delete the snippet itself that is call it's destructor
         delete obj;
+
+        return true;
     }
 
-    void MainWindow::renameSnippet(snippetBaseClass *obj)
+    void MainWindow::renameSnippet(std::string newName, snippetBaseClass *obj)
     {
         //change name in lang holder
             //names are not stored here lol
@@ -795,7 +807,7 @@ void MainWindow::sandBox(){
         //name was already changed in filename holder
 
         //change name in search trie
-        searchObj->rename(obj);
+        searchObj->rename(newName , obj);
     }
 
     void MainWindow::snipetLangChanged( snippetBaseClass *obj, std::string lang)
@@ -992,3 +1004,158 @@ void MainWindow::on_snippetSettingsOnSearchPage_clicked()
     }
 }
 
+
+
+
+
+
+
+void MainWindow::on_testCryptoButton_clicked()
+{
+    // encryptText();
+}
+
+void MainWindow::encryptText(QString file, QString data)
+{
+    // QString password = "password" /*ui->OnlyFilePassword->text()*/;
+    // if (password.isEmpty()) {
+    //     QMessageBox::warning(this, "Error", "Please enter a password.");
+    //     return;
+    // }
+    // QString fileName = "testFILE" /*ui->Filename->text()*/;
+    // if (fileName.isEmpty()) {
+    //     QMessageBox::warning(this, "Error", "Please enter a file name.");
+    //     return;
+    // }
+    // QString filePath = QFileDialog::getSaveFileName(this, "Save Encrypted File", QDir::homePath() + "/" + fileName);
+    // if (filePath.isEmpty()) {
+    //     return; // User canceled the save dialog
+    // }
+
+    Julius->encryptToFile(file , data );
+}
+
+
+
+void MainWindow::on_testDecryptButton_clicked()
+{
+    // decryptText();
+}
+
+
+QString MainWindow::decryptText(QString fileName)
+{
+    // QString password = "password" /*ui->OnlyFilePassword->text()*/;
+    // if (password.isEmpty()) {
+    //     QMessageBox::warning(this, "Error", "Please enter a password.");
+    //     return;
+    // }
+    // QString filePath = QFileDialog::getOpenFileName(this, "Select Encrypted File", QDir::homePath());
+    // if (filePath.isEmpty()) {
+    //     return; // User canceled the file dialog
+    // }
+
+    return Julius->decryptFromFile( fileName );
+}
+
+void MainWindow::test(){
+    qDebug()<<"this is some test text\n";
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    hashResult=Julius->setPassFirstTime();
+    qDebug()<<"the hash result is: "<<hashResult;
+    QSettings settings(company, appName);
+    settings.setValue("hashres", QString(hashResult.c_str() ) );
+}
+
+
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+
+}
+
+
+
+
+
+
+// Schedule deletion (add to map and save to temp file)
+void MainWindow::scheduleDeletion(int lineNumber, const QString &filePath) {
+    pendingDeletions[lineNumber] = filePath;
+    qDebug()<<"the snippet has been scheduled for removal from the file";
+    savePendingDeletes();
+}
+
+// Save pending deletions to temp file
+void MainWindow::savePendingDeletes() {
+    QFile file(tempFilePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        for (const auto &[lineNumber, filePath] : pendingDeletions) {
+            out << lineNumber << "|" << filePath << "\n";
+        }
+        file.close();
+    }
+    qDebug()<<"the snippet has been added to temp file for deletetion";
+}
+
+// 
+/**
+ * @brief Load pending deletions from temp file (on startup)
+ * this is not being used right now because the are more bounds 
+ * checking needed to be done. like for example, 
+ *  when loading, the loading part needs to be done before the actual data loading
+ * also when the data load will happpend the ones scheduled for deletion will also 
+ * appear. this is not intended behaviour. in which case a crash detection mechanism needs to be 
+ * in place that will check for undeleted snippets, meaning thea application crashed last time a\
+ * and then will detelte them, inform the user and then restart the application
+ */
+void MainWindow::loadPendingDeletes() {
+    QFile file(tempFilePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            QStringList parts = line.split("|");
+            if (parts.size() == 2) {
+                int lineNumber = parts[0].toInt();
+                QString filePath = parts[1];
+                pendingDeletions[lineNumber] = filePath;
+            }
+        }
+        file.close();
+    }
+}
+
+// Delete lines and corresponding snippet files before closing
+void MainWindow::completeDeletes() {
+    //QString vaultFilePath = "path/to/snipDatVault.cdh";  // Update with actual path
+
+    char vaultFilePath[assist::PATH_SIZE];
+    std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+    vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+    assist::make_appData_filePath(vaultFilePath);
+
+    for (const auto &[lineNumber, filePath] : pendingDeletions) {
+        assist::removeLine(vaultFilePath, lineNumber);
+
+        if (QFile::remove(filePath)) {
+            qDebug() << "Snippet file deleted: " << filePath;
+        } else {
+            qDebug() << "Failed to delete: " << filePath;
+        }
+    }
+
+    pendingDeletions.clear();
+    QFile::remove(tempFilePath);  // Remove temp file after processing
+}
+
+// Override close event to complete deletions
+void MainWindow::closeEvent(QCloseEvent *event) {
+    completeDeletes();
+    event->accept();
+}

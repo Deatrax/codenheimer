@@ -1,14 +1,35 @@
 #include "snippetliveclass.h"
+#include "mainwindow.h"
 
 snippetLiveClass::snippetLiveClass() {}
 
-void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, std::string lng, std::vector<std::string> tgs)
+snippetLiveClass::~snippetLiveClass()
+{
+    //nothing to delete coz no dynamic memory was allocated  here
+
+    SNIPPET.clear();
+    name.clear();
+    filename.clear();
+    lang.clear();
+}
+
+void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, std::string lng, std::vector<std::string> tgs, QMainWindow *MM)
+    // : name(nam)
+    // , filename(filenam)
+    // , lineNum(linNum)
+    // , lang(lng)
+    // , tags(tgs)
 {
     name=nam;
     filename=filenam;
     lineNum=linNum;
     lang=lng;
     tags=tgs;
+    masterWindow=MM;
+    MainWindow* mm=static_cast<MainWindow*>(masterWindow);
+    if (mm) {
+        mm->test();  // Now you can call MainWindow-specific functions
+    }
 
     size_t pos = filename.find_last_of('.');
 
@@ -54,7 +75,14 @@ std::string snippetLiveClass::getSnippet()
 {
     if (!SNIPPET.empty()) {
         return SNIPPET;
-    } else {
+    }
+    else if( isLocked() ){
+        MainWindow* mainW=static_cast<MainWindow*>(masterWindow);
+        if (mainW) {
+            return mainW->decryptText(filename.c_str()).toStdString();  // Now you can call MainWindow-specific functions
+        }
+    }
+    else {
         char snippetCodeFile[assist::PATH_SIZE];
         // for now considering vaultLocation is default
         if (true /*vaultLocation == "default"*/) {
@@ -123,18 +151,9 @@ void snippetLiveClass::insert(const std::string &str, snippetBaseClass *targ){
     //absolutely nothing;
 }
 
-void snippetLiveClass::insert(std::string str, int n){
-    thisLol=new lol(str,n);
-}
-
 bool snippetLiveClass::search(const std::string& str, std::vector<snippetBaseClass*>& ret)
 {
     return false;
-}
-
-void snippetLiveClass::getData(std::string& str, int& n){
-    str=thisLol->str;
-    n=thisLol->num;
 }
 
 std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> snippetLiveClass::searchWithPrefix(const std::string &prefix)
@@ -232,7 +251,10 @@ bool snippetLiveClass::updateSnippetDetails(std::string nam,std::string filenam,
     std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
     vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
     assist::make_appData_filePath(vaultFilePath);
-    return assist::editLine(vaultFilePath,lineNum,vaultDat);
+    /*return*/ assist::editLine(vaultFilePath,lineNum,vaultDat);
+
+
+    if( isLockedVar != lock) updateFileSecurity(lock);
 }
 
 bool snippetLiveClass::updateSnippetFilename(std::string newFilename) {
@@ -274,6 +296,22 @@ bool snippetLiveClass::updateSnippetFilename(std::string newFilename) {
     return true;
 }
 
+void snippetLiveClass::updateFileSecurity(bool lock)
+{
+    MainWindow* mainW=static_cast<MainWindow*>(masterWindow);
+    if (mainW) {
+        if(lock){
+            mainW->encryptText( QString( filename.c_str() ) , QString( getSnippet().c_str() ) );
+        }
+
+        else if(!lock){
+            SNIPPET = mainW->decryptText( QString( filename.c_str() ) ).toStdString();
+            saveSnippetToFile(SNIPPET);
+        }
+    }
+    isLockedVar = lock;
+}
+
 std::string snippetLiveClass::getOldFilename(){
     size_t lastDot = filename.find_last_of(".");
     std::string nameWithoutExt = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
@@ -282,11 +320,13 @@ std::string snippetLiveClass::getOldFilename(){
 
 bool snippetLiveClass::deleteFromVault()
 {
-    char vaultFilePath[assist::PATH_SIZE];
-    std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
-    vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
-    assist::make_appData_filePath(vaultFilePath);
-    if(assist::removeLine(vaultFilePath,lineNum)){
+    // char vaultFilePath[assist::PATH_SIZE];
+    // std::strncpy(vaultFilePath, "snipDatVault.cdh", sizeof(vaultFilePath) - 1);
+    // vaultFilePath[sizeof(vaultFilePath) - 1] = '\0';
+    // assist::make_appData_filePath(vaultFilePath);
+
+
+    //if(assist::removeLine(vaultFilePath,lineNum)){
 
         char snippetCodeFileOld[assist::PATH_SIZE];
         if (true /*vaultLocation == "default"*/) {
@@ -295,20 +335,26 @@ bool snippetLiveClass::deleteFromVault()
             snippetCodeFileOld[sizeof(snippetCodeFileOld) - 1] = '\0';
             assist::make_appData_filePath(snippetCodeFileOld);
 
-            if (std::remove(snippetCodeFileOld) == 0) {
-                qDebug() << "File deleted successfully.\n";
-            } else {
-                std::perror("Error deleting file");
-                return false;
+            // if (std::remove(snippetCodeFileOld) == 0) {
+                // qDebug() << "File deleted successfully.\n";
+            // } else {
+                // std::perror("Error deleting file");
+                // return false;
+            // }
+            MainWindow* mainW=static_cast<MainWindow*>(masterWindow);
+            if (mainW) {
+                mainW->scheduleDeletion(lineNum, QString(snippetCodeFileOld));
             }
+
+            
             return true;
         } else {
             // Implement other vault location handling later
         }
-    }
-    else{
-        return false;
-    }
+    // }
+    // else{
+    //     return false;
+    // }
 }
 
 bool snippetLiveClass::remove(snippetBaseClass *obj)

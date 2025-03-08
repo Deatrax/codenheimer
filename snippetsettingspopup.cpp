@@ -164,6 +164,7 @@ void snippetSettingsPopup::on_commitChangesButton_clicked()
         if(name!=ui->newNameBox->text().toStdString() && ui->newNameBox->text().toStdString()!=""){
             filename = masterWindow->generateUniqueFilename(ui->newNameBox->text(), ui->langComboBox->currentText() , 2 , assignedSnippet->getOldFilename() , assignedSnippet );
             nameCH=true;
+            masterWindow->renameSnippet(ui->newNameBox->text().toStdString() , assignedSnippet);
             name = ui->newNameBox->text().toStdString();
         }
         else{
@@ -183,9 +184,13 @@ void snippetSettingsPopup::on_commitChangesButton_clicked()
 
         initialLock=ui->isLockedCheckbox->checkState();
 
+        // this->setWindowModality(Qt::NonModal);
+        this->hide();
         assignedSnippet->updateSnippetDetails(name,filename,newTags,lang,initialLock);
+        this->show();
+        // this->setWindowModality(Qt::ApplicationModal);
 
-        if(nameCH) masterWindow->renameSnippet(assignedSnippet);
+        // if(nameCH)
         if(isTagChanged()) masterWindow->tagChanged(assignedSnippet);
 
         ui->titleLabel->setText(QString(name.c_str())+"'s settings");
@@ -367,9 +372,15 @@ void snippetSettingsPopup::on_deleteSnippetButton_clicked()
                                   QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
-        masterWindow->deleteSnippet(assignedSnippet);
-        isEdited=false;
-        this->close();
+        this->hide();
+        if(masterWindow->deleteSnippet(assignedSnippet)){
+            isEdited=false;
+            this->close();
+        }
+        else{
+            this->show();
+            return;
+        }
     }
     else return;
 }
