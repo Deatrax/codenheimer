@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "qmenu.h"
+#include "qpainter.h"
 #include "snippetpreviewbox.h"
 #include "snippetsettingspopup.h"
 #include "tagadder.h"
@@ -6,6 +8,7 @@
 #include "predefines.h"
 #include "editorwidget.h"
 #include "searchsyetem.h"
+#include <QDir>
 #include <QSettings>
 
 
@@ -130,7 +133,6 @@ void MainWindow::sandBox(){
         ui->sidebar->layout()->setAlignment(ui->usernameAndMainSettingsButton, Qt::AlignHCenter); //align the settings button at the centre
         centreSidebarButtons();
         setSidebarButtonIcons();
-        prepareSettingsPage();
 
         readUconfig();
         ui->usernameAndMainSettingsButton->setText(QString(username.c_str())+"  ");
@@ -142,37 +144,22 @@ void MainWindow::sandBox(){
         searchObj=new searchSystem;
         readData();
 
-        //testing holders
-        // mainLangHolder->testPrintCustomLang("typeName5");
-        // mainLangHolder->testPrintCustomLang("typeName4");
 
-
-        //testing the snippet previewBox
-        // for(int i=0;i<5;i++){
-        //     snippetPreviewBox* snp=new snippetPreviewBox(this);
-        //     ui->testbox->layout()->addWidget(snp);
-        // }
-
-        //custom UI styling calls
         prepareCentralArea();
-//<<<<<<< ryexocious-making-search-page
         searchPageSearchbar();
-
-//=======
         prepareAddNewComboBox();
-//>>>>>>> main
+        prepareSettingsPage();
 
 
-
-        //testing the editor
-        // editorWidget *widget=new editorWidget(this);
-        //ui->editorsPage->layout()->addWidget(widget);
-        // ui->defaultTab->layout()->addWidget(widget);
-
-
-
-        //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
+        //add to system tray
+        createTrayActions();
+        setClickableOptions(true);
+        createSysTray();
+        connect(trayIcon, &QSystemTrayIcon::activated, this,
+                &MainWindow::iconActivated);
+        if(trayEnabled) trayIcon->show();
+
     }
 
 
@@ -458,47 +445,31 @@ void MainWindow::sandBox(){
         ui->newPasswordEdit->setFont(CreteRoundFont);
         ui->vaultLocationTitle->setFont(CreteRoundFont);
         ui->vaultLocationEdit->setFont(CreteRoundFont);
+        ui->sysTrayCheckBox->setCheckState( trayEnabled ?  Qt::Checked  : Qt::Unchecked);
+         ui->OpenAtLoginCheckBox->setCheckState( loginEnabled ?  Qt::Checked  : Qt::Unchecked);
 
     }
 
 
     void MainWindow::readUconfig(){
 
-        // //OLD system using File IO============
-        // char uconfigFile[assist::PATH_SIZE]="uconfig.cdh";
-        // assist::make_appData_filePath(uconfigFile);
-        // std::ifstream uconfigStream(uconfigFile, std::ios::in);
-        // if(!uconfigStream.is_open()){
-        //     qDebug("Failed to open uconfig.cdh");
-        //     return;
-        // }
-        //
-        // std::getline(uconfigStream,username);
-        // std::getline(uconfigStream,hashResult);
-        // std::getline(uconfigStream,vaultLocation);
-        // std::string tagC, typeC;
-        //
-        // std::getline(uconfigStream,tagC);
-        // std::getline(uconfigStream,typeC);
-        // tagCount=std::stoi(tagC);
-        // additionalTypeCount=std::stoi(typeC);
-        // qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
-        //========================================
-
-       
-
         QSettings settings(company, appName);
         QString u=settings.value("username","default_user").toString();
         QString hs=settings.value("hashres","default_val").toString();
         QString va=settings.value("vault","default").toString();
-        int ty=settings.value("type",6).toInt();
-        int tg=settings.value("tag",6).toInt();
+        int ty=settings.value("type",0).toInt();
+        int tg=settings.value("tag",0).toInt();
+        bool login =settings.value("loginRun",false).toBool();
+        bool tray =  settings.value("trayIcon",false).toBool();
 
         username=u.toStdString();
         hashResult=hs.toStdString();
         vaultLocation=va.toStdString();
         tagCount=tg;
         additionalTypeCount=ty;
+        trayEnabled= tray;
+        loginEnabled= login;
+
 
 
         qDebug() << "got from settings==" << u << hs << va << ty << tg;
@@ -1066,5 +1037,221 @@ void MainWindow::getMainTagHolder(const std::string &tagName, const std::string 
     tagCount++;
     QSettings settings(company, appName);
     settings.setValue("tag",tagCount);
+}
+
+//-------------------system tray related functions------------------
+
+
+void MainWindow::createTrayActions(){
+    minimizeAction = new QAction(tr("Mi&nimize"), this);
+    connect(minimizeAction, &QAction::triggered, this, [this]
+            (){
+                this->hide();
+                setClickableOptions(false);
+            });
+    maximizeAction = new QAction(tr("Ma&ximize"), this);
+    connect(maximizeAction, &QAction::triggered, this,
+            &QWidget::showMaximized);
+    restoreAction = new QAction(tr("&Restore"), this);
+    connect(restoreAction, &QAction::triggered, this, [this]()
+            {
+                this->showNormal();  // Restore the window
+                setClickableOptions(true);  // Call
+                setClickableOptions(true);
+            });
+    quitAction = new QAction(tr("&Quit"), this);
+    connect(quitAction, &QAction::triggered, qApp,
+            &QCoreApplication::quit);
+}
+
+void MainWindow::createSysTray(){
+    trayIconMenu = new QMenu(this);
+    trayIconMenu->addAction(minimizeAction);
+    trayIconMenu->addAction(maximizeAction);
+    trayIconMenu->addAction(restoreAction);
+    trayIconMenu->addSeparator();
+    trayIconMenu->addAction(quitAction);
+    QString menuStyle =
+        "QMenu {"
+        "    background-color: #fff;"
+        "    border: 1px solid #e2e8f0;"
+        "    border-radius: 5px;"
+        "    font-family: 'Basier circle', -apple-system, system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';"
+    "    font-size: 15px;"
+    "    font-weight: 600;"
+    "    padding: 5px;"
+    "}"
+    "QMenu::item {"
+    "    background-color: #fff;"
+    "    color: #0d172a;"
+    "    padding: 5px 10px;"
+    "    border-radius: 5px;"
+    "    margin: 5px 0;"
+        //Codenheimer © Aronox Studios 52
+        "}"
+        "QMenu::item:selected {"
+        "    background-color: #221D23;"
+        "    color: #fff;"
+        "}";
+    trayIconMenu->setStyleSheet(menuStyle);
+    trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setContextMenu(trayIconMenu);
+    trayIcon->setIcon(QIcon(":/images/codenheimer_icon3.png"));
+    QPixmap pixmap(":/images/codenheimer_icon3.png");
+    QPainter painter(&pixmap);
+    painter.setPen(Qt::white); // Or any color that contrasts with the background
+        painter.drawText(pixmap.rect().adjusted(20, 0, -20, 0),
+                         Qt::AlignRight, "Text");
+    painter.end();
+    trayIcon->setIcon(QIcon(pixmap));
+}
+
+void MainWindow::setClickableOptions(bool visible)
+{
+    minimizeAction->setEnabled(visible);
+    maximizeAction->setEnabled(!isMaximized());
+    restoreAction->setEnabled(!visible);
+}
+void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason) {
+    case QSystemTrayIcon::Trigger:
+        qDebug("single click detected");
+        //Codenheimer © Aronox Studios 53
+            break;
+    case QSystemTrayIcon::DoubleClick:
+        qDebug("dounel click detedted");
+        break;
+    case QSystemTrayIcon::MiddleClick:
+        qDebug("middle click detedted");
+        break;
+    default:
+        ;
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    setClickableOptions(false);
+    if (!event->spontaneous() || !isVisible())
+        return;
+    if (trayIcon->isVisible()) {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(tr("Systray"));
+        msgBox.setText(tr("The program will keep running in the " "system tray. To terminate the program, " "choose <b>Quit</b> in the context menu " "of the system tray entry."));
+        //msgBox.setStyleSheet(messageboxStyle);
+        msgBox.exec();
+        hide();
+        event->ignore();
+        return;
+    }
+    trayIcon->hide();
+    //Codenheimer © Aronox Studios 54
+}
+void MainWindow::trayVisibility(bool flag){
+    flag? trayIcon->show() : trayIcon->hide();
+}
+
+void MainWindow::on_sysTrayCheckBox_clicked(bool checked)
+{
+    if(checked!= trayEnabled){
+
+        if(checked==false){
+            trayEnabled=checked;
+            trayVisibility(false);
+            QSettings settings(company, appName);
+            settings.setValue("trayIcon",trayEnabled);
+            qDebug()<<"tray enabled is now false";
+
+        }
+        else{
+            trayEnabled=checked;
+            QSettings settings(company, appName);
+            settings.setValue("trayIcon",trayEnabled);
+            trayVisibility(true);
+            qDebug()<<"tray enabled is now true";
+        }
+    }
+    else if(checked == trayEnabled) return;
+}
+
+//end of system tray functions
+
+//------Open on Login Functions---------
+
+void MainWindow::setAutoStartWindows(bool flag) {
+#ifdef _WIN32
+    QString appName = "Codenheimer";
+    QString appPath =
+        QDir::toNativeSeparators(QCoreApplication::applicationFilePath
+                                 ());
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+                       QSettings::NativeFormat);
+    if (flag) {
+        settings.setValue(appName, appPath);
+    } else {
+        settings.remove(appName);
+    }
+#elif defined(__APPLE__) // macOS specific code
+    QString appName = "TestApp";
+        QString appPath = QCoreApplication::applicationFilePath();
+    QString plistPath = QDir::homePath() + "/Library/
+                                               LaunchAgents/" + appName + ".plist";
+                                                 QFile plistFile(plistPath);
+    if (flag) {
+        if (plistFile.open(QIODevice::WriteOnly |
+                           QIODevice::Text)) {
+            QTextStream out(&plistFile);
+            out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?
+                >\n";
+                     out << "<!DOCTYPE plist PUBLIC \"-//Apple//DTD
+                            PLIST 1.0//EN\" \"http://www.apple.com/DTDs/
+                            PropertyList-1.0.dtd\">\n";
+            out << "<plist version=\"1.0\">\n";
+            out << "<dict>\n";
+            out << "    <key>Label</key>\n";
+            out << "    <string>" << appName << "</string>\n";
+            out << "    <key>ProgramArguments</key>\n";
+            out << "    <array>\n";
+            out << "        <string>" << appPath << "</
+                    string>\n";
+                     out << "    </array>\n";
+            out << "    <key>RunAtLoad</key>\n";
+            out << "    <true/>\n";
+            out << "</dict>\n";
+            out << "</plist>\n";
+            plistFile.close();
+        }
+    } else {
+        if (plistFile.exists()) {
+            plistFile.remove();
+        }
+    }
+#endif
+    //Codenheimer © Aronox Studios
+
+}
+
+void MainWindow::on_OpenAtLoginCheckBox_clicked(bool checked)
+{
+    if(checked!=loginEnabled){
+        setAutoStartWindows(checked);
+        //preparing for getting the configs file
+        // char file[260]="uconfig.spenc";
+        // make_appData_filePath(file);
+        //open and change the file
+        if(checked==false){
+            loginEnabled=false;
+            QSettings settings(company, appName);
+            settings.setValue("loginRun",loginEnabled);
+            qDebug()<<"tray enabled is now false";
+        }
+        else{
+            loginEnabled=true;
+            QSettings settings(company, appName);
+            settings.setValue("loginRun",loginEnabled);
+            qDebug()<<"tray enabled is now false";
+        }
+    }
 }
 

@@ -497,7 +497,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -2292,16 +2292,16 @@ QPushButton:hover{
                         </widget>
                        </item>
                        <item>
-                        <widget class="QCheckBox" name="checkBox_2">
+                        <widget class="QCheckBox" name="OpenAtLoginCheckBox">
                          <property name="text">
-                          <string>CheckBox</string>
+                          <string>Open at Login</string>
                          </property>
                         </widget>
                        </item>
                        <item>
-                        <widget class="QCheckBox" name="checkBox">
+                        <widget class="QCheckBox" name="sysTrayCheckBox">
                          <property name="text">
-                          <string>CheckBox</string>
+                          <string>Minimize to tray</string>
                          </property>
                         </widget>
                        </item>

@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QTimer>
 #include <unordered_map>
+#include <QSystemTrayIcon>
 
 #include "snippetbaseclass.h"
 #include "snippetc.h"
@@ -130,6 +131,12 @@ private slots:
 
     void on_addTagButton_clicked();
 
+
+
+    void on_sysTrayCheckBox_clicked(bool checked);
+
+    void on_OpenAtLoginCheckBox_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -164,6 +171,26 @@ private:
     void prepareSettingsPage();
     //QListWidget *tagListWidget;  // QListWidget to hold tags
     //QVBoxLayout *taglayout;
+
+    //system tray related functions
+    void createTrayActions();
+    void createSysTray();
+    void setClickableOptions(bool visible);
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void closeEvent(QCloseEvent *event);
+    void trayVisibility(bool flag);
+
+
+    QAction *minimizeAction;
+    QAction *maximizeAction;
+    QAction *restoreAction;
+    QAction *quitAction;
+    QMenu *trayIconMenu;
+    QSystemTrayIcon *trayIcon;
+    bool trayEnabled;
+
+    void setAutoStartWindows(bool flag);
+    bool loginEnabled;
 
 protected:
 
