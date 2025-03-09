@@ -27,6 +27,10 @@
 
 #include "langholder.h"
 #include "tagholder.h"
+//settingspage-prince
+#include <QVBoxLayout>
+#include <qlistwidget.h>
+#include <tagviewer.h>
 
 // >>>>>>> main
 QT_BEGIN_NAMESPACE
@@ -85,6 +89,9 @@ public:
     void snipetLangChanged(snippetBaseClass *obj, string lang);
     void tagChanged(snippetBaseClass *obj);
     bool containsSpaces(QString &str);
+    void addTagtoList();//tagViewer *tag);
+    void getMainTagHolder(const std::string &tagName, const std::string &tagColor);
+
 private slots:
     void on_sidebarButton_clicked();
 
@@ -121,6 +128,8 @@ private slots:
 
     void on_snippetSettingsOnSearchPage_clicked();
 
+    void on_addTagButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -130,6 +139,7 @@ private:
     void sandBox();
     void searchPageSearchbar();
     searchSystem *searchObj;
+
 
 // >>>>>>> main
     QFont CutiveMonoFont;
@@ -152,6 +162,9 @@ private:
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
     void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
     void prepareSettingsPage();
+    //QListWidget *tagListWidget;  // QListWidget to hold tags
+    //QVBoxLayout *taglayout;
+
 protected:
 
 

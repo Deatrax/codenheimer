@@ -43,6 +43,7 @@ class tagHolder{
         char tagFile[assist::PATH_SIZE]="tagDat.cdh";
         bool noTags;
 
+
     public:
         /**
          * @brief Construct a new tag Holder object. 
@@ -73,6 +74,7 @@ class tagHolder{
         tag* operator[](std::string str);
 
         bool removeSnippet(snippetBaseClass* obj);
+        void addTag(const std::string &tagName, const std::string &tagColor);
     //END OF PUBLIC
 };
 

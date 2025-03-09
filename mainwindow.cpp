@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "snippetpreviewbox.h"
 #include "snippetsettingspopup.h"
+#include "tagadder.h"
 #include "ui_mainwindow.h"
 #include "predefines.h"
 #include "editorwidget.h"
@@ -36,6 +37,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     loadConfig();
+
+    addTagtoList();
+    //tagwidget
+    //taglayout= new QVBoxLayout();
+    //ui->tagWidget->setLayout(taglayout);
+    //ui->tagWidget->layout()->addWidget(tagListWidget);
+    //taglayout->addWidget(tagListWidget);
 }
 
 MainWindow::~MainWindow()
@@ -223,7 +231,7 @@ void MainWindow::sandBox(){
             settings.setValue("username", "dummyUser");
             settings.setValue("hashres", "noHash");
             settings.setValue("vault", "default");
-            settings.setValue("tag",  0);
+            settings.setValue("tag",  6); //working on this
             settings.setValue("type", 0);
             return 1;
             //makeSampleFile();
@@ -477,9 +485,9 @@ void MainWindow::sandBox(){
         // qDebug("the stuff got from uconfig was:\nusername\t%s\nhashres\t%s\nvault\t%s\ntag\t%d\ntype\t%d\n",username.c_str(),hashResult.c_str(),vaultLocation.c_str(),tagCount,additionalTypeCount);
         //========================================
 
-        //Qsettings system
-        QSettings settings(company, appName);
+       
 
+        QSettings settings(company, appName);
         QString u=settings.value("username","default_user").toString();
         QString hs=settings.value("hashres","default_val").toString();
         QString va=settings.value("vault","default").toString();
@@ -1011,5 +1019,52 @@ void MainWindow::on_snippetSettingsOnSearchPage_clicked()
         ui->statusBar->showMessage("Please select snippet first!", 2500);
         delete pop;
     }
+}
+
+//settingspage functions
+
+
+
+
+void MainWindow::on_addTagButton_clicked()
+{
+    tagAdder *addtag = new tagAdder(this,this);
+    addtag->setWindowTitle("Add Tag Wizard");
+    addtag->setWindowFlags(Qt::Window);// | Qt::CustomizeWindowHint | Qt::WindowTitleHint
+
+    //addtag->setAttribute(Qt::WA_DeleteOnClose);
+    addtag->show();
+
+}
+
+void MainWindow::addTagtoList()//tagViewer *tag)
+{
+    ui->tagListWidget->clear();
+
+    qDebug() <<"total tags found" <<getTagList().size();
+
+    for(auto &tname: getTagList())
+    {
+        QListWidgetItem *newItem= new QListWidgetItem(ui->tagListWidget);
+        string name,color;
+        getTagInfo(tname,name,color);
+        tagViewer *tag=new tagViewer(this);
+        tag->setTag(name,color);
+
+
+
+        newItem->setSizeHint(tag->sizeHint());
+        ui->tagListWidget->addItem(newItem);
+        ui->tagListWidget->setItemWidget(newItem,tag);
+        //ui->tagListWidget->setItemWidget();
+    }
+}
+
+void MainWindow::getMainTagHolder(const std::string &tagName, const std::string &tagColor )//need to be changed later
+{
+    mainTagHolder->addTag(tagName,tagColor) ;
+    tagCount++;
+    QSettings settings(company, appName);
+    settings.setValue("tag",tagCount);
 }
 
