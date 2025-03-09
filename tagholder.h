@@ -75,6 +75,7 @@ class tagHolder{
 
         bool removeSnippet(snippetBaseClass* obj);
         void addTag(const std::string &tagName, const std::string &tagColor);
+        void removeTag(const std::string &tagName);
     //END OF PUBLIC
 };
 

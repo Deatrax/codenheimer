@@ -137,6 +137,8 @@ private slots:
 
     void on_OpenAtLoginCheckBox_clicked(bool checked);
 
+    void on_removeTagButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started

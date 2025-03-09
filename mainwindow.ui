@@ -497,7 +497,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>4</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">

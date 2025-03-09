@@ -1255,3 +1255,29 @@ void MainWindow::on_OpenAtLoginCheckBox_clicked(bool checked)
     }
 }
 
+
+void MainWindow::on_removeTagButton_clicked()
+{
+    QListWidgetItem *selectedItem = ui->tagListWidget->currentItem();
+    if (!selectedItem) {
+        qDebug() << "No tag selected for removal.";
+        return;
+    }
+
+    // Retrieve the tag widget from the list item
+    tagViewer *tag = qobject_cast<tagViewer *>(ui->tagListWidget->itemWidget(selectedItem));
+    if (!tag) {
+        qDebug() << "Error: Selected item does not contain a tagViewer.";
+        return;
+    }
+
+    QString tagName = tag->getTagName();
+    qDebug() << "Removing tag:" << tagName;
+    mainTagHolder->removeTag(tagName.toStdString());
+
+    delete selectedItem;
+
+    qDebug() << "Tag removed successfully.";
+}
+
+

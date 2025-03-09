@@ -105,3 +105,15 @@ void tagHolder::addTag(const std::string &tagName, const std::string &tagColor) 
              << " with color: " << QString::fromStdString(tagColor);
 }
 
+void tagHolder::removeTag(const std::string &tagName)
+{
+    auto it = tagStorage.find(tagName);
+    if (it != tagStorage.end()) {
+        delete it->second;  // Free memory
+        tagStorage.erase(it);
+        qDebug() << "Tag removed from storage:" << QString::fromStdString(tagName);
+    } else {
+        qDebug() << "Tag not found in storage:" << QString::fromStdString(tagName);
+    }
+}
+
