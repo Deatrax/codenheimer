@@ -173,6 +173,8 @@ void MainWindow::sandBox(){
         settings.setValue("vault", vault);
         settings.setValue("tag", tag);
         settings.setValue("type", type);
+        settings.setValue("loginRun",false);
+        settings.setValue("trayIcon",false);
     }
 
     int MainWindow::firstTimeInit()
