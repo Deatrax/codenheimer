@@ -100,6 +100,8 @@ public:
     void encryptText(QString file, QString data);
     QString decryptText(QString fileName);
     void scheduleDeletion(int lineNumber, const QString &filePath);
+    void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
+
 
     void applyFilter(std::string text, int type);
     void removeFilter(std::string text, int type);
@@ -152,7 +154,6 @@ private slots:
     void on_OpenAtLoginCheckBox_clicked(bool checked);
 
     void on_removeTagButton_clicked();
-    void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
 
@@ -165,6 +166,9 @@ private slots:
     void on_nextPageButton_clicked();
 
     void on_previousPageButton_clicked();
+
+
+    void on_mofobutton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -205,7 +209,6 @@ private:
 
 
     void prepareAddNewComboBox();
-    void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
     void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
     void prepareSettingsPage();
     //QListWidget *tagListWidget;  // QListWidget to hold tags

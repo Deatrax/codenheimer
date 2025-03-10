@@ -1,6 +1,8 @@
 #include "snippetc.h"
 
-snippetC::snippetC() {}
+snippetC::snippetC()
+: highlighter(nullptr)
+{}
 
 void snippetC::setEditor(QTextDocument* doc)
 {

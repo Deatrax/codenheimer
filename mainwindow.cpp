@@ -227,7 +227,7 @@ void MainWindow::sandBox(){
             QSettings settings(company, appName);
 
             settings.setValue("username", "dummyUser");
-            settings.setValue("hashres", "noHash");
+            settings.setValue("hashres", "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8");
             settings.setValue("vault", "default");
             settings.setValue("tag",  6); //working on this
             settings.setValue("type", 0);
@@ -748,7 +748,7 @@ void MainWindow::sandBox(){
     void MainWindow::openSnippetInEditor(snippetBaseClass* snipObj, QString& tabname, bool isOld)
     {
         editorWidget* newEditor=new editorWidget(this,this);
-        newEditor->assign(snipObj,false);
+        newEditor->assign(snipObj,isOld);
         ui->editorTabs->addTab(newEditor,tabname);
         newEditor->tellIdx(ui->editorTabs->indexOf(newEditor));
         setMainIndex(2);
@@ -1358,13 +1358,6 @@ void MainWindow::test(){
     qDebug()<<"this is some test text\n";
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    hashResult=Julius->setPassFirstTime();
-    qDebug()<<"the hash result is: "<<hashResult;
-    QSettings settings(company, appName);
-    settings.setValue("hashres", QString(hashResult.c_str() ) );
-}
 
 
 
@@ -1812,5 +1805,18 @@ void MainWindow::removeFilter(std::string text, int type){
 
     updateBrowseView();
     ui->browsePageStack->setCurrentIndex(1);
+}
+
+
+
+
+
+void MainWindow::on_mofobutton_clicked()
+{
+    qDebug()<<"the button was clicked";
+    hashResult=Julius->setPassFirstTime();
+    qDebug()<<"the hash result is: "<<hashResult;
+    QSettings settings(company, appName);
+    settings.setValue("hashres", QString(hashResult.c_str() ) );
 }
 

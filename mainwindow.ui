@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1092</width>
-    <height>686</height>
+    <height>719</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -497,7 +497,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>3</number>
+          <number>5</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1009,7 +1009,7 @@ QTabBar::close-button:hover {
                 <widget class="QWidget" name="widget" native="true">
                  <property name="maximumSize">
                   <size>
-                   <width>200</width>
+                   <width>250</width>
                    <height>250</height>
                   </size>
                  </property>
@@ -3030,33 +3030,6 @@ QPushButton:hover{
             <string>Show snippet settings</string>
            </property>
           </widget>
-          <widget class="QPushButton" name="pushButton">
-           <property name="geometry">
-            <rect>
-             <x>350</x>
-             <y>540</y>
-             <width>100</width>
-             <height>32</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QWidget{
-	font-size:14px;
-	color: white;
-	border-radius:5px
-}
-QPushButton{
-	background:black;
-}
-
-QPushButton:hover{
-	background:#1E1E1E;
-}</string>
-           </property>
-           <property name="text">
-            <string>set pass</string>
-           </property>
-          </widget>
           <widget class="QPushButton" name="pushButton_2">
            <property name="geometry">
             <rect>
@@ -3083,6 +3056,34 @@ QPushButton:hover{
            </property>
            <property name="text">
             <string>set New Hash</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="mofobutton">
+           <property name="geometry">
+            <rect>
+             <x>350</x>
+             <y>540</y>
+             <width>100</width>
+             <height>32</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QWidget{
+	font-size:14px;
+	color: white;
+	border-radius:5px
+}
+QPushButton{
+	background:black;
+}
+
+QPushButton:hover{
+	background:#1E1E1E;
+}
+</string>
+           </property>
+           <property name="text">
+            <string>set pass</string>
            </property>
           </widget>
          </widget>

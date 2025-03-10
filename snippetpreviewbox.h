@@ -22,6 +22,7 @@ public:
 protected:
     void setTags();
     void addCopyButton();
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 private slots:
 
 
