@@ -73,7 +73,8 @@ class tagHolder{
         tag* operator[](std::string str);
 
         bool removeSnippet(snippetBaseClass* obj);
-    //END OF PUBLIC
+        bool snippetExistsInTag(const std::string &tag, snippetBaseClass *snippet);
+        // END OF PUBLIC
 };
 
 #endif // TAGHOLDER_H

@@ -85,3 +85,12 @@ bool tagHolder::removeSnippet(snippetBaseClass *obj)
     }
     return true;
 }
+
+
+bool tagHolder::snippetExistsInTag(const std::string& tag, snippetBaseClass* snippet) {
+    auto it = storage.find(tag);
+    if (it != storage.end()) {
+        return std::find(it->second.begin(), it->second.end(), snippet) != it->second.end();
+    }
+    return false;
+}
