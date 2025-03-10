@@ -96,7 +96,9 @@ std::string snippetLiveClass::getSnippet()
 
         std::ifstream file(snippetCodeFile, std::ios::in);
         if (!file) {
-            throw std::runtime_error("Failed to open file: " + filename);
+            //throw std::runtime_error("Failed to open file: " + filename);
+            MainWindow* mainW= static_cast<MainWindow*>(masterWindow);
+            mainW->warnUser("file failed to open, maybe doesn't exist");
         }
 
         std::ostringstream buffer;
