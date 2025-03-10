@@ -497,7 +497,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1009,7 +1009,7 @@ QTabBar::close-button:hover {
                 <widget class="QWidget" name="widget" native="true">
                  <property name="maximumSize">
                   <size>
-                   <width>200</width>
+                   <width>250</width>
                    <height>250</height>
                   </size>
                  </property>
