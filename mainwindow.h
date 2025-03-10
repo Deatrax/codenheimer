@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <predefines.h>
 #include <QFontDatabase>
+#include "flowlayout.h"
 #include "helperFunctions.h"
 #include <fstream>
 #include <iostream>
@@ -100,6 +101,8 @@ public:
     QString decryptText(QString fileName);
     void scheduleDeletion(int lineNumber, const QString &filePath);
 
+    void applyFilter(std::string text, int type);
+    void removeFilter(std::string text, int type);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -153,6 +156,16 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_browseShortCutButton_clicked();
+
+    void on_browseBackButton_clicked();
+
+    void on_perPageSee_valueChanged(int arg1);
+
+    void on_nextPageButton_clicked();
+
+    void on_previousPageButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -181,6 +194,15 @@ private:
     static QString company;
     static QString appName;
     cryptographicAgent* Julius;
+    FlowLayout *browseLangFL;
+    FlowLayout *browseTagFL;
+
+    //========filters
+    std::vector< std::string> langFilters;
+    std::vector< std::string> tagFilters;
+    //std::unordered_map<std::string, filterWidget*> tagFilters;
+
+
 
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
@@ -209,6 +231,12 @@ private:
     void setAutoStartWindows(bool flag);
     bool loginEnabled;
 
+    void prepareBrowsePage();
+    void applyFontToChildren(QWidget *parent, const QFont &font);
+    void updateBrowseView();
+
+    void updateBrowseView(bool flag);
+    std::vector<snippetBaseClass *> getFilteredSnippets(const std::vector<std::string> &langFilters, const std::vector<std::string> &tagFilters, const std::vector<snippetBaseClass *> &snippets, langHolder* langDB, tagHolder* tagDB);
 protected:
     
     void completeDeletes();

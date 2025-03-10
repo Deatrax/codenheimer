@@ -1,4 +1,6 @@
 #include "mainwindow.h"
+#include "browselangwidget.h"
+#include "browsetagwidget.h"
 #include "qmenu.h"
 #include "qpainter.h"
 #include "snippetpreviewbox.h"
@@ -153,6 +155,11 @@ void MainWindow::sandBox(){
         prepareSettingsPage();
 
 
+        prepareBrowsePage();
+
+
+
+        //load complete, land on add new page
         ui->maincontentsStack->setCurrentIndex(0);
         //add to system tray
         createTrayActions();
@@ -1441,5 +1448,369 @@ void MainWindow::completeDeletes() {
 
     pendingDeletions.clear();
     QFile::remove(tempFilePath);  // Remove temp file after processing
+}
+
+
+
+
+void MainWindow::applyFontToChildren(QWidget* parent, const QFont& font) {
+    if (!parent) return;
+
+    parent->setFont(font);  // Apply font to the parent itself
+
+    for (QObject* child : parent->children()) {
+        QWidget* childWidget = qobject_cast<QWidget*>(child);
+        if (childWidget) {
+            childWidget->setFont(font);  // Apply font to child widget
+            applyFontToChildren(childWidget, font);  // Recursively apply to grandchildren
+        }
+    }
+}
+
+void MainWindow::prepareBrowsePage(){
+    ui->browseShortCutButton->setIcon(QIcon(":/images/rightArowIcon.svg"));
+    ui->browseShortCutButton->setIconSize(QSize(26,30));
+
+    ui->browseBackButton->setIcon(QIcon(":/images/backArrowIcon.svg"));
+    ui->browseBackButton->setIconSize(QSize(20,23));
+
+    QFont brosweFont=CreteRoundFont;
+    brosweFont.setPointSize(14);
+
+    QFont browseFont2= CreteRoundFont;
+    browseFont2.setPointSize(18);
+
+    applyFontToChildren(ui->browseViewFilterBox, brosweFont);
+
+    ui->browseMainTitle->setFont(browseFont2);
+    ui->tagsLabel->setFont(browseFont2);
+    ui->browseViewTitle->setFont(browseFont2);
+    ui->filterTitle->setFont(browseFont2);
+
+    //preparing the langs
+    browseLangFL= new FlowLayout(10,20,8);
+    std::vector<std::string> langs=mainLangHolder->getLangList();
+    for (auto &it : langs) {
+        browseLangWidget *bl=new browseLangWidget(this, this);
+        filterWidget *fw=new filterWidget(this, bl);
+        bl->init(it, fw);
+        fw->init(it, 1);
+        browseLangFL->addWidget(bl);
+
+        // Create a QListWidgetItem to hold the custom widget
+                QListWidgetItem* item = new QListWidgetItem(ui->filderLangList);
+
+        // Set the size of the item to match the widget
+        item->setSizeHint(fw->sizeHint());
+
+        // Store snippetPreviewBox pointer inside Qt::UserRole
+        item->setData(Qt::UserRole, QVariant::fromValue(fw));
+
+        // Add the item to the list widget
+        ui->filderLangList->addItem(item);
+
+        // Set the custom widget for this item (for display only)
+        ui->filderLangList->setItemWidget(item, fw);
+    }
+    ui->langAreaBox->setLayout(browseLangFL);
+
+
+    //preparing the tags
+    qDebug()<<"==============================================starting to add the tags";
+    browseTagFL= new FlowLayout(10, 10, 8);
+    std::vector<std::string> tagssss= getTagList();
+    for (auto &it : tagssss) {
+        qDebug()<<"adding the tag: "<<it;
+        browseTagWidget *bt=new browseTagWidget(this ,this);
+        filterWidget *fw=new filterWidget(this, bt);
+        bt->init(it, fw);
+        fw->init(it, 2);
+        browseTagFL->addWidget(bt);
+
+        // Create a QListWidgetItem to hold the custom widget
+        QListWidgetItem* item = new QListWidgetItem(ui->filterTagList);
+
+        // Set the size of the item to match the widget
+        item->setSizeHint(fw->sizeHint());
+
+        // Store snippetPreviewBox pointer inside Qt::UserRole
+        item->setData(Qt::UserRole, QVariant::fromValue(fw));
+
+        // Add the item to the list widget
+        ui->filterTagList->addItem(item);
+
+        // Set the custom widget for this item (for display only)
+        ui->filterTagList->setItemWidget(item, fw);
+    }
+    ui->tagAreaBox->setLayout(browseTagFL);
+    qDebug()<<"==============================================tag add complete";
+
+    ui->browsePageStack->setCurrentIndex(0);
+}
+
+void MainWindow::on_browseShortCutButton_clicked()
+{
+    ui->browsePageStack->setCurrentIndex(1);
+    updateBrowseView();
+}
+
+
+void MainWindow::on_browseBackButton_clicked()
+{
+    ui->browsePageStack->setCurrentIndex(0);
+}
+
+
+std::vector<snippetBaseClass*> MainWindow::getFilteredSnippets(
+    const std::vector<std::string>& langFilters,
+    const std::vector<std::string>& tagFilters,
+    const std::vector<snippetBaseClass*>& snippets,
+    langHolder* langDB,  // Used for checking snippet-language mapping
+    tagHolder* tagDB     // Used for checking snippet-tag mapping
+    ) {
+    std::vector<snippetBaseClass*> filteredSnippets;
+
+    for (auto* snippet : snippets) {
+        bool matchesLang = false, matchesTag = false;
+
+        // Check if snippet matches any language filter
+        for (const auto& lang : langFilters) {
+            if (langDB->snippetExistsInLang(lang, snippet)) {
+                matchesLang = true;
+                break;  // No need to check further
+            }
+        }
+
+        // Check if snippet matches any tag filter
+        for (const auto& tag : tagFilters) {
+            if (tagDB->snippetExistsInTag(tag, snippet)) {
+                matchesTag = true;
+                break;  // No need to check further
+            }
+        }
+
+        // If both conditions are met, add to result vector
+        if (matchesLang || matchesTag) {
+            filteredSnippets.push_back(snippet);
+        }
+    }
+
+    return filteredSnippets;
+}
+
+
+void MainWindow::updateBrowseView(){
+
+    // ui->browseMainViewArea->clear();
+    ui->browseMainViewArea->clear();
+
+    int limit=ui->perPageSee->value();
+
+    std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->pagedSearch(limit, false);
+    std::vector<snippetBaseClass*> snippetVector;
+
+    for (const auto& pair : searchRet) {
+        snippetVector.insert(snippetVector.end(), pair.second.begin(), pair.second.end());
+    }
+
+    std::vector<snippetBaseClass*> finalList;
+    if(langFilters.size() >0 || tagFilters.size() >0 )
+        finalList= getFilteredSnippets(langFilters, tagFilters, snippetVector, mainLangHolder, mainTagHolder);
+    else
+        finalList= snippetVector;
+    // //std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix("");
+    // for (auto& itr : searchRet){
+    //         for (auto& itr2 : itr.second) {
+    //             // Create the custom widget
+    //             snippetPreviewBox* pb = new snippetPreviewBox(this, this);
+    //             pb->assignSnippet(itr2);
+
+    //             // Create a QListWidgetItem to hold the custom widget
+    //             QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
+
+    //             // Set the size of the item to match the widget
+    //             item->setSizeHint(pb->sizeHint());
+
+    //             // Store snippetPreviewBox pointer inside Qt::UserRole
+    //             item->setData(Qt::UserRole, QVariant::fromValue(pb));
+
+    //             // Add the item to the list widget
+    //             ui->browseMainViewArea->addItem(item);
+
+    //             // Set the custom widget for this item (for display only)
+    //             ui->browseMainViewArea->setItemWidget(item, pb);
+    //         }
+    //     }
+
+
+
+    for (auto& itr2 : finalList) {
+        // Create the custom widget
+        snippetPreviewBox* pb = new snippetPreviewBox(this, this);
+        pb->assignSnippet(itr2);
+
+        // Create a QListWidgetItem to hold the custom widget
+        QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
+
+        // Set the size of the item to match the widget
+        item->setSizeHint(pb->sizeHint());
+
+        // Store snippetPreviewBox pointer inside Qt::UserRole
+        item->setData(Qt::UserRole, QVariant::fromValue(pb));
+
+        // Add the item to the list widget
+        ui->browseMainViewArea->addItem(item);
+
+        // Set the custom widget for this item (for display only)
+        ui->browseMainViewArea->setItemWidget(item, pb);
+    }
+
+
+}
+
+
+void MainWindow::updateBrowseView(bool flag){
+
+    // // ui->browseMainViewArea->clear();
+    // ui->browseMainViewArea->clear();
+
+    // int limit=ui->perPageSee->value();
+
+    // std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->pagedSearch(limit, flag);
+
+
+    // //std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix("");
+    // for (auto& itr : searchRet){
+    //     for (auto& itr2 : itr.second) {
+    //         // Create the custom widget
+    //         snippetPreviewBox* pb = new snippetPreviewBox(this, this);
+    //         pb->assignSnippet(itr2);
+
+    //         // Create a QListWidgetItem to hold the custom widget
+    //         QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
+
+    //         // Set the size of the item to match the widget
+    //         item->setSizeHint(pb->sizeHint());
+
+    //         // Store snippetPreviewBox pointer inside Qt::UserRole
+    //         item->setData(Qt::UserRole, QVariant::fromValue(pb));
+
+    //         // Add the item to the list widget
+    //         ui->browseMainViewArea->addItem(item);
+
+    //         // Set the custom widget for this item (for display only)
+    //         ui->browseMainViewArea->setItemWidget(item, pb);
+    //     }
+    // }
+
+    // ui->browseMainViewArea->clear();
+    ui->browseMainViewArea->clear();
+
+    int limit=ui->perPageSee->value();
+
+    std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->pagedSearch(limit, flag);
+    std::vector<snippetBaseClass*> snippetVector;
+
+    for (const auto& pair : searchRet) {
+        snippetVector.insert(snippetVector.end(), pair.second.begin(), pair.second.end());
+    }
+
+    std::vector<snippetBaseClass*> finalList;
+    if(langFilters.size() >0 || tagFilters.size() >0 )
+        finalList= getFilteredSnippets(langFilters, tagFilters, snippetVector, mainLangHolder, mainTagHolder);
+    else
+        finalList= snippetVector;
+    // //std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix("");
+    // for (auto& itr : searchRet){
+    //         for (auto& itr2 : itr.second) {
+    //             // Create the custom widget
+    //             snippetPreviewBox* pb = new snippetPreviewBox(this, this);
+    //             pb->assignSnippet(itr2);
+
+    //             // Create a QListWidgetItem to hold the custom widget
+    //             QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
+
+    //             // Set the size of the item to match the widget
+    //             item->setSizeHint(pb->sizeHint());
+
+    //             // Store snippetPreviewBox pointer inside Qt::UserRole
+    //             item->setData(Qt::UserRole, QVariant::fromValue(pb));
+
+    //             // Add the item to the list widget
+    //             ui->browseMainViewArea->addItem(item);
+
+    //             // Set the custom widget for this item (for display only)
+    //             ui->browseMainViewArea->setItemWidget(item, pb);
+    //         }
+    //     }
+
+
+
+    for (auto& itr2 : finalList) {
+        // Create the custom widget
+        snippetPreviewBox* pb = new snippetPreviewBox(this, this);
+        pb->assignSnippet(itr2);
+
+        // Create a QListWidgetItem to hold the custom widget
+        QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
+
+        // Set the size of the item to match the widget
+        item->setSizeHint(pb->sizeHint());
+
+        // Store snippetPreviewBox pointer inside Qt::UserRole
+        item->setData(Qt::UserRole, QVariant::fromValue(pb));
+
+        // Add the item to the list widget
+        ui->browseMainViewArea->addItem(item);
+
+        // Set the custom widget for this item (for display only)
+        ui->browseMainViewArea->setItemWidget(item, pb);
+    }
+
+
+}
+
+
+void MainWindow::on_perPageSee_valueChanged(int arg1)
+{
+    updateBrowseView();
+}
+
+
+void MainWindow::on_nextPageButton_clicked()
+{
+    updateBrowseView(true);
+}
+
+
+void MainWindow::on_previousPageButton_clicked()
+{
+    updateBrowseView();
+}
+
+
+void MainWindow::applyFilter(std::string text, int type){
+    if(type == 1){
+        langFilters.push_back(text);
+    }
+    else if (type == 2){
+        tagFilters.push_back(text);
+    }
+
+    updateBrowseView();
+    ui->browsePageStack->setCurrentIndex(1);
+}
+
+
+void MainWindow::removeFilter(std::string text, int type){
+    if(type == 1){
+        langFilters.erase( std::find(langFilters.begin() , langFilters.end() , text) );
+    }
+    else if (type == 2){
+        tagFilters.erase( std::find(langFilters.begin() , langFilters.end() , text) );;
+    }
+
+    updateBrowseView();
+    ui->browsePageStack->setCurrentIndex(1);
 }
 

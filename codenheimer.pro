@@ -9,7 +9,10 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    browselangwidget.cpp \
+    browsetagwidget.cpp \
     editorwidget.cpp \
+    filterwidget.cpp \
     langholder.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -31,7 +34,10 @@ SOURCES += \
     cryptographicagent.cpp
 
 HEADERS += \
+    browselangwidget.h \
+    browsetagwidget.h \
     editorwidget.h \
+    filterwidget.h \
     langholder.h \
     mainwindow.h \
     predefines.h \
@@ -54,7 +60,10 @@ HEADERS += \
     cryptographicagent.h
 
 FORMS += \
+    browselangwidget.ui \
+    browsetagwidget.ui \
     editorwidget.ui \
+    filterwidget.ui \
     mainwindow.ui \
     snippetpreviewbox.ui \
     snippetsettingspopup.ui \

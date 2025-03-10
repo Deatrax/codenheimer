@@ -27,11 +27,17 @@ private:
     Node* root;
 
     int getIndex(char ch);
-
     void clear(Node* curr);
 
-    void collectAll(Node* curr, std::string prefix, std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>>& results);
+    Node* collectAll(Node* curr, std::string prefix, std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>>& results);
 
+    Node* lastSearchedNode = nullptr;
+    int lastCharIndex = 0; // Tracks which child was last visited
+    bool passedLast=false;
+
+
+    void collectAll(int &skipCount, int &remainingCount, Node *curr, std::string prefix, std::vector<std::pair<std::string, std::vector<snippetBaseClass *> > > &results);
+    int searchAttempt;
 public:
     searchSystem();
     ~searchSystem();
@@ -74,6 +80,8 @@ public:
     bool deleteFromVault() override;
     bool remove(snippetBaseClass *obj) override;
     bool rename(std::string newName, snippetBaseClass *obj);
+    std::vector<std::pair<std::string, std::vector<snippetBaseClass *> > > pagedSearch(int n, bool continueSearch);
+    std::string lastPrefix;
 };
 
 #endif // SEARCHSYSTEM_H
