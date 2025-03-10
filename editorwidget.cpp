@@ -96,7 +96,7 @@ void editorWidget::tellIdx(int i){
 
 void editorWidget::on_editorSnippetSettingsButton_clicked()
 {
-    mainWindow->warnUser("Jessan was supposed to make this!! but now i did");
+    //mainWindow->warnUser("Jessan was supposed to make this!! but now i did");
     snippetSettingsPopup* pop=new snippetSettingsPopup(mainWindow);
     pop->assign(thisSnippet);
     pop->show();
