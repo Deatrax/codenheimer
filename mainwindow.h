@@ -18,9 +18,13 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <unordered_map>
+<<<<<<< HEAD
+#include <QSystemTrayIcon>
+=======
 #include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/rand.h>
+>>>>>>> origin/main
 
 #include "snippetbaseclass.h"
 #include "snippetc.h"
@@ -33,10 +37,17 @@
 
 #include "langholder.h"
 #include "tagholder.h"
+<<<<<<< HEAD
+//settingspage-prince
+#include <QVBoxLayout>
+#include <qlistwidget.h>
+#include <tagviewer.h>
+=======
 #include "cryptographicagent.h"
 
 
 
+>>>>>>> origin/main
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -89,10 +100,15 @@ public:
     void snipetLangChanged(snippetBaseClass *obj, string lang);
     void tagChanged(snippetBaseClass *obj);
     bool containsSpaces(QString &str);
+<<<<<<< HEAD
+    void addTagtoList();//tagViewer *tag);
+    void getMainTagHolder(const std::string &tagName, const std::string &tagColor);
+=======
     void test();
     void encryptText(QString file, QString data);
     QString decryptText(QString fileName);
     void scheduleDeletion(int lineNumber, const QString &filePath);
+>>>>>>> origin/main
 
 private slots:
     void on_sidebarButton_clicked();
@@ -134,9 +150,21 @@ private slots:
 
     void on_snippetSettingsOnSearchPage_clicked();
 
+<<<<<<< HEAD
+    void on_addTagButton_clicked();
+
+
+
+    void on_sysTrayCheckBox_clicked(bool checked);
+
+    void on_OpenAtLoginCheckBox_clicked(bool checked);
+
+    void on_removeTagButton_clicked();
+=======
     void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
+>>>>>>> origin/main
 
 private:
     Ui::MainWindow *ui;
@@ -149,6 +177,10 @@ private:
     searchSystem *searchObj;
 
 
+<<<<<<< HEAD
+// >>>>>>> main
+=======
+>>>>>>> origin/main
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
     int tagCount; //the number of tags that exists
@@ -169,6 +201,30 @@ private:
     void prepareAddNewComboBox();
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
     void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
+    void prepareSettingsPage();
+    //QListWidget *tagListWidget;  // QListWidget to hold tags
+    //QVBoxLayout *taglayout;
+
+    //system tray related functions
+    void createTrayActions();
+    void createSysTray();
+    void setClickableOptions(bool visible);
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void closeEvent(QCloseEvent *event);
+    void trayVisibility(bool flag);
+
+
+    QAction *minimizeAction;
+    QAction *maximizeAction;
+    QAction *restoreAction;
+    QAction *quitAction;
+    QMenu *trayIconMenu;
+    QSystemTrayIcon *trayIcon;
+    bool trayEnabled;
+
+    void setAutoStartWindows(bool flag);
+    bool loginEnabled;
+
 protected:
     
     void completeDeletes();

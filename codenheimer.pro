@@ -24,6 +24,7 @@ SOURCES += \
     snippetpreviewbox.cpp \
     snippetpy.cpp \
     snippetsettingspopup.cpp \
+    tagadder.cpp \
     tagholder.cpp \
     tagviewer.cpp \
     flowlayout.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     helperFunctions.h \
     snippetpy.h \
     snippetsettingspopup.h \
+    tagadder.h \
     tagholder.h \
     tagviewer.h \
     flowlayout.h \
@@ -56,6 +58,7 @@ FORMS += \
     mainwindow.ui \
     snippetpreviewbox.ui \
     snippetsettingspopup.ui \
+    tagadder.ui \
     tagviewer.ui \
     cryptographicagent.ui
 

@@ -10,6 +10,7 @@ snippetSettingsPopup::snippetSettingsPopup(MainWindow *mainwindow, QWidget *pare
 {
     ui->setupUi(this);
     this->setWindowModality(Qt::ApplicationModal);
+
     CreteRound=masterWindow->getFont("Crete");
     CreteRound.setPointSize(13);
     for (QLabel* label : this->findChildren<QLabel*>()) {

@@ -17,10 +17,12 @@ public:
 
     void setTag(std::string Name, std::string Color);
     QString getTagName();
+    QString getTagColor();
 private:
     Ui::tagViewer *ui;
     QString tagName;
     QString tagColor;
+
 
 };
 

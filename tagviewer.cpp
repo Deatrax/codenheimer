@@ -25,3 +25,8 @@ void tagViewer::setTag(std::string Name, std::string Color){
 QString tagViewer::getTagName(){
     return tagName;
 }
+
+QString tagViewer::getTagColor()
+{
+    return tagColor;
+}
