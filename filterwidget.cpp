@@ -18,7 +18,7 @@ void filterWidget::init(std::string text, int type){
 }
 
 void filterWidget::activated(){
-    on_checkBox_stateChanged(true);
+    ui->checkBox->setCheckState(Qt::Checked);
 }
 
 filterWidget::~filterWidget()
@@ -28,6 +28,6 @@ filterWidget::~filterWidget()
 
 void filterWidget::on_checkBox_stateChanged(int arg1)
 {
-
+    arg1 ? masterWindow->applyFilter(thisText, filterType) : masterWindow->removeFilter(thisText, filterType);
 }
 
