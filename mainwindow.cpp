@@ -1161,6 +1161,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         return;
     }
     trayIcon->hide();
+    completeDeletes();
+    event->accept();
     //Codenheimer © Aronox Studios 54
 }
 void MainWindow::trayVisibility(bool flag){
@@ -1441,8 +1443,3 @@ void MainWindow::completeDeletes() {
     QFile::remove(tempFilePath);  // Remove temp file after processing
 }
 
-// Override close event to complete deletions
-void MainWindow::closeEvent(QCloseEvent *event) {
-    completeDeletes();
-    event->accept();
-}
