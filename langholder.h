@@ -156,5 +156,8 @@ public:
     bool removeSnippet(snippetBaseClass *obj);
 
     bool rename(snippetBaseClass* obj);
+
+    bool snippetExistsInLang(const std::string& lang, snippetBaseClass* snippet);
+    
 };
 #endif // LANGHOLDER_H

@@ -22,8 +22,8 @@ void searchSystem::clear(Node *curr) {
     delete curr;
 }
 
-void searchSystem::collectAll(Node *curr, std::string prefix, std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> &results) {
-    if (!curr) return;
+searchSystem::Node* searchSystem::collectAll(Node *curr, std::string prefix, std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> &results) {
+    if (!curr) return nullptr;
     if (curr->endpoint) {
         results.emplace_back(prefix, curr->target);
     }
@@ -37,7 +37,37 @@ void searchSystem::collectAll(Node *curr, std::string prefix, std::vector<std::p
             collectAll(curr->next[i], prefix + ch, results);
         }
     }
+    return curr;
 }
+
+
+void searchSystem::collectAll(int& skipCount, int& remainingCount, Node* curr,
+                              std::string prefix, std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>>& results) {
+
+    if (!curr || remainingCount <= 0) return;
+
+    if (curr->endpoint) {
+        if (skipCount > 0) {
+            skipCount--; // Ignore this snippet
+        } else {
+            results.emplace_back(prefix, curr->target);
+            remainingCount--;
+        }
+    }
+
+    for (int i = 0; i < ALPHABET_SIZE && remainingCount > 0; i++) {
+        if (curr->next[i]) {
+            char ch;
+            if (i < 26) ch = 'A' + i;
+            else if (i < 52) ch = 'a' + (i - 26);
+            else if (i == 53) ch = '-';
+            else if (i == 54) ch = ' ';
+
+            collectAll(skipCount, remainingCount, curr->next[i], prefix + ch, results);
+        }
+    }
+}
+
 
 searchSystem::searchSystem() {
     root = new Node;
@@ -174,7 +204,27 @@ void searchSystem::display(Node *curr, std::string str) {
     }
 }
 
+std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchSystem::pagedSearch(int n, bool continueSearch) {
+    std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> results;
 
+    if (!continueSearch) { // Restart search, reset attempt count
+        qDebug() << "Restarting search from root...";
+        searchAttempt = 1;
+    } else {
+        searchAttempt++;
+    }
+
+    int searchLimit = searchAttempt * n;   // Total nodes we should have seen so far
+    int skipCount = (searchAttempt - 1) * n; // How many nodes to skip
+    int remainingCount = n; // We only collect `n` snippets for the current page
+
+    qDebug() << "Initiating paged search: skipping " << skipCount
+             << " and collecting " << remainingCount << "...";
+
+    collectAll(skipCount, remainingCount, root, "", results);
+
+    return results;
+}
 
 bool searchSystem::saveSnippetToFile(std::string snippet)
 {

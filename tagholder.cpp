@@ -85,3 +85,44 @@ bool tagHolder::removeSnippet(snippetBaseClass *obj)
     }
     return true;
 }
+
+void tagHolder::addTag(const std::string &tagName, const std::string &tagColor) {
+    if (tagStorage.find(tagName) != tagStorage.end()) {
+        qDebug() << "Tag already exists: " << QString::fromStdString(tagName);
+        return;
+    }
+
+    // Create a new tag object (similar to line 23-27)
+    tag *newTag = new tag;
+    newTag->hasData = true;
+    newTag->tagName = tagName;
+    newTag->tagColor = tagColor;
+
+    // Add to tagStorage using emplace
+    tagStorage.emplace(tagName, newTag);
+
+    qDebug() << "Added new tag: " << QString::fromStdString(tagName)
+             << " with color: " << QString::fromStdString(tagColor);
+}
+
+void tagHolder::removeTag(const std::string &tagName)
+{
+    auto it = tagStorage.find(tagName);
+    if (it != tagStorage.end()) {
+        delete it->second;  // Free memory
+        tagStorage.erase(it);
+        qDebug() << "Tag removed from storage:" << QString::fromStdString(tagName);
+    } else {
+        qDebug() << "Tag not found in storage:" << QString::fromStdString(tagName);
+    }
+}
+
+
+
+bool tagHolder::snippetExistsInTag(const std::string& tag, snippetBaseClass* snippet) {
+    auto it = storage.find(tag);
+    if (it != storage.end()) {
+        return std::find(it->second.begin(), it->second.end(), snippet) != it->second.end();
+    }
+    return false;
+}

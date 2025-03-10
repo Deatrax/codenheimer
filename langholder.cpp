@@ -158,3 +158,12 @@ bool langHolder::rename(snippetBaseClass *obj)
 {
     //lol names are not stored here
 }
+
+
+bool langHolder::snippetExistsInLang(const std::string& lang, snippetBaseClass* snippet) {
+    auto it = stringTolang.find(lang);
+    if (it != stringTolang.end()) {
+        return std::find(it->second->snippetsStorage.begin(), it->second->snippetsStorage.end(), snippet) != it->second->snippetsStorage.end();
+    }
+    return false;
+}

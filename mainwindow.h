@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <predefines.h>
 #include <QFontDatabase>
+#include "flowlayout.h"
 #include "helperFunctions.h"
 #include <fstream>
 #include <iostream>
@@ -18,6 +19,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <unordered_map>
+#include <QSystemTrayIcon>
 #include <openssl/evp.h>
 #include <openssl/aes.h>
 #include <openssl/rand.h>
@@ -33,8 +35,11 @@
 
 #include "langholder.h"
 #include "tagholder.h"
+//settingspage-prince
+#include <QVBoxLayout>
+#include <qlistwidget.h>
+#include <tagviewer.h>
 #include "cryptographicagent.h"
-
 
 
 
@@ -89,6 +94,8 @@ public:
     void snipetLangChanged(snippetBaseClass *obj, string lang);
     void tagChanged(snippetBaseClass *obj);
     bool containsSpaces(QString &str);
+    void addTagtoList();//tagViewer *tag);
+    void getMainTagHolder(const std::string &tagName, const std::string &tagColor);
     void test();
     void encryptText(QString file, QString data);
     QString decryptText(QString fileName);
@@ -96,6 +103,8 @@ public:
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
 
 
+    void applyFilter(std::string text, int type);
+    void removeFilter(std::string text, int type);
 private slots:
     void on_sidebarButton_clicked();
 
@@ -136,9 +145,28 @@ private slots:
 
     void on_snippetSettingsOnSearchPage_clicked();
 
+    void on_addTagButton_clicked();
+
+
+
+    void on_sysTrayCheckBox_clicked(bool checked);
+
+    void on_OpenAtLoginCheckBox_clicked(bool checked);
+
+    void on_removeTagButton_clicked();
     void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
+
+    void on_browseShortCutButton_clicked();
+
+    void on_browseBackButton_clicked();
+
+    void on_perPageSee_valueChanged(int arg1);
+
+    void on_nextPageButton_clicked();
+
+    void on_previousPageButton_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -151,6 +179,7 @@ private:
     searchSystem *searchObj;
 
 
+// >>>>>>> main
     QFont CutiveMonoFont;
     QFont CreteRoundFont;
     int tagCount; //the number of tags that exists
@@ -167,15 +196,53 @@ private:
     static QString company;
     static QString appName;
     cryptographicAgent* Julius;
+    FlowLayout *browseLangFL;
+    FlowLayout *browseTagFL;
+
+    //========filters
+    std::vector< std::string> langFilters;
+    std::vector< std::string> tagFilters;
+    //std::unordered_map<std::string, filterWidget*> tagFilters;
+
+
 
     void prepareAddNewComboBox();
     void saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type);
+    void prepareSettingsPage();
+    //QListWidget *tagListWidget;  // QListWidget to hold tags
+    //QVBoxLayout *taglayout;
+
+    //system tray related functions
+    void createTrayActions();
+    void createSysTray();
+    void setClickableOptions(bool visible);
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void closeEvent(QCloseEvent *event) override;
+    void trayVisibility(bool flag);
+
+
+    QAction *minimizeAction;
+    QAction *maximizeAction;
+    QAction *restoreAction;
+    QAction *quitAction;
+    QMenu *trayIconMenu;
+    QSystemTrayIcon *trayIcon;
+    bool trayEnabled;
+
+    void setAutoStartWindows(bool flag);
+    bool loginEnabled;
+
+    void prepareBrowsePage();
+    void applyFontToChildren(QWidget *parent, const QFont &font);
+    void updateBrowseView();
+
+    void updateBrowseView(bool flag);
+    std::vector<snippetBaseClass *> getFilteredSnippets(const std::vector<std::string> &langFilters, const std::vector<std::string> &tagFilters, const std::vector<snippetBaseClass *> &snippets, langHolder* langDB, tagHolder* tagDB);
 protected:
     
     void completeDeletes();
     void loadPendingDeletes();
     void savePendingDeletes();
-    void closeEvent(QCloseEvent *event) override;
 
 
     std::map<int, QString, std::greater<int>> pendingDeletions;
