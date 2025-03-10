@@ -1196,28 +1196,23 @@ void MainWindow::setAutoStartWindows(bool flag) {
     }
 #elif defined(__APPLE__) // macOS specific code
     QString appName = "TestApp";
-        QString appPath = QCoreApplication::applicationFilePath();
-    QString plistPath = QDir::homePath() + "/Library/
-                                               LaunchAgents/" + appName + ".plist";
-                                                 QFile plistFile(plistPath);
+    QString appPath = QCoreApplication::applicationFilePath();
+    QString plistPath = QDir::homePath() + "/Library/LaunchAgents/" + appName + ".plist";
+    QFile plistFile(plistPath);
+
     if (flag) {
-        if (plistFile.open(QIODevice::WriteOnly |
-                           QIODevice::Text)) {
+        if (plistFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QTextStream out(&plistFile);
-            out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?
-                >\n";
-                     out << "<!DOCTYPE plist PUBLIC \"-//Apple//DTD
-                            PLIST 1.0//EN\" \"http://www.apple.com/DTDs/
-                            PropertyList-1.0.dtd\">\n";
+            out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+            out << "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n";
             out << "<plist version=\"1.0\">\n";
             out << "<dict>\n";
             out << "    <key>Label</key>\n";
             out << "    <string>" << appName << "</string>\n";
             out << "    <key>ProgramArguments</key>\n";
             out << "    <array>\n";
-            out << "        <string>" << appPath << "</
-                    string>\n";
-                     out << "    </array>\n";
+            out << "        <string>" << appPath << "</string>\n";
+            out << "    </array>\n";
             out << "    <key>RunAtLoad</key>\n";
             out << "    <true/>\n";
             out << "</dict>\n";
