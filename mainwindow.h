@@ -154,7 +154,6 @@ private slots:
     void on_OpenAtLoginCheckBox_clicked(bool checked);
 
     void on_removeTagButton_clicked();
-    void on_pushButton_clicked();
 
     void on_pushButton_2_clicked();
 
@@ -167,6 +166,9 @@ private slots:
     void on_nextPageButton_clicked();
 
     void on_previousPageButton_clicked();
+
+
+    void on_mofobutton_clicked();
 
 private:
     Ui::MainWindow *ui;

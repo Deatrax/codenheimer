@@ -258,9 +258,10 @@ QString cryptographicAgent::decryptFromFile(QString fileName)
 std::string cryptographicAgent::setPassFirstTime()
 {
     firstTime=true;
+    showUI(2);
     QEventLoop loop;
     connect(this, &cryptographicAgent::passwordSet, &loop, &QEventLoop::quit);
-    showUI(2);
+
     loop.exec();
     return hashResult=hashPassword(ui->passwordField->text()).toStdString();
 }
