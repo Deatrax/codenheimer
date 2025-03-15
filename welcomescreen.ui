@@ -57,7 +57,7 @@ QWidget {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>9</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -77,7 +77,7 @@ border-radius:15px;</string>
            <item>
             <widget class="QStackedWidget" name="page1innerStack">
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="page1InnerStack_page1">
               <layout class="QVBoxLayout" name="verticalLayout">
@@ -196,7 +196,7 @@ QPushButton:hover{
                       <height>16777215</height>
                      </size>
                     </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_16">
+                    <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="1,1">
                      <property name="spacing">
                       <number>0</number>
                      </property>
@@ -215,7 +215,7 @@ QPushButton:hover{
                      <item>
                       <widget class="QLabel" name="usernameTitle">
                        <property name="sizePolicy">
-                        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                          <horstretch>0</horstretch>
                          <verstretch>0</verstretch>
                         </sizepolicy>
@@ -228,7 +228,7 @@ QPushButton:hover{
                        </property>
                        <property name="maximumSize">
                         <size>
-                         <width>142</width>
+                         <width>16777215</width>
                          <height>16777215</height>
                         </size>
                        </property>
@@ -239,6 +239,12 @@ QPushButton:hover{
                      </item>
                      <item>
                       <widget class="QLineEdit" name="usernameEdit">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
                        <property name="minimumSize">
                         <size>
                          <width>192</width>
@@ -271,7 +277,7 @@ border-radius:7px;</string>
                       <height>16777215</height>
                      </size>
                     </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_18">
+                    <layout class="QHBoxLayout" name="horizontalLayout_18" stretch="1,1">
                      <property name="spacing">
                       <number>0</number>
                      </property>
@@ -303,7 +309,7 @@ border-radius:7px;</string>
                        </property>
                        <property name="maximumSize">
                         <size>
-                         <width>142</width>
+                         <width>16777215</width>
                          <height>16777215</height>
                         </size>
                        </property>

@@ -1,4 +1,5 @@
 #include "welcomescreen.h"
+#include "qmessagebox.h"
 #include "ui_welcomescreen.h"
 
 
@@ -13,7 +14,7 @@ welcomeScreen::welcomeScreen(QWidget *parent)
     if (fontId != -1) {
         QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
         CutiveMonoFont=QFont(family);
-        CutiveMonoFont.setPointSize(20);
+        CutiveMonoFont.setPointSize(18);
     } else {
         qDebug() << "Font loading failed!";
     }
@@ -199,7 +200,14 @@ void welcomeScreen::on_userUpdateButton_clicked()
     settings.setValue("loginRun",false);
     settings.setValue("trayIcon",false);
 
-
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Information");
+    msgBox.setText("User successfully set\nHere is the password you entered: " + ui->newPasswordEdit->text()
+                   +"\nPlease remember the password as there is no\nrecovery system for lost password"
+                     "\nNow you will be shown image guides redarding the usage of the app"
+                     "\nWe apologize for the distorted dimentions of the images");
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.exec();
     ui->stackedWidget->setCurrentIndex(1);
 }
 
