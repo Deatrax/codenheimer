@@ -184,20 +184,20 @@ void welcomeScreen::on_showPasswordButton_released()
 
 void welcomeScreen::on_userUpdateButton_clicked()
 {
-    // QString usr= ui->usernameEdit->text();
-    // QString hashres=QString(QCryptographicHash::hash(ui->newPasswordEdit->text().toUtf8(), QCryptographicHash::Sha256).toHex()) ;
+    QString usr= ui->usernameEdit->text();
+    QString hashres=QString(QCryptographicHash::hash(ui->newPasswordEdit->text().toUtf8(), QCryptographicHash::Sha256).toHex()) ;
 
-    // QString company="AronoxStudios";
-    // QString appName="Codenheimer";
-    // QSettings settings(company, appName);
-    // settings.setValue("username", usr);
-    // settings.setValue("hashres", hashres);
-    // settings.setValue("vault", "default");
-    // settings.setValue("tag",  0);
-    // settings.setValue("type", 0);
-    // settings.setValue("showPerPage", 10);
-    // settings.setValue("loginRun",false);
-    // settings.setValue("trayIcon",false);
+    QString company="AronoxStudios";
+    QString appName="Codenheimer";
+    QSettings settings(company, appName);
+    settings.setValue("username", usr);
+    settings.setValue("hashres", hashres);
+    settings.setValue("vault", "default");
+    settings.setValue("tag",  0);
+    settings.setValue("type", 0);
+    settings.setValue("showPerPage", 10);
+    settings.setValue("loginRun",false);
+    settings.setValue("trayIcon",false);
 
 
     ui->stackedWidget->setCurrentIndex(1);
@@ -263,3 +263,9 @@ void welcomeScreen::on_page9nxt_clicked() {
 void welcomeScreen::on_page9prev_clicked() {
     ui->stackedWidget->setCurrentIndex(7);
 }
+
+void welcomeScreen::on_finishWelcomeButton_clicked()
+{
+    QApplication::exit(123);
+}
+

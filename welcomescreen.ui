@@ -1158,12 +1158,11 @@ QPushButton:hover{
 One thing to note however is that this is still
  in beta. Although all intended features for release
  has been implemented, the stable-release version
- is yet to be made. here is a major bug:
+ is yet to be made.
 
 
- Using the tag filters in the browse page
- causes the app to crash.
- please refrain from using it until we release a patch</string>
+ Please stay tuned to the gtithub page
+to get the news of latest updates and bugfixes.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -1201,7 +1200,7 @@ One thing to note however is that this is still
                <number>0</number>
               </property>
               <item>
-               <widget class="QPushButton" name="pushButton">
+               <widget class="QPushButton" name="finishWelcomeButton">
                 <property name="maximumSize">
                  <size>
                   <width>70</width>

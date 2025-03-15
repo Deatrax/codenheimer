@@ -60,6 +60,8 @@ private slots:
 
     void on_page9prev_clicked();
 
+    void on_finishWelcomeButton_clicked();
+
 private:
     Ui::welcomeScreen *ui;
     QFont CutiveMonoFont;
