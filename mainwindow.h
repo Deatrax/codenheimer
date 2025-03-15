@@ -101,11 +101,11 @@ public:
     QString decryptText(QString fileName);
     void scheduleDeletion(int lineNumber, const QString &filePath);
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
-
-
+    void scheduleTagDeletion(int lineNumber);
     void applyFilter(std::string text, int type);
     void removeFilter(std::string text, int type);
-private slots:
+    
+    private slots:
     void on_sidebarButton_clicked();
 
     void on_AddnewSidebarButton_clicked();
@@ -240,7 +240,18 @@ private:
 
     void updateBrowseView(bool flag);
     std::vector<snippetBaseClass *> getFilteredSnippets(const std::vector<std::string> &langFilters, const std::vector<std::string> &tagFilters, const std::vector<snippetBaseClass *> &snippets, langHolder* langDB, tagHolder* tagDB);
-protected:
+
+
+
+    void savePendingTagDeletes();
+
+    void loadPendingTagDeletes();
+
+    void completeTagDeletes();
+    QSet<int> pendingTagDeletions;   // Stores line numbers of tags to delete
+    QString tagTempFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/pending_tag_deletes.tmp";;         // Path to store pending deletions for tags
+
+    protected:
     
     void completeDeletes();
     void loadPendingDeletes();

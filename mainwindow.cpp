@@ -172,13 +172,13 @@ void MainWindow::sandBox(){
     }
 
 
-    void MainWindow::saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type) {
+    void MainWindow::saveToSettings(const QString &username, const QString &hs, const QString &vault, int tag, int type) {
         // Step 1: Create or open the QSettings object
         QSettings settings(company, appName);
 
         // Step 2: Write data to settings
         settings.setValue("username", username);
-        settings.setValue("hashres", hashResult);
+        settings.setValue("hashres", hs);
         settings.setValue("vault", vault);
         settings.setValue("tag", tag);
         settings.setValue("type", type);
@@ -1035,6 +1035,8 @@ void MainWindow::addTagtoList()//tagViewer *tag)
     ui->tagListWidget->clear();
 
     qDebug() <<"total tags found" <<getTagList().size();
+    std::string str=std::to_string(static_cast<int> (getTagList().size()));
+    ui->tagCountViewer->setText( QString(str.c_str()));
 
     for(auto &tname: getTagList())
     {
@@ -1161,7 +1163,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Systray"));
         msgBox.setText(tr("The program will keep running in the " "system tray. To terminate the program, " "choose <b>Quit</b> in the context menu " "of the system tray entry."));
-        //msgBox.setStyleSheet(messageboxStyle);
         msgBox.exec();
         hide();
         event->ignore();
@@ -1169,8 +1170,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     trayIcon->hide();
     completeDeletes();
+    completeTagDeletes();
     event->accept();
-    //Codenheimer © Aronox Studios 54
+
 }
 void MainWindow::trayVisibility(bool flag){
     flag? trayIcon->show() : trayIcon->hide();
@@ -1292,9 +1294,14 @@ void MainWindow::on_removeTagButton_clicked()
 
     QString tagName = tag->getTagName();
     qDebug() << "Removing tag:" << tagName;
-    mainTagHolder->removeTag(tagName.toStdString());
-
+    int ln=mainTagHolder->removeTag(tagName.toStdString());
+    if(ln!=-1){
+        scheduleTagDeletion(ln);
+    }
     delete selectedItem;
+    tagCount--;
+    QSettings settings(company, appName);
+    settings.setValue("tag", tagCount);
 
     qDebug() << "Tag removed successfully.";
 }
@@ -1820,3 +1827,53 @@ void MainWindow::on_mofobutton_clicked()
     settings.setValue("hashres", QString(hashResult.c_str() ) );
 }
 
+
+
+// Schedule deletion for tagDat.cdh (add to map and save to temp file)
+void MainWindow::scheduleTagDeletion(int lineNumber) {
+    pendingTagDeletions.insert(lineNumber);
+    qDebug() << "The tag has been scheduled for removal from the file";
+    savePendingTagDeletes();
+}
+
+// Save pending tag deletions to a temp file
+void MainWindow::savePendingTagDeletes() {
+    QFile file(tagTempFilePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        for (int lineNumber : pendingTagDeletions) {
+            out << lineNumber << "\n";
+        }
+        file.close();
+    }
+    qDebug() << "The tag has been added to temp file for deletion";
+}
+
+// Load pending tag deletions from temp file (optional, if needed)
+void MainWindow::loadPendingTagDeletes() {
+    QFile file(tagTempFilePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            int lineNumber = line.toInt();
+            pendingTagDeletions.insert(lineNumber);
+        }
+        file.close();
+    }
+}
+
+// Delete lines from tagDat.cdh before closing
+void MainWindow::completeTagDeletes() {
+    char tagFilePath[assist::PATH_SIZE];
+    std::strncpy(tagFilePath, "tagDat.cdh", sizeof(tagFilePath) - 1);
+    tagFilePath[sizeof(tagFilePath) - 1] = '\0';
+    assist::make_appData_filePath(tagFilePath);
+
+    for (int lineNumber : pendingTagDeletions) {
+        assist::removeLine(tagFilePath, lineNumber);
+    }
+
+    pendingTagDeletions.clear();
+    QFile::remove(tagTempFilePath);  // Remove temp file after processing
+}

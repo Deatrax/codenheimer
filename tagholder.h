@@ -36,12 +36,14 @@ class tagHolder{
             bool hasData=false;
             std::string tagName;
             std::string tagColor;
+            int lineNo;
         };
 
         std::unordered_map<std::string, std::vector<snippetBaseClass*>> storage;
         std::unordered_map<std::string,tag*>tagStorage;
         char tagFile[assist::PATH_SIZE]="tagDat.cdh";
         bool noTags;
+        int lineTrack=0;
 
 
     public:
@@ -75,7 +77,7 @@ class tagHolder{
 
         bool removeSnippet(snippetBaseClass* obj);
         void addTag(const std::string &tagName, const std::string &tagColor);
-        void removeTag(const std::string &tagName);
+        int removeTag(const std::string &tagName);
         bool snippetExistsInTag(const std::string &tag, snippetBaseClass *snippet);
         // END OF PUBLIC
 };

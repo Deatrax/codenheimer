@@ -23,6 +23,7 @@ tagHolder::tagHolder(int n){
         tg->hasData=true;
         tg->tagColor=tgColor;
         tg->tagName=tgName;
+        tg->lineNo=++lineTrack;
         tagStorage.emplace(tgName,tg);
     }
 }
@@ -97,6 +98,7 @@ void tagHolder::addTag(const std::string &tagName, const std::string &tagColor) 
     newTag->hasData = true;
     newTag->tagName = tagName;
     newTag->tagColor = tagColor;
+    newTag->lineNo = ++lineTrack;
 
     // Add to tagStorage using emplace
     tagStorage.emplace(tagName, newTag);
@@ -105,16 +107,19 @@ void tagHolder::addTag(const std::string &tagName, const std::string &tagColor) 
              << " with color: " << QString::fromStdString(tagColor);
 }
 
-void tagHolder::removeTag(const std::string &tagName)
+int tagHolder::removeTag(const std::string &tagName)
 {
+    int lineNum=-1;
     auto it = tagStorage.find(tagName);
     if (it != tagStorage.end()) {
+        lineNum=it->second->lineNo;
         delete it->second;  // Free memory
         tagStorage.erase(it);
         qDebug() << "Tag removed from storage:" << QString::fromStdString(tagName);
     } else {
         qDebug() << "Tag not found in storage:" << QString::fromStdString(tagName);
     }
+    return lineNum;
 }
 
 
