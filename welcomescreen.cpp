@@ -30,6 +30,8 @@ welcomeScreen::welcomeScreen(QWidget *parent)
 
 
     ui->welcomeTitle->setFont(CreteRoundFont);
+    CreteRoundFont.setPointSize(24);
+    ui->finalWords->setFont(CreteRoundFont);
     QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(ui->welcomeTitle);
     ui->welcomeTitle->setGraphicsEffect(effect);
     QPropertyAnimation* animation = new QPropertyAnimation(effect, "opacity");

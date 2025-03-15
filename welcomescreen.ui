@@ -57,7 +57,7 @@ QWidget {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>9</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -430,7 +430,7 @@ QPushButton:hover{
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>page 2</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -505,7 +505,7 @@ QPushButton:hover{
            <item>
             <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>page 3</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -596,7 +596,7 @@ QPushButton:hover{
            <item>
             <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>page 4</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -687,7 +687,7 @@ QPushButton:hover{
            <item>
             <widget class="QLabel" name="label_4">
              <property name="text">
-              <string>page 5</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -778,7 +778,7 @@ QPushButton:hover{
            <item>
             <widget class="QLabel" name="label_5">
              <property name="text">
-              <string>page 6</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -869,7 +869,7 @@ QPushButton:hover{
            <item>
             <widget class="QLabel" name="label_6">
              <property name="text">
-              <string>page 7</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -960,7 +960,7 @@ QPushButton:hover{
            <item>
             <widget class="QLabel" name="label_7">
              <property name="text">
-              <string>page 8</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -1051,7 +1051,7 @@ QPushButton:hover{
            <item>
             <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>page 9</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -1127,6 +1127,108 @@ QPushButton:hover{
              <property name="text">
               <string/>
              </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_10">
+       <layout class="QHBoxLayout" name="horizontalLayout_24">
+        <item>
+         <widget class="QWidget" name="widget_4" native="true">
+          <property name="maximumSize">
+           <size>
+            <width>600</width>
+            <height>382</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_12">
+           <item>
+            <widget class="QLabel" name="finalWords">
+             <property name="maximumSize">
+              <size>
+               <width>590</width>
+               <height>349</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Thank you for downlaoding our software
+One thing to note however is that this is still
+ in beta. Although all intended features for release
+ has been implemented, the stable-release version
+ is yet to be made. here is a major bug:
+
+
+ Using the tag filters in the browse page
+ causes the app to crash.
+ please refrain from using it until we release a patch</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="widget_5" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>40</height>
+              </size>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_25">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="maximumSize">
+                 <size>
+                  <width>70</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QWidget{
+	font-size:14px;
+	color: white;
+	border-radius:5px
+}
+QPushButton{
+	background:#2B3663;
+}
+
+QPushButton:hover{
+	background:rgb(86, 99, 152);
+}
+</string>
+                </property>
+                <property name="text">
+                 <string>Start App</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
