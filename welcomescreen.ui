@@ -57,7 +57,7 @@ QWidget {
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>9</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -1168,7 +1168,9 @@ One thing to note however is that this is still
 
 
  Please stay tuned to the gtithub page
-to get the news of latest updates and bugfixes.</string>
+to get the news of latest updates and bugfixes. 
+You can replay this walkthrough anytime
+from the settings.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>

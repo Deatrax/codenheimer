@@ -21,6 +21,7 @@ public:
     explicit welcomeScreen(QWidget *parent = nullptr);
     ~welcomeScreen();
 
+    void replayMode();
 private slots:
     void on_startButton_clicked();
 
@@ -68,6 +69,7 @@ private:
     QFont CreteRoundFont;
     void applyFontToChildren(QWidget *parent, const QFont &font);
     void applyNavigationButtonIcons();
+    bool replay=false;
 };
 
 #endif // WELCOMESCREEN_H
