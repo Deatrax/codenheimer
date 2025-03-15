@@ -368,6 +368,17 @@ bool cryptographicAgent::authenticate(){
 
     return ok;
 }
+
+
+bool cryptographicAgent::authenticate(QString pass){
+    bool ok=false;
+    if (hashPassword(pass).toStdString() == hashResult) {
+        ok = true;
+    }
+
+    return ok;
+}
+
 void cryptographicAgent::on_passwordField_returnPressed()
 {
     on_cofirmButton_clicked();
@@ -383,3 +394,29 @@ void cryptographicAgent::tellUsename(std::string str){
     usrnam_salt=str;
 }
 
+
+int cryptographicAgent::changePassword(const QString& oldPassword, const QString& newPassword)
+{
+    // Verify if the old password is correct
+    if (hashPassword(oldPassword).toStdString() != hashResult) {
+        qWarning() << "Old password is incorrect.";
+        return -1; // Old password doesn't match, return false
+    }
+
+    // Verify that new password is not empty
+    if (newPassword.isEmpty()) {
+        qWarning() << "New password cannot be empty.";
+        return -2; // Return false if the new password is empty
+    }
+
+    qDebug()<<"the previous hash is: "<<hashResult<<"\nand the new hash is: "<<hashPassword(newPassword).toStdString();
+    // Store the new password (hash it for security)
+    hashResult = hashPassword(newPassword).toStdString();
+
+    secureErase(password, sizeof(password));
+    storePassword(newPassword);
+
+    // Indicate success
+    qDebug() << "Password changed successfully.";
+    return 1; // Return true if the password change is successful
+}

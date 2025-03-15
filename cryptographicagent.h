@@ -38,6 +38,9 @@ public:
     bool authenticate();
     void closeEvent(QCloseEvent *event) override;
     void tellUsename(std::string str);
+    bool authenticate(QString str);
+    void storePassword(QString pass);
+    int changePassword(const QString &oldPassword, const QString &newPassword);
 private slots:
     void on_cofirmButton_clicked();
 
@@ -59,7 +62,6 @@ private:
     void showUI(int mode);
 
     char password[256];
-    void storePassword(QString pass);
     void secureErase(char *buffer, size_t size);
     bool hasPassword;
     std::string hashResult;

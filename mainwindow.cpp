@@ -510,7 +510,7 @@ void MainWindow::sandBox(){
             string ifTags,name,filename,lang,tag;
             std::vector<std::string> tags;
             std::stringstream ss(lineStore);
-            std::string lockStat;
+            bool lockStat;
             getline(ss,name,',');
             getline(ss,filename,',');
             getline(ss,lang,',');
@@ -527,6 +527,7 @@ void MainWindow::sandBox(){
             size_t lastDot = filename.find_last_of(".");
             std::string nameWithoutExt = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
             filenameStorage[nameWithoutExt] = obj;
+            if(obj->isLocked()) lockedStorage[nameWithoutExt]=obj;
             mainLangHolder->insert(obj);
             if(ifTags=="tags")mainTagHolder->insert(obj);
             // deprecated mainStorage.push_back(obj);
@@ -544,6 +545,7 @@ void MainWindow::sandBox(){
             std::cout << std::endl;
             lineNum++;
         }
+        qDebug()<<"read data complete.\ntotal snippets in filenamestorage: "<<filenameStorage.size()<<"\nTotal snippets in lockedstorage: "<<lockedStorage.size();
     }
 
     snippetBaseClass* MainWindow::generateSnippetObject(std::string lang){
@@ -589,11 +591,11 @@ void MainWindow::sandBox(){
     }
 
     void MainWindow::copyToClipboard(const QString& text){
-        
+
         //qDebug("copy to clipboard called");
-        clipboard->setText(text); 
+        clipboard->setText(text);
         if(QApplication::clipboard()->text() == text){
-            ui->statusBar->showMessage("Copied to clipboard!", 2500); 
+            ui->statusBar->showMessage("Copied to clipboard!", 2500);
         } else {
             warnUser("Text copy to clipboard failed! Please contact devs to report bug");
         }
@@ -775,7 +777,7 @@ void MainWindow::sandBox(){
             }
         }
 
-        
+
         //remove from tag holder
         if(mainTagHolder->removeSnippet(obj)) qDebug()<<"removed from tagHolder";
         else qDebug()<<"Snippet failed to remove from or didn't exist in tag holder";
@@ -1349,16 +1351,6 @@ void MainWindow::on_testDecryptButton_clicked()
 
 QString MainWindow::decryptText(QString fileName)
 {
-    // QString password = "password" /*ui->OnlyFilePassword->text()*/;
-    // if (password.isEmpty()) {
-    //     QMessageBox::warning(this, "Error", "Please enter a password.");
-    //     return;
-    // }
-    // QString filePath = QFileDialog::getOpenFileName(this, "Select Encrypted File", QDir::homePath());
-    // if (filePath.isEmpty()) {
-    //     return; // User canceled the file dialog
-    // }
-
     return Julius->decryptFromFile( fileName );
 }
 
@@ -1400,14 +1392,14 @@ void MainWindow::savePendingDeletes() {
     qDebug()<<"the snippet has been added to temp file for deletetion";
 }
 
-// 
+//
 /**
  * @brief Load pending deletions from temp file (on startup)
- * this is not being used right now because the are more bounds 
- * checking needed to be done. like for example, 
+ * this is not being used right now because the are more bounds
+ * checking needed to be done. like for example,
  *  when loading, the loading part needs to be done before the actual data loading
- * also when the data load will happpend the ones scheduled for deletion will also 
- * appear. this is not intended behaviour. in which case a crash detection mechanism needs to be 
+ * also when the data load will happpend the ones scheduled for deletion will also
+ * appear. this is not intended behaviour. in which case a crash detection mechanism needs to be
  * in place that will check for undeleted snippets, meaning thea application crashed last time a\
  * and then will detelte them, inform the user and then restart the application
  */
@@ -1882,5 +1874,62 @@ void MainWindow::completeTagDeletes() {
 void MainWindow::on_userUpdateButton_clicked()
 {
 
+    if( !Julius->authenticate(ui->oldPasswordEdit->text()) ){
+        warnUser("Please enter correct old password!!");
+        return;
+    }
+
+    if(ui->newPasswordEdit->text().size() < 8){
+        warnUser("Please use password with at least 8 charecters");
+        return;
+    }
+
+    if( !ui->usernameEdit->text().toStdString().empty() && ui->usernameEdit->text().toStdString() != username){
+        username= ui->usernameEdit->text().toStdString();
+        ui->usernameAndMainSettingsButton->setText( QString::fromStdString(username) );
+    }
+
+
+    Julius->storePassword( ui->oldPasswordEdit->text() );
+
+    std::vector<std::string>snips;
+    for (auto& it : lockedStorage) {
+        snips.push_back( it.second->getSnippet() );
+    }
+
+    Julius->tellUsename(username);
+    int result = Julius->changePassword(ui->oldPasswordEdit->text(), ui->newPasswordEdit->text());
+    if (result == -1) {
+        warnUser("Old password is incorrect.");
+        return;
+    } else if (result == -2) {
+        warnUser("New password cannot be empty.");
+        return;
+    } else if (result == 1) {
+        qDebug() << "Password changed successfully.";
+    } else {
+        warnUser("An unknown error occurred while changing the password.");
+        return;
+    }
+
+    auto snipit = snips.begin();
+    for (auto& it : lockedStorage) {
+        it.second->saveSnippetToFile( *snipit );
+        snipit++;
+    }
+
+    QString currentHash = QString::fromStdString(Julius->getHash());
+    hashResult=currentHash.toStdString();
+    QSettings settings(company, appName);
+    settings.setValue("hashres", QString(hashResult.c_str() ));
+                      settings.setValue("username", QString::fromStdString(username) );
+
+
+}
+
+
+void MainWindow::on_newPasswordEdit_returnPressed()
+{
+    on_userUpdateButton_clicked();
 }
 
