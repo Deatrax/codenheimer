@@ -211,6 +211,11 @@ void welcomeScreen::on_userUpdateButton_clicked()
     ui->stackedWidget->setCurrentIndex(1);
 }
 
+void welcomeScreen::replayMode(){
+    replay=true;
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
 
 void welcomeScreen::on_page2nxt_clicked() {
     ui->stackedWidget->setCurrentIndex(2);
@@ -274,6 +279,9 @@ void welcomeScreen::on_page9prev_clicked() {
 
 void welcomeScreen::on_finishWelcomeButton_clicked()
 {
+    if(!replay)
     QApplication::exit(123);
+    else
+        this->close();
 }
 

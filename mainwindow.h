@@ -185,6 +185,8 @@ public:
 
     void on_filterSnippetEditButton_clicked();
 
+    void on_replayWalkthroughButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started

@@ -12,6 +12,7 @@
 #include "predefines.h"
 #include "editorwidget.h"
 #include "searchsyetem.h"
+#include "welcomescreen.h"
 #include <QDir>
 #include <QSettings>
 
@@ -2052,5 +2053,14 @@ void MainWindow::on_filterSnippetEditButton_clicked()
     } else {
         qDebug() << "No item selected.";
     }
+}
+
+
+void MainWindow::on_replayWalkthroughButton_clicked()
+{
+    welcomeScreen *wel = new welcomeScreen;
+    wel->setAttribute(Qt::WA_DeleteOnClose);
+    wel->replayMode();
+    wel->show();
 }
 
