@@ -52,13 +52,62 @@ welcomeScreen::welcomeScreen(QWidget *parent)
     animation2->start(QAbstractAnimation::DeleteWhenStopped);
 
     ui->page1innerStack->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(0);
     applyFontToChildren(ui->page1InnerStack_page2, CutiveMonoFont);
+
+    applyNavigationButtonIcons();
+    for (int i = 2; i <= 9; ++i) {
+        QLabel* label = nullptr;
+
+        if (i == 2) {
+            label = findChild<QLabel*>("label");  // Page 2 has "label" instead of "label_1"
+        } else {
+            label = findChild<QLabel*>(QString("label_%1").arg(i - 1));
+        }
+
+        if (label) {
+            QString imagePath = QString(":/images/walkthrough/walkthrough%1.png").arg(i - 1);
+            QPixmap pixmap(imagePath);
+            int scaledWidth = 2184 / 3;  // Reduce width by a factor of 2
+            int scaledHeight = 1500 / 3; // Reduce height by a factor of 2
+            label->setPixmap(pixmap.scaled(scaledWidth, scaledHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            label->setScaledContents(true);
+        }
+    }
 }
 
 welcomeScreen::~welcomeScreen()
 {
     delete ui;
 }
+
+
+void welcomeScreen::applyNavigationButtonIcons() {
+    QIcon rightArrow(":/images/rightCircularArrow.svg");
+    QIcon leftArrow(":/images/leftCircularArrow.svg");
+    QSize iconSize(36, 36);
+
+    QList<QPushButton*> nextButtons = {
+        ui->page2nxt, ui->page3nxt, ui->page4nxt, ui->page5nxt,
+        ui->page6nxt, ui->page7nxt, ui->page8nxt, ui->page9nxt
+    };
+
+    QList<QPushButton*> prevButtons = {
+        ui->page3prev, ui->page4prev, ui->page5prev, ui->page6prev,
+        ui->page7prev, ui->page8prev, ui->page9prev
+    };
+
+    for (auto button : nextButtons) {
+        button->setIcon(rightArrow);
+        button->setIconSize(iconSize);
+    }
+
+    for (auto button : prevButtons) {
+        button->setIcon(leftArrow);
+        button->setIconSize(iconSize);
+    }
+}
+
 
 void welcomeScreen::on_startButton_clicked()
 {
@@ -133,19 +182,82 @@ void welcomeScreen::on_showPasswordButton_released()
 
 void welcomeScreen::on_userUpdateButton_clicked()
 {
-    QString usr= ui->usernameEdit->text();
-    QString hashres=QString(QCryptographicHash::hash(ui->newPasswordEdit->text().toUtf8(), QCryptographicHash::Sha256).toHex()) ;
+    // QString usr= ui->usernameEdit->text();
+    // QString hashres=QString(QCryptographicHash::hash(ui->newPasswordEdit->text().toUtf8(), QCryptographicHash::Sha256).toHex()) ;
 
-    QString company="AronoxStudios";
-    QString appName="Codenheimer";
-    QSettings settings(company, appName);
-    settings.setValue("username", usr);
-    settings.setValue("hashres", hashres);
-    settings.setValue("vault", "default");
-    settings.setValue("tag",  0);
-    settings.setValue("type", 0);
-    settings.setValue("showPerPage", 10);
-    settings.setValue("loginRun",false);
-    settings.setValue("trayIcon",false);
+    // QString company="AronoxStudios";
+    // QString appName="Codenheimer";
+    // QSettings settings(company, appName);
+    // settings.setValue("username", usr);
+    // settings.setValue("hashres", hashres);
+    // settings.setValue("vault", "default");
+    // settings.setValue("tag",  0);
+    // settings.setValue("type", 0);
+    // settings.setValue("showPerPage", 10);
+    // settings.setValue("loginRun",false);
+    // settings.setValue("trayIcon",false);
+
+
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
+
+void welcomeScreen::on_page2nxt_clicked() {
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void welcomeScreen::on_page3nxt_clicked() {
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
+void welcomeScreen::on_page3prev_clicked() {
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void welcomeScreen::on_page4nxt_clicked() {
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
+void welcomeScreen::on_page4prev_clicked() {
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void welcomeScreen::on_page5nxt_clicked() {
+    ui->stackedWidget->setCurrentIndex(5);
+}
+
+void welcomeScreen::on_page5prev_clicked() {
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
+void welcomeScreen::on_page6nxt_clicked() {
+    ui->stackedWidget->setCurrentIndex(6);
+}
+
+void welcomeScreen::on_page6prev_clicked() {
+    ui->stackedWidget->setCurrentIndex(4);
+}
+
+void welcomeScreen::on_page7nxt_clicked() {
+    ui->stackedWidget->setCurrentIndex(7);
+}
+
+void welcomeScreen::on_page7prev_clicked() {
+    ui->stackedWidget->setCurrentIndex(5);
+}
+
+void welcomeScreen::on_page8nxt_clicked() {
+    ui->stackedWidget->setCurrentIndex(8);
+}
+
+void welcomeScreen::on_page8prev_clicked() {
+    ui->stackedWidget->setCurrentIndex(6);
+}
+
+void welcomeScreen::on_page9nxt_clicked() {
+    ui->stackedWidget->setCurrentIndex(9);
+}
+
+void welcomeScreen::on_page9prev_clicked() {
+    ui->stackedWidget->setCurrentIndex(7);
+}
