@@ -1823,7 +1823,7 @@ void MainWindow::removeFilter(std::string text, int type){
         langFilters.erase( std::find(langFilters.begin() , langFilters.end() , text) );
     }
     else if (type == 2){
-        tagFilters.erase( std::find(langFilters.begin() , langFilters.end() , text) );;
+        tagFilters.erase( std::find(tagFilters.begin() , tagFilters.end() , text) );;
     }
 
     updateBrowseView();
