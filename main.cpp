@@ -15,10 +15,12 @@ int main(int argc, char *argv[])
     }
     if(ret==1){
         //launch onboarding flow
+        welcomeScreen wel;
+        wel.show();
+        return a.exec();
     }
-    // MainWindow w;
-    // w.show();
-    welcomeScreen wel;
-    wel.show();
+    MainWindow w;
+    w.show();
+
     return a.exec();
 }

@@ -19,6 +19,7 @@ public:
 
     void assignSnippet(snippetBaseClass *snippet);
     snippetBaseClass *getSnippetObj();
+    QString getNam();
 protected:
     void setTags();
     void addCopyButton();

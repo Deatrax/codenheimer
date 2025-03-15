@@ -967,8 +967,18 @@ void MainWindow::on_EditorsDefaultTabButton_clicked()
 
 void MainWindow::on_downarrow_clicked()
 {
-    sandBox();
-    ui->maincontentsStack->setCurrentIndex(5);
+    if(devmode){
+        sandBox();
+        ui->maincontentsStack->setCurrentIndex(5);
+    }
+    else{
+        setMainIndex(3);
+        ui->browsePageStack->setCurrentIndex(1);
+        updateBrowseView();
+    }
+
+
+
 }
 
 
@@ -1958,5 +1968,89 @@ void MainWindow::on_showPasswordButton_released()
 {
     ui->oldPasswordEdit->setEchoMode( QLineEdit::Password);
     ui->newPasswordEdit->setEchoMode( QLineEdit::Password);
+}
+
+
+void MainWindow::on_centralSearchBoxLE_textChanged(const QString &arg1)
+{
+    ui->centralSearchBoxLE->clear();
+    setMainIndex(1);
+}
+
+
+#include <QInputDialog>
+#include <QCryptographicHash>
+#include <QMessageBox>
+
+void MainWindow::on_searchBoxLineEdit_returnPressed() {
+    QString str = ui->searchBoxLineEdit->text();
+
+    if (str == "enable dev mode") {
+        bool ok;
+        QString password = QInputDialog::getText(this, "Developer Mode", "Enter Password:", QLineEdit::Password, "", &ok);
+
+        if (ok && !password.isEmpty()) {
+            // Hash the entered password
+            QByteArray hashedPassword = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+            // Compare with stored hashed password
+            const QByteArray storedHash = "61c630b89895a851ce188d03bc761f518a74adfe0740c4e7a6b8c1d72898af1f";  // Replace with actual hash
+
+            if (hashedPassword == storedHash) {
+                devmode = true;
+                QMessageBox::information(this, "Success", "Developer mode enabled!");
+            } else {
+                QMessageBox::warning(this, "Error", "Incorrect password.");
+            }
+        }
+    }
+    else if(str == "disable dev mode"){
+        devmode=false;
+        QMessageBox::information(this, "Success", "Developer mode disabled!");
+    }
+}
+
+
+void MainWindow::on_filterSnippetSettingsButton_clicked()
+{
+    snippetSettingsPopup* pop=new snippetSettingsPopup(this);
+    QListWidgetItem *selectedItem = ui->browseMainViewArea->currentItem();
+    if (selectedItem) {
+        QVariant data = selectedItem->data(Qt::UserRole);
+        snippetPreviewBox *previewBox = data.value<snippetPreviewBox*>();
+
+        if (previewBox) {
+            // Do something with previewBox
+            qDebug() << "Snippet Preview Box retrieved!";
+            pop->assign(previewBox->getSnippetObj());
+            pop->show();
+        } else {
+            qDebug() << "No snippetPreviewBox associated with this item.";
+            delete pop;
+        }
+    } else {
+        qDebug() << "No item selected.";
+        delete pop;
+    }
+}
+
+
+void MainWindow::on_filterSnippetEditButton_clicked()
+{
+    QListWidgetItem *selectedItem = ui->browseMainViewArea->currentItem();
+    if (selectedItem) {
+        QVariant data = selectedItem->data(Qt::UserRole);
+        snippetPreviewBox *previewBox = data.value<snippetPreviewBox*>();
+
+        if (previewBox) {
+            // Do something with previewBox
+            auto nam =previewBox->getNam();
+            openSnippetInEditor(previewBox->getSnippetObj() , nam  , true);
+        } else {
+            qDebug() << "No snippetPreviewBox associated with this item.";
+        }
+    } else {
+        qDebug() << "No item selected.";
+    }
 }
 

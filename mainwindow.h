@@ -176,6 +176,14 @@ public:
 
     void on_showPasswordButton_pressed();
     void on_showPasswordButton_released();
+    void on_centralSearchBoxLE_textChanged(const QString &arg1);
+
+    void on_searchBoxLineEdit_returnPressed();
+
+    void on_filterSnippetSettingsButton_clicked();
+
+    void on_filterSnippetEditButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -242,6 +250,7 @@ private:
     bool loginEnabled;
     int totalCount;
     int showPerPage;
+    bool devmode=false;
 
     void prepareBrowsePage();
     void applyFontToChildren(QWidget *parent, const QFont &font);

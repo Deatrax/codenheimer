@@ -21,7 +21,6 @@ void filterWidget::activated(){
     if( !ui->checkBox->isChecked())
     {
         ui->checkBox->setCheckState(Qt::Checked);
-        on_checkBox_stateChanged(1);
     }
 }
 
