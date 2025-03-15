@@ -74,6 +74,7 @@ private:
 signals:
     void passwordSet();
     void windowClosed();
+    void confirmButtonClicked();
 
 };
 

@@ -300,6 +300,7 @@ void cryptographicAgent::showUI(int mode){
 
 void cryptographicAgent::on_cofirmButton_clicked()
 {
+    emit confirmButtonClicked();
     QString pass=ui->passwordField->text();
     if( !ui->passwordConfirmField->isHidden() ){
         if(ui->passwordField->text() != ui->passwordConfirmField->text() ){
@@ -348,7 +349,8 @@ bool cryptographicAgent::authenticate(){
     // Create an event loop to halt execution
     QEventLoop loop;
     // Connect a signal (e.g., button clicked) to exit the loop when the user provides input
-    connect(ui->cofirmButton, &QPushButton::clicked, &loop, &QEventLoop::quit);
+    // connect(ui->cofirmButton, &QPushButton::clicked, &loop, &QEventLoop::quit);
+    connect(this, &cryptographicAgent::confirmButtonClicked, &loop, &QEventLoop::quit);
     // Connect window close to exit loop
     connect(this, &cryptographicAgent::windowClosed, &loop, &QEventLoop::quit);// Run the event loop (halts execution here until quit() is called)
     loop.exec();
