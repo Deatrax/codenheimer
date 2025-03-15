@@ -1,8 +1,10 @@
 #include "mainwindow.h"
 #include "browselangwidget.h"
 #include "browsetagwidget.h"
+#include "qgraphicseffect.h"
 #include "qmenu.h"
 #include "qpainter.h"
+#include "qpropertyanimation.h"
 #include "snippetpreviewbox.h"
 #include "snippetsettingspopup.h"
 #include "tagadder.h"
@@ -146,6 +148,7 @@ void MainWindow::sandBox(){
         searchObj=new searchSystem;
         Julius= new cryptographicAgent();
         Julius->setHash(hashResult);
+        Julius->tellUsename(username);
         readData();
 
 
@@ -172,13 +175,13 @@ void MainWindow::sandBox(){
     }
 
 
-    void MainWindow::saveToSettings(const QString &username, const QString &hashResult, const QString &vault, int tag, int type) {
+    void MainWindow::saveToSettings(const QString &username, const QString &hs, const QString &vault, int tag, int type) {
         // Step 1: Create or open the QSettings object
         QSettings settings(company, appName);
 
         // Step 2: Write data to settings
         settings.setValue("username", username);
-        settings.setValue("hashres", hashResult);
+        settings.setValue("hashres", hs);
         settings.setValue("vault", vault);
         settings.setValue("tag", tag);
         settings.setValue("type", type);
@@ -448,30 +451,35 @@ void MainWindow::sandBox(){
         ui->snLSettingTitle->setFont(CreteRoundFont);
         ui->fileSettingsTitle->setFont(CreteRoundFont);
         CreteRoundFont.setPointSize(12);
+        ui->showPasswordButton->setFont(CreteRoundFont);
         ui->usernameTitle->setFont(CreteRoundFont);
         ui->oldPasswordTitle->setFont(CreteRoundFont);
         ui->newPasswordTitle->setFont(CreteRoundFont);
+        ui->userUpdateButton->setFont(CreteRoundFont);
         ui->usernameEdit->setFont(CreteRoundFont);
         ui->oldPasswordEdit->setFont(CreteRoundFont);
         ui->newPasswordEdit->setFont(CreteRoundFont);
         ui->vaultLocationTitle->setFont(CreteRoundFont);
         ui->vaultLocationEdit->setFont(CreteRoundFont);
         ui->sysTrayCheckBox->setCheckState( trayEnabled ?  Qt::Checked  : Qt::Unchecked);
-         ui->OpenAtLoginCheckBox->setCheckState( loginEnabled ?  Qt::Checked  : Qt::Unchecked);
+        ui->OpenAtLoginCheckBox->setCheckState( loginEnabled ?  Qt::Checked  : Qt::Unchecked);
+        ui->usernameEdit->setPlaceholderText(QString::fromStdString(username));
+        ui->tbaLabe->setFont(CreteRoundFont);
 
     }
 
 
     void MainWindow::readUconfig(){
 
-        QSettings settings(company, appName);
-        QString u=settings.value("username","default_user").toString();
-        QString hs=settings.value("hashres","default_val").toString();
-        QString va=settings.value("vault","default").toString();
-        int ty=settings.value("type",0).toInt();
-        int tg=settings.value("tag",0).toInt();
-        bool login =settings.value("loginRun",false).toBool();
-        bool tray =  settings.value("trayIcon",false).toBool();
+        QSettings   settings(company, appName);
+        QString u   =settings.value("username","default_user").toString();
+        QString hs  =settings.value("hashres","default_val").toString();
+        QString va  =settings.value("vault","default").toString();
+        int ty      =settings.value("type",0).toInt();
+        int tg      =settings.value("tag",0).toInt();
+        bool login  =settings.value("loginRun",false).toBool();
+        bool tray   =settings.value("trayIcon",false).toBool();
+        int perpage =settings.value("showPerPage", 10).toInt();
 
         username=u.toStdString();
         hashResult=hs.toStdString();
@@ -480,6 +488,7 @@ void MainWindow::sandBox(){
         additionalTypeCount=ty;
         trayEnabled= tray;
         loginEnabled= login;
+        showPerPage=perpage;
 
 
 
@@ -509,7 +518,7 @@ void MainWindow::sandBox(){
             string ifTags,name,filename,lang,tag;
             std::vector<std::string> tags;
             std::stringstream ss(lineStore);
-            std::string lockStat;
+            bool lockStat;
             getline(ss,name,',');
             getline(ss,filename,',');
             getline(ss,lang,',');
@@ -526,6 +535,7 @@ void MainWindow::sandBox(){
             size_t lastDot = filename.find_last_of(".");
             std::string nameWithoutExt = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
             filenameStorage[nameWithoutExt] = obj;
+            if(obj->isLocked()) lockedStorage[nameWithoutExt]=obj;
             mainLangHolder->insert(obj);
             if(ifTags=="tags")mainTagHolder->insert(obj);
             // deprecated mainStorage.push_back(obj);
@@ -543,6 +553,9 @@ void MainWindow::sandBox(){
             std::cout << std::endl;
             lineNum++;
         }
+        qDebug()<<"read data complete.\ntotal snippets in filenamestorage: "<<filenameStorage.size()<<"\nTotal snippets in lockedstorage: "<<lockedStorage.size();
+        totalCount =  filenameStorage.size();
+        searchObj->tellTotalCount(totalCount);
     }
 
     snippetBaseClass* MainWindow::generateSnippetObject(std::string lang){
@@ -588,11 +601,11 @@ void MainWindow::sandBox(){
     }
 
     void MainWindow::copyToClipboard(const QString& text){
-        
+
         //qDebug("copy to clipboard called");
-        clipboard->setText(text); 
+        clipboard->setText(text);
         if(QApplication::clipboard()->text() == text){
-            ui->statusBar->showMessage("Copied to clipboard!", 2500); 
+            ui->statusBar->showMessage("Copied to clipboard!", 2500);
         } else {
             warnUser("Text copy to clipboard failed! Please contact devs to report bug");
         }
@@ -626,8 +639,12 @@ void MainWindow::sandBox(){
         obj->innit( name.toStdString() , filename , lineNum , lang.toStdString() , std::vector<std::string>() ,this);
         mainLangHolder->insert(obj);
         filenameStorage[filenameWithoutExt]=obj;
+
         //Insert into search here
         searchObj->insert(name.toStdString(),obj);
+        totalCount++;
+        searchObj->tellTotalCount(totalCount);
+
         //=====updating the vault file
         std::string vaultDat=name.toStdString() + "," + filename + "," + lang.toStdString() + "," + "noTags";
         qDebug()<<"gonna write to vault file: "<<vaultDat;
@@ -774,7 +791,7 @@ void MainWindow::sandBox(){
             }
         }
 
-        
+
         //remove from tag holder
         if(mainTagHolder->removeSnippet(obj)) qDebug()<<"removed from tagHolder";
         else qDebug()<<"Snippet failed to remove from or didn't exist in tag holder";
@@ -802,7 +819,8 @@ void MainWindow::sandBox(){
 
         //delete the snippet itself that is call it's destructor
         delete obj;
-
+        totalCount--;
+        searchObj->tellTotalCount(totalCount);
         return true;
     }
 
@@ -949,8 +967,18 @@ void MainWindow::on_EditorsDefaultTabButton_clicked()
 
 void MainWindow::on_downarrow_clicked()
 {
-    sandBox();
-    ui->maincontentsStack->setCurrentIndex(5);
+    if(devmode){
+        sandBox();
+        ui->maincontentsStack->setCurrentIndex(5);
+    }
+    else{
+        setMainIndex(3);
+        ui->browsePageStack->setCurrentIndex(1);
+        updateBrowseView();
+    }
+
+
+
 }
 
 
@@ -1035,6 +1063,8 @@ void MainWindow::addTagtoList()//tagViewer *tag)
     ui->tagListWidget->clear();
 
     qDebug() <<"total tags found" <<getTagList().size();
+    std::string str=std::to_string(static_cast<int> (getTagList().size()));
+    ui->tagCountViewer->setText( QString(str.c_str()));
 
     for(auto &tname: getTagList())
     {
@@ -1161,7 +1191,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Systray"));
         msgBox.setText(tr("The program will keep running in the " "system tray. To terminate the program, " "choose <b>Quit</b> in the context menu " "of the system tray entry."));
-        //msgBox.setStyleSheet(messageboxStyle);
         msgBox.exec();
         hide();
         event->ignore();
@@ -1169,8 +1198,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     trayIcon->hide();
     completeDeletes();
+    completeTagDeletes();
     event->accept();
-    //Codenheimer © Aronox Studios 54
+
 }
 void MainWindow::trayVisibility(bool flag){
     flag? trayIcon->show() : trayIcon->hide();
@@ -1292,9 +1322,14 @@ void MainWindow::on_removeTagButton_clicked()
 
     QString tagName = tag->getTagName();
     qDebug() << "Removing tag:" << tagName;
-    mainTagHolder->removeTag(tagName.toStdString());
-
+    int ln=mainTagHolder->removeTag(tagName.toStdString());
+    if(ln!=-1){
+        scheduleTagDeletion(ln);
+    }
     delete selectedItem;
+    tagCount--;
+    QSettings settings(company, appName);
+    settings.setValue("tag", tagCount);
 
     qDebug() << "Tag removed successfully.";
 }
@@ -1341,16 +1376,6 @@ void MainWindow::on_testDecryptButton_clicked()
 
 QString MainWindow::decryptText(QString fileName)
 {
-    // QString password = "password" /*ui->OnlyFilePassword->text()*/;
-    // if (password.isEmpty()) {
-    //     QMessageBox::warning(this, "Error", "Please enter a password.");
-    //     return;
-    // }
-    // QString filePath = QFileDialog::getOpenFileName(this, "Select Encrypted File", QDir::homePath());
-    // if (filePath.isEmpty()) {
-    //     return; // User canceled the file dialog
-    // }
-
     return Julius->decryptFromFile( fileName );
 }
 
@@ -1392,14 +1417,14 @@ void MainWindow::savePendingDeletes() {
     qDebug()<<"the snippet has been added to temp file for deletetion";
 }
 
-// 
+//
 /**
  * @brief Load pending deletions from temp file (on startup)
- * this is not being used right now because the are more bounds 
- * checking needed to be done. like for example, 
+ * this is not being used right now because the are more bounds
+ * checking needed to be done. like for example,
  *  when loading, the loading part needs to be done before the actual data loading
- * also when the data load will happpend the ones scheduled for deletion will also 
- * appear. this is not intended behaviour. in which case a crash detection mechanism needs to be 
+ * also when the data load will happpend the ones scheduled for deletion will also
+ * appear. this is not intended behaviour. in which case a crash detection mechanism needs to be
  * in place that will check for undeleted snippets, meaning thea application crashed last time a\
  * and then will detelte them, inform the user and then restart the application
  */
@@ -1537,7 +1562,7 @@ void MainWindow::prepareBrowsePage(){
     }
     ui->tagAreaBox->setLayout(browseTagFL);
     qDebug()<<"==============================================tag add complete";
-
+    ui->perPageSee->setValue(showPerPage);
     ui->browsePageStack->setCurrentIndex(0);
 }
 
@@ -1664,39 +1689,7 @@ void MainWindow::updateBrowseView(){
 
 void MainWindow::updateBrowseView(bool flag){
 
-    // // ui->browseMainViewArea->clear();
-    // ui->browseMainViewArea->clear();
 
-    // int limit=ui->perPageSee->value();
-
-    // std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->pagedSearch(limit, flag);
-
-
-    // //std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix("");
-    // for (auto& itr : searchRet){
-    //     for (auto& itr2 : itr.second) {
-    //         // Create the custom widget
-    //         snippetPreviewBox* pb = new snippetPreviewBox(this, this);
-    //         pb->assignSnippet(itr2);
-
-    //         // Create a QListWidgetItem to hold the custom widget
-    //         QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
-
-    //         // Set the size of the item to match the widget
-    //         item->setSizeHint(pb->sizeHint());
-
-    //         // Store snippetPreviewBox pointer inside Qt::UserRole
-    //         item->setData(Qt::UserRole, QVariant::fromValue(pb));
-
-    //         // Add the item to the list widget
-    //         ui->browseMainViewArea->addItem(item);
-
-    //         // Set the custom widget for this item (for display only)
-    //         ui->browseMainViewArea->setItemWidget(item, pb);
-    //     }
-    // }
-
-    // ui->browseMainViewArea->clear();
     ui->browseMainViewArea->clear();
 
     int limit=ui->perPageSee->value();
@@ -1713,59 +1706,89 @@ void MainWindow::updateBrowseView(bool flag){
         finalList= getFilteredSnippets(langFilters, tagFilters, snippetVector, mainLangHolder, mainTagHolder);
     else
         finalList= snippetVector;
-    // //std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix("");
-    // for (auto& itr : searchRet){
-    //         for (auto& itr2 : itr.second) {
-    //             // Create the custom widget
-    //             snippetPreviewBox* pb = new snippetPreviewBox(this, this);
-    //             pb->assignSnippet(itr2);
-
-    //             // Create a QListWidgetItem to hold the custom widget
-    //             QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
-
-    //             // Set the size of the item to match the widget
-    //             item->setSizeHint(pb->sizeHint());
-
-    //             // Store snippetPreviewBox pointer inside Qt::UserRole
-    //             item->setData(Qt::UserRole, QVariant::fromValue(pb));
-
-    //             // Add the item to the list widget
-    //             ui->browseMainViewArea->addItem(item);
-
-    //             // Set the custom widget for this item (for display only)
-    //             ui->browseMainViewArea->setItemWidget(item, pb);
-    //         }
-    //     }
 
 
+    int additionalItemsNeeded = limit - finalList.size();
+
+    // If there are fewer results than the limit, fetch additional items
+    if (finalList.size()!=0 && additionalItemsNeeded > 0) {
+        // Run search again with the remaining number of items needed
+        std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> additionalSearchRet = searchObj->pagedSearch(additionalItemsNeeded, flag);
+        std::vector<snippetBaseClass*> additionalSnippetVector;
+
+        for (const auto& pair : additionalSearchRet) {
+            additionalSnippetVector.insert(additionalSnippetVector.end(), pair.second.begin(), pair.second.end());
+        }
+
+        // Add the additional snippets to the final list
+        for (const auto& snippet : additionalSnippetVector) {
+            finalList.push_back(snippet);
+        }
+
+        // Filter the final list if filters are applied
+        if (langFilters.size() > 0 || tagFilters.size() > 0) {
+            finalList = getFilteredSnippets(langFilters, tagFilters, finalList, mainLangHolder, mainTagHolder);
+        }
+    }
 
     for (auto& itr2 : finalList) {
-        // Create the custom widget
         snippetPreviewBox* pb = new snippetPreviewBox(this, this);
         pb->assignSnippet(itr2);
 
-        // Create a QListWidgetItem to hold the custom widget
         QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
 
-        // Set the size of the item to match the widget
         item->setSizeHint(pb->sizeHint());
 
-        // Store snippetPreviewBox pointer inside Qt::UserRole
         item->setData(Qt::UserRole, QVariant::fromValue(pb));
 
-        // Add the item to the list widget
         ui->browseMainViewArea->addItem(item);
 
-        // Set the custom widget for this item (for display only)
         ui->browseMainViewArea->setItemWidget(item, pb);
     }
 
 
+
+
+    if(finalList.size() == 0){
+        QString str=ui->browseViewTitle->text();
+        QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(ui->browseViewTitle);
+        ui->browseViewTitle->setGraphicsEffect(effect);
+
+        QPropertyAnimation* animation = new QPropertyAnimation(effect, "opacity");
+        animation->setDuration(1000); // Duration in milliseconds
+        animation->setLoopCount(2);   // Number of flashes (2 flashes = 4 opacity changes)
+        animation->setKeyValueAt(0, 1.0);   // Fully visible
+        animation->setKeyValueAt(0.5, 0.0); // Fully invisible
+        animation->setKeyValueAt(1, 1.0);   // Fully visible again
+
+        // Change the background color to red during the animation
+        QTimer::singleShot(100, [this]() {
+            ui->browseViewTitle->setStyleSheet(
+                "background-color: red;"  // Change to red
+                "color: black;"
+                "border-radius:10px;"
+                );
+            ui->browseViewTitle->setText("End of pages!");
+        });
+
+        // Reset the background color back to normal after the animation finishes
+        connect(animation, &QPropertyAnimation::finished, this, [this, str]() {
+            ui->browseViewTitle->setStyleSheet(
+                ""
+                );
+            ui->browseViewTitle->setText(str);
+        });
+
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 }
 
 
 void MainWindow::on_perPageSee_valueChanged(int arg1)
 {
+    showPerPage=arg1;
+    QSettings settings(company, appName);
+    settings.setValue("showPerPage", showPerPage);
     updateBrowseView();
 }
 
@@ -1800,7 +1823,7 @@ void MainWindow::removeFilter(std::string text, int type){
         langFilters.erase( std::find(langFilters.begin() , langFilters.end() , text) );
     }
     else if (type == 2){
-        tagFilters.erase( std::find(langFilters.begin() , langFilters.end() , text) );;
+        tagFilters.erase( std::find(tagFilters.begin() , tagFilters.end() , text) );;
     }
 
     updateBrowseView();
@@ -1818,5 +1841,216 @@ void MainWindow::on_mofobutton_clicked()
     qDebug()<<"the hash result is: "<<hashResult;
     QSettings settings(company, appName);
     settings.setValue("hashres", QString(hashResult.c_str() ) );
+}
+
+
+
+// Schedule deletion for tagDat.cdh (add to map and save to temp file)
+void MainWindow::scheduleTagDeletion(int lineNumber) {
+    pendingTagDeletions.insert(lineNumber);
+    qDebug() << "The tag has been scheduled for removal from the file";
+    savePendingTagDeletes();
+}
+
+// Save pending tag deletions to a temp file
+void MainWindow::savePendingTagDeletes() {
+    QFile file(tagTempFilePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        for (int lineNumber : pendingTagDeletions) {
+            out << lineNumber << "\n";
+        }
+        file.close();
+    }
+    qDebug() << "The tag has been added to temp file for deletion";
+}
+
+// Load pending tag deletions from temp file (optional, if needed)
+void MainWindow::loadPendingTagDeletes() {
+    QFile file(tagTempFilePath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            int lineNumber = line.toInt();
+            pendingTagDeletions.insert(lineNumber);
+        }
+        file.close();
+    }
+}
+
+// Delete lines from tagDat.cdh before closing
+void MainWindow::completeTagDeletes() {
+    char tagFilePath[assist::PATH_SIZE];
+    std::strncpy(tagFilePath, "tagDat.cdh", sizeof(tagFilePath) - 1);
+    tagFilePath[sizeof(tagFilePath) - 1] = '\0';
+    assist::make_appData_filePath(tagFilePath);
+
+    for (int lineNumber : pendingTagDeletions) {
+        assist::removeLine(tagFilePath, lineNumber);
+    }
+
+    pendingTagDeletions.clear();
+    QFile::remove(tagTempFilePath);  // Remove temp file after processing
+}
+
+void MainWindow::on_userUpdateButton_clicked()
+{
+
+    if( !Julius->authenticate(ui->oldPasswordEdit->text()) ){
+        warnUser("Please enter correct old password!!");
+        return;
+    }
+
+    if(ui->newPasswordEdit->text().size() < 8){
+        warnUser("Please use password with at least 8 charecters");
+        return;
+    }
+
+    if( !ui->usernameEdit->text().toStdString().empty() && ui->usernameEdit->text().toStdString() != username){
+        username= ui->usernameEdit->text().toStdString();
+        ui->usernameAndMainSettingsButton->setText( QString::fromStdString(username) );
+    }
+
+
+    Julius->storePassword( ui->oldPasswordEdit->text() );
+
+    std::vector<std::string>snips;
+    for (auto& it : lockedStorage) {
+        snips.push_back( it.second->getSnippet() );
+    }
+
+    Julius->tellUsename(username);
+    int result = Julius->changePassword(ui->oldPasswordEdit->text(), ui->newPasswordEdit->text());
+    if (result == -1) {
+        warnUser("Old password is incorrect.");
+        return;
+    } else if (result == -2) {
+        warnUser("New password cannot be empty.");
+        return;
+    } else if (result == 1) {
+        qDebug() << "Password changed successfully.";
+    } else {
+        warnUser("An unknown error occurred while changing the password.");
+        return;
+    }
+
+    auto snipit = snips.begin();
+    for (auto& it : lockedStorage) {
+        it.second->saveSnippetToFile( *snipit );
+        snipit++;
+    }
+
+    QString currentHash = QString::fromStdString(Julius->getHash());
+    hashResult=currentHash.toStdString();
+    QSettings settings(company, appName);
+    settings.setValue("hashres", QString(hashResult.c_str() ));
+                      settings.setValue("username", QString::fromStdString(username) );
+
+
+}
+
+
+void MainWindow::on_newPasswordEdit_returnPressed()
+{
+    on_userUpdateButton_clicked();
+}
+
+
+void MainWindow::on_showPasswordButton_pressed()
+{
+    ui->oldPasswordEdit->setEchoMode(QLineEdit::Normal);
+    ui->newPasswordEdit->setEchoMode(QLineEdit::Normal);
+}
+
+
+void MainWindow::on_showPasswordButton_released()
+{
+    ui->oldPasswordEdit->setEchoMode( QLineEdit::Password);
+    ui->newPasswordEdit->setEchoMode( QLineEdit::Password);
+}
+
+
+void MainWindow::on_centralSearchBoxLE_textChanged(const QString &arg1)
+{
+    ui->centralSearchBoxLE->clear();
+    setMainIndex(1);
+}
+
+
+#include <QInputDialog>
+#include <QCryptographicHash>
+#include <QMessageBox>
+
+void MainWindow::on_searchBoxLineEdit_returnPressed() {
+    QString str = ui->searchBoxLineEdit->text();
+
+    if (str == "enable dev mode") {
+        bool ok;
+        QString password = QInputDialog::getText(this, "Developer Mode", "Enter Password:", QLineEdit::Password, "", &ok);
+
+        if (ok && !password.isEmpty()) {
+            // Hash the entered password
+            QByteArray hashedPassword = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+            // Compare with stored hashed password
+            const QByteArray storedHash = "61c630b89895a851ce188d03bc761f518a74adfe0740c4e7a6b8c1d72898af1f";  // Replace with actual hash
+
+            if (hashedPassword == storedHash) {
+                devmode = true;
+                QMessageBox::information(this, "Success", "Developer mode enabled!");
+            } else {
+                QMessageBox::warning(this, "Error", "Incorrect password.");
+            }
+        }
+    }
+    else if(str == "disable dev mode"){
+        devmode=false;
+        QMessageBox::information(this, "Success", "Developer mode disabled!");
+    }
+}
+
+
+void MainWindow::on_filterSnippetSettingsButton_clicked()
+{
+    snippetSettingsPopup* pop=new snippetSettingsPopup(this);
+    QListWidgetItem *selectedItem = ui->browseMainViewArea->currentItem();
+    if (selectedItem) {
+        QVariant data = selectedItem->data(Qt::UserRole);
+        snippetPreviewBox *previewBox = data.value<snippetPreviewBox*>();
+
+        if (previewBox) {
+            // Do something with previewBox
+            qDebug() << "Snippet Preview Box retrieved!";
+            pop->assign(previewBox->getSnippetObj());
+            pop->show();
+        } else {
+            qDebug() << "No snippetPreviewBox associated with this item.";
+            delete pop;
+        }
+    } else {
+        qDebug() << "No item selected.";
+        delete pop;
+    }
+}
+
+
+void MainWindow::on_filterSnippetEditButton_clicked()
+{
+    QListWidgetItem *selectedItem = ui->browseMainViewArea->currentItem();
+    if (selectedItem) {
+        QVariant data = selectedItem->data(Qt::UserRole);
+        snippetPreviewBox *previewBox = data.value<snippetPreviewBox*>();
+
+        if (previewBox) {
+            // Do something with previewBox
+            auto nam =previewBox->getNam();
+            openSnippetInEditor(previewBox->getSnippetObj() , nam  , true);
+        } else {
+            qDebug() << "No snippetPreviewBox associated with this item.";
+        }
+    } else {
+        qDebug() << "No item selected.";
+    }
 }
 

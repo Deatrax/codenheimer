@@ -196,6 +196,8 @@ void snippetSettingsPopup::on_commitChangesButton_clicked()
 
         ui->titleLabel->setText(QString(name.c_str())+"'s settings");
         isEdited=false;
+
+        masterWindow->updateBrowseView();
     } else {
 
         //do nothing

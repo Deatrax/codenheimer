@@ -101,11 +101,12 @@ public:
     QString decryptText(QString fileName);
     void scheduleDeletion(int lineNumber, const QString &filePath);
     void openSnippetInEditor(snippetBaseClass *snipObj, QString &tabname, bool isOld);
-
-
+    void scheduleTagDeletion(int lineNumber);
     void applyFilter(std::string text, int type);
     void removeFilter(std::string text, int type);
-private slots:
+    void updateBrowseView();
+    
+    private slots:
     void on_sidebarButton_clicked();
 
     void on_AddnewSidebarButton_clicked();
@@ -170,6 +171,20 @@ private slots:
 
     void on_mofobutton_clicked();
 
+    void on_userUpdateButton_clicked();
+
+    void on_newPasswordEdit_returnPressed();
+
+    void on_showPasswordButton_pressed();
+    void on_showPasswordButton_released();
+    void on_centralSearchBoxLE_textChanged(const QString &arg1);
+
+    void on_searchBoxLineEdit_returnPressed();
+
+    void on_filterSnippetSettingsButton_clicked();
+
+    void on_filterSnippetEditButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started
@@ -191,6 +206,7 @@ private:
     std::string hashResult; //hashresult of the password
     tagHolder* mainTagHolder; //pointer to hold a tagHolder object to be added in readData() function
     langHolder* mainLangHolder; //pointer to hold a langHolder object to be added in readData() function
+    std::map<std::string, snippetBaseClass*> lockedStorage;
     // this was deprecated because filne name storage was already doing it = std::vector<snippetBaseClass*> mainStorage; // a vector to hold all the snippet's pointers
     QClipboard *clipboard;
     std::unordered_map<std::string,snippetBaseClass*> filenameStorage;
@@ -204,7 +220,7 @@ private:
     //========filters
     std::vector< std::string> langFilters;
     std::vector< std::string> tagFilters;
-    //std::unordered_map<std::string, filterWidget*> tagFilters;
+
 
 
 
@@ -233,14 +249,27 @@ private:
 
     void setAutoStartWindows(bool flag);
     bool loginEnabled;
+    int totalCount;
+    int showPerPage;
+    bool devmode=false;
 
     void prepareBrowsePage();
     void applyFontToChildren(QWidget *parent, const QFont &font);
-    void updateBrowseView();
 
     void updateBrowseView(bool flag);
     std::vector<snippetBaseClass *> getFilteredSnippets(const std::vector<std::string> &langFilters, const std::vector<std::string> &tagFilters, const std::vector<snippetBaseClass *> &snippets, langHolder* langDB, tagHolder* tagDB);
-protected:
+
+
+
+    void savePendingTagDeletes();
+
+    void loadPendingTagDeletes();
+
+    void completeTagDeletes();
+    QSet<int> pendingTagDeletions;   // Stores line numbers of tags to delete
+    QString tagTempFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/pending_tag_deletes.tmp";;         // Path to store pending deletions for tags
+
+    protected:
     
     void completeDeletes();
     void loadPendingDeletes();

@@ -28,6 +28,5 @@ void browseTagWidget::init(std::string tag, filterWidget *fw){
 void browseTagWidget::on_pushButton_clicked()
 {
     thisFilterWidget->activated();
-    masterWindow->applyFilter(thisTag.toStdString(), 2);
 }
 

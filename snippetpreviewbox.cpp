@@ -121,3 +121,9 @@ void snippetPreviewBox::readSnippet(std::string& str)
     //call str=assignedSnippet->getSnippet();
 }
 
+QString snippetPreviewBox::getNam(){
+    QString nam=ui->Name->text();
+    return nam;
+}
+
+

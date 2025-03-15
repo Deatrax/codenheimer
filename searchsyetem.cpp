@@ -112,7 +112,10 @@ bool searchSystem::isLocked() {
     return true;
 }
 
-
+void searchSystem::tellTotalCount(int t)
+{
+    totalCount=t;
+}
 
 void searchSystem::insert(const std::string &str, snippetBaseClass *targ) {
     Node* curr = root;
@@ -209,20 +212,24 @@ std::vector<std::pair<std::string, std::vector<snippetBaseClass*>>> searchSystem
 
     if (!continueSearch) { // Restart search, reset attempt count
         qDebug() << "Restarting search from root...";
-        searchAttempt = 1;
-    } else {
-        searchAttempt++;
+        searchAttempt = 0;
     }
+    //  else {
+    //     searchAttempt++;
+    // }
 
-    int searchLimit = searchAttempt * n;   // Total nodes we should have seen so far
-    int skipCount = (searchAttempt - 1) * n; // How many nodes to skip
+    //int searchLimit = searchAttempt * n;   // Total nodes we should have seen so far
+    //int skipCount = (searchAttempt - 1) * n; // How many nodes to skip
+
+    if(searchAttempt > (totalCount+n)) searchAttempt=0;
+    int skipCount = searchAttempt;
     int remainingCount = n; // We only collect `n` snippets for the current page
 
     qDebug() << "Initiating paged search: skipping " << skipCount
              << " and collecting " << remainingCount << "...";
 
     collectAll(skipCount, remainingCount, root, "", results);
-
+    searchAttempt += n;
     return results;
 }
 

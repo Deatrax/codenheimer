@@ -497,7 +497,7 @@ QPushButton:hover{
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>5</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="addnewPage">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -1888,7 +1888,7 @@ QPushButton:hover{
                        <enum>Qt::LeftToRight</enum>
                       </property>
                       <property name="text">
-                       <string>General Settings</string>
+                       <string>User Settings</string>
                       </property>
                       <property name="alignment">
                        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1961,6 +1961,9 @@ QPushButton:hover{
                          <property name="styleSheet">
                           <string notr="true">background:#2B3663;
 border-radius:7px;</string>
+                         </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
                          </property>
                         </widget>
                        </item>
@@ -2053,6 +2056,9 @@ border-radius:7px;</string>
                          <property name="echoMode">
                           <enum>QLineEdit::Password</enum>
                          </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
                         </widget>
                        </item>
                        <item>
@@ -2141,6 +2147,9 @@ border-radius:7px;</string>
                          <property name="echoMode">
                           <enum>QLineEdit::Password</enum>
                          </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
                         </widget>
                        </item>
                        <item>
@@ -2157,7 +2166,43 @@ border-radius:7px;</string>
                         </spacer>
                        </item>
                        <item>
-                        <widget class="QPushButton" name="pushButton">
+                        <widget class="QPushButton" name="showPasswordButton">
+                         <property name="minimumSize">
+                          <size>
+                           <width>141</width>
+                           <height>21</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>141</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QWidget{
+	font-size:14px;
+	color: white;
+	border-radius:5px;
+margin-left:10px;
+margin-right:10px;
+}
+QPushButton{
+	background:#2B3663;
+}
+
+QPushButton:hover{
+	background:rgb(86, 99, 152);
+}
+</string>
+                         </property>
+                         <property name="text">
+                          <string>Show Password</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="userUpdateButton">
                          <property name="minimumSize">
                           <size>
                            <width>49</width>
@@ -2467,40 +2512,6 @@ QPushButton:hover{
                             </layout>
                            </widget>
                           </item>
-                          <item>
-                           <widget class="QWidget" name="widget_17" native="true">
-                            <layout class="QHBoxLayout" name="horizontalLayout_20">
-                             <property name="spacing">
-                              <number>0</number>
-                             </property>
-                             <property name="leftMargin">
-                              <number>53</number>
-                             </property>
-                             <property name="topMargin">
-                              <number>0</number>
-                             </property>
-                             <property name="rightMargin">
-                              <number>60</number>
-                             </property>
-                             <property name="bottomMargin">
-                              <number>0</number>
-                             </property>
-                             <item>
-                              <widget class="QPushButton" name="saveButton">
-                               <property name="maximumSize">
-                                <size>
-                                 <width>73</width>
-                                 <height>21</height>
-                                </size>
-                               </property>
-                               <property name="text">
-                                <string>Save</string>
-                               </property>
-                              </widget>
-                             </item>
-                            </layout>
-                           </widget>
-                          </item>
                          </layout>
                         </widget>
                        </item>
@@ -2539,20 +2550,19 @@ border-radius:7px;</string>
                            <number>0</number>
                           </property>
                           <item>
-                           <widget class="QScrollArea" name="scrollArea_2">
-                            <property name="widgetResizable">
-                             <bool>true</bool>
+                           <widget class="QLabel" name="tbaLabe">
+                            <property name="font">
+                             <font>
+                              <pointsize>10</pointsize>
+                             </font>
                             </property>
-                            <widget class="QWidget" name="scrollAreaWidgetContents_2">
-                             <property name="geometry">
-                              <rect>
-                               <x>0</x>
-                               <y>0</y>
-                               <width>233</width>
-                               <height>130</height>
-                              </rect>
-                             </property>
-                            </widget>
+                            <property name="text">
+                             <string>To Be Implemented
+ in Future</string>
+                            </property>
+                            <property name="alignment">
+                             <set>Qt::AlignCenter</set>
+                            </property>
                            </widget>
                           </item>
                          </layout>
@@ -2636,7 +2646,7 @@ font-family: 'Crete Round';</string>
                            </widget>
                           </item>
                           <item row="0" column="1">
-                           <widget class="QLabel" name="label_4">
+                           <widget class="QLabel" name="tagCountViewer">
                             <property name="text">
                              <string>here</string>
                             </property>
@@ -2755,7 +2765,7 @@ font-family: 'Crete Round';</string>
                        </sizepolicy>
                       </property>
                       <property name="text">
-                       <string>File Settings</string>
+                       <string>System Settings</string>
                       </property>
                      </widget>
                     </item>
@@ -2979,10 +2989,10 @@ QPushButton:hover{
           <widget class="QPushButton" name="testDecryptButton">
            <property name="geometry">
             <rect>
-             <x>210</x>
-             <y>550</y>
-             <width>100</width>
-             <height>32</height>
+             <x>170</x>
+             <y>590</y>
+             <width>181</width>
+             <height>31</height>
             </rect>
            </property>
            <property name="styleSheet">
@@ -3000,7 +3010,7 @@ QPushButton:hover{
 }</string>
            </property>
            <property name="text">
-            <string>Decrypt it</string>
+            <string>restart app in dev mode</string>
            </property>
           </widget>
           <widget class="QPushButton" name="snippetSettingsTestButton">

@@ -46,12 +46,12 @@ void snippetLiveClass::innit(std::string nam, std::string filenam, int linNum, s
     }
 
 
-    std::cout << "Snippet Initialized: " << std::endl;
-    std::cout << "Name: " << name << std::endl;
-    std::cout << "Filename: " << filename << std::endl;
-    std::cout << "Line Number: " << lineNum << std::endl;
-    std::cout << "Language: " << lang << std::endl;
-    std::cout << "Locked Status: " << isLockedVar << std::endl;
+    qDebug() << "Snippet Initialized: " ;
+    qDebug()  << "Name: " << name;
+    qDebug()  << "Filename: " << filename;
+    qDebug()  << "Line Number: " << lineNum;
+    qDebug()  << "Language: " << lang;
+    qDebug()  << "Locked Status: " << isLockedVar;
 
     std::cout << "Tags: ";
     if (tags.empty()) {
@@ -195,6 +195,12 @@ std::string& snippetLiveClass::EditSnippet()
 
 bool snippetLiveClass::saveSnippetToFile(string snippet)
 {
+
+    if(isLocked()){
+        MainWindow* mainW=static_cast<MainWindow*>(masterWindow);
+        mainW->encryptText( QString( filename.c_str() ) , QString::fromStdString(snippet));
+        return true;
+    }
     char snippetCodeFile[assist::PATH_SIZE];
 
     // Assuming vaultLocation is "default" for now

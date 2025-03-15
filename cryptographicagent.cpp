@@ -125,8 +125,10 @@ QString cryptographicAgent::decryptFileToString(const QString &filePath, const Q
 bool cryptographicAgent::deriveKeyAndIV(const QString &password, QByteArray &key, QByteArray &iv) {
     key.resize(32); // 256-bit key
     iv.resize(16);  // 128-bit IV
-    QByteArray salt = "example_salt"; // You can generate a random salt for stronger security
-
+    QByteArray salt = QByteArray::fromStdString(usrnam_salt);/*"example_salt"*/; // You can generate a random salt for stronger security
+    // qDebug() << "usrnam_salt (std::string):" << QString::fromStdString(usrnam_salt);
+    // qDebug() << "usrnam_salt size:" << usrnam_salt.size();
+    // qDebug() << "Salt size:" << salt.size() << "Salt data:" << salt.toHex();
     // Use PBKDF2 to derive the key and IV
     if (!PKCS5_PBKDF2_HMAC(password.toUtf8().data(),
                            password.length(),
@@ -298,6 +300,7 @@ void cryptographicAgent::showUI(int mode){
 
 void cryptographicAgent::on_cofirmButton_clicked()
 {
+    emit confirmButtonClicked();
     QString pass=ui->passwordField->text();
     if( !ui->passwordConfirmField->isHidden() ){
         if(ui->passwordField->text() != ui->passwordConfirmField->text() ){
@@ -346,7 +349,8 @@ bool cryptographicAgent::authenticate(){
     // Create an event loop to halt execution
     QEventLoop loop;
     // Connect a signal (e.g., button clicked) to exit the loop when the user provides input
-    connect(ui->cofirmButton, &QPushButton::clicked, &loop, &QEventLoop::quit);
+    // connect(ui->cofirmButton, &QPushButton::clicked, &loop, &QEventLoop::quit);
+    connect(this, &cryptographicAgent::confirmButtonClicked, &loop, &QEventLoop::quit);
     // Connect window close to exit loop
     connect(this, &cryptographicAgent::windowClosed, &loop, &QEventLoop::quit);// Run the event loop (halts execution here until quit() is called)
     loop.exec();
@@ -366,6 +370,17 @@ bool cryptographicAgent::authenticate(){
 
     return ok;
 }
+
+
+bool cryptographicAgent::authenticate(QString pass){
+    bool ok=false;
+    if (hashPassword(pass).toStdString() == hashResult) {
+        ok = true;
+    }
+
+    return ok;
+}
+
 void cryptographicAgent::on_passwordField_returnPressed()
 {
     on_cofirmButton_clicked();
@@ -377,3 +392,31 @@ void cryptographicAgent::on_passwordConfirmField_returnPressed()
     on_cofirmButton_clicked();
 }
 
+void cryptographicAgent::tellUsename(std::string str){
+    usrnam_salt=str;
+}
+
+
+int cryptographicAgent::changePassword(const QString& oldPassword, const QString& newPassword)
+{
+    // Verify if the old password is correct
+    if (hashPassword(oldPassword).toStdString() != hashResult) {
+        qWarning() << "Old password is incorrect.";
+        return -1;
+    }
+
+    if (newPassword.isEmpty()) {
+        qWarning() << "New password cannot be empty.";
+        return -2; // Return false if the new password is empty
+    }
+
+    qDebug()<<"the previous hash is: "<<hashResult<<"\nand the new hash is: "<<hashPassword(newPassword).toStdString();
+    hashResult = hashPassword(newPassword).toStdString();
+
+    secureErase(password, sizeof(password));
+    storePassword(newPassword);
+
+
+    qDebug() << "Password changed successfully.";
+    return 1; // Return true if the password change is successful
+}

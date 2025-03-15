@@ -72,6 +72,11 @@ CMakeLists.txt.user*
 *.dll
 *.exe
 
+
+# But don't ignore this folder and its contents
+!openssl_libs/
+!openssl_libs/**
+
 #custom added
 initialsetup.txt
 datafileSample.txt

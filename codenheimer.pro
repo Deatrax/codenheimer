@@ -31,7 +31,8 @@ SOURCES += \
     tagholder.cpp \
     tagviewer.cpp \
     flowlayout.cpp \
-    cryptographicagent.cpp
+    cryptographicagent.cpp \
+    welcomescreen.cpp
 
 HEADERS += \
     browselangwidget.h \
@@ -57,7 +58,8 @@ HEADERS += \
     tagholder.h \
     tagviewer.h \
     flowlayout.h \
-    cryptographicagent.h
+    cryptographicagent.h \
+    welcomescreen.h
 
 FORMS += \
     browselangwidget.ui \
@@ -69,7 +71,8 @@ FORMS += \
     snippetsettingspopup.ui \
     tagadder.ui \
     tagviewer.ui \
-    cryptographicagent.ui
+    cryptographicagent.ui \
+    welcomescreen.ui
 
 RESOURCES += \
     images/ \
