@@ -8,7 +8,7 @@ welcomeScreen::welcomeScreen(QWidget *parent)
     , ui(new Ui::welcomeScreen)
 {
     ui->setupUi(this);
-
+    setWindowTitle("Welcome to Codenheimer");
     int fontId = QFontDatabase::addApplicationFont(":/fonts/CutiveMono-Regular.ttf");
     if (fontId != -1) {
         QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
