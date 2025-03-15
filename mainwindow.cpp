@@ -464,6 +464,7 @@ void MainWindow::sandBox(){
         ui->sysTrayCheckBox->setCheckState( trayEnabled ?  Qt::Checked  : Qt::Unchecked);
         ui->OpenAtLoginCheckBox->setCheckState( loginEnabled ?  Qt::Checked  : Qt::Unchecked);
         ui->usernameEdit->setPlaceholderText(QString::fromStdString(username));
+        ui->tbaLabe->setFont(CreteRoundFont);
 
     }
 
