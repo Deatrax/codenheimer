@@ -104,6 +104,7 @@ public:
     void scheduleTagDeletion(int lineNumber);
     void applyFilter(std::string text, int type);
     void removeFilter(std::string text, int type);
+    void updateBrowseView();
     
     private slots:
     void on_sidebarButton_clicked();
@@ -254,7 +255,6 @@ private:
 
     void prepareBrowsePage();
     void applyFontToChildren(QWidget *parent, const QFont &font);
-    void updateBrowseView();
 
     void updateBrowseView(bool flag);
     std::vector<snippetBaseClass *> getFilteredSnippets(const std::vector<std::string> &langFilters, const std::vector<std::string> &tagFilters, const std::vector<snippetBaseClass *> &snippets, langHolder* langDB, tagHolder* tagDB);
