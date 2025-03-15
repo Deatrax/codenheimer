@@ -1,8 +1,10 @@
 #include "mainwindow.h"
 #include "browselangwidget.h"
 #include "browsetagwidget.h"
+#include "qgraphicseffect.h"
 #include "qmenu.h"
 #include "qpainter.h"
+#include "qpropertyanimation.h"
 #include "snippetpreviewbox.h"
 #include "snippetsettingspopup.h"
 #include "tagadder.h"
@@ -549,6 +551,8 @@ void MainWindow::sandBox(){
             lineNum++;
         }
         qDebug()<<"read data complete.\ntotal snippets in filenamestorage: "<<filenameStorage.size()<<"\nTotal snippets in lockedstorage: "<<lockedStorage.size();
+        totalCount =  filenameStorage.size();
+        searchObj->tellTotalCount(totalCount);
     }
 
     snippetBaseClass* MainWindow::generateSnippetObject(std::string lang){
@@ -632,8 +636,12 @@ void MainWindow::sandBox(){
         obj->innit( name.toStdString() , filename , lineNum , lang.toStdString() , std::vector<std::string>() ,this);
         mainLangHolder->insert(obj);
         filenameStorage[filenameWithoutExt]=obj;
+
         //Insert into search here
         searchObj->insert(name.toStdString(),obj);
+        totalCount++;
+        searchObj->tellTotalCount(totalCount);
+
         //=====updating the vault file
         std::string vaultDat=name.toStdString() + "," + filename + "," + lang.toStdString() + "," + "noTags";
         qDebug()<<"gonna write to vault file: "<<vaultDat;
@@ -808,7 +816,8 @@ void MainWindow::sandBox(){
 
         //delete the snippet itself that is call it's destructor
         delete obj;
-
+        totalCount--;
+        searchObj->tellTotalCount(totalCount);
         return true;
     }
 
@@ -1667,39 +1676,7 @@ void MainWindow::updateBrowseView(){
 
 void MainWindow::updateBrowseView(bool flag){
 
-    // // ui->browseMainViewArea->clear();
-    // ui->browseMainViewArea->clear();
 
-    // int limit=ui->perPageSee->value();
-
-    // std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->pagedSearch(limit, flag);
-
-
-    // //std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix("");
-    // for (auto& itr : searchRet){
-    //     for (auto& itr2 : itr.second) {
-    //         // Create the custom widget
-    //         snippetPreviewBox* pb = new snippetPreviewBox(this, this);
-    //         pb->assignSnippet(itr2);
-
-    //         // Create a QListWidgetItem to hold the custom widget
-    //         QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
-
-    //         // Set the size of the item to match the widget
-    //         item->setSizeHint(pb->sizeHint());
-
-    //         // Store snippetPreviewBox pointer inside Qt::UserRole
-    //         item->setData(Qt::UserRole, QVariant::fromValue(pb));
-
-    //         // Add the item to the list widget
-    //         ui->browseMainViewArea->addItem(item);
-
-    //         // Set the custom widget for this item (for display only)
-    //         ui->browseMainViewArea->setItemWidget(item, pb);
-    //     }
-    // }
-
-    // ui->browseMainViewArea->clear();
     ui->browseMainViewArea->clear();
 
     int limit=ui->perPageSee->value();
@@ -1716,54 +1693,81 @@ void MainWindow::updateBrowseView(bool flag){
         finalList= getFilteredSnippets(langFilters, tagFilters, snippetVector, mainLangHolder, mainTagHolder);
     else
         finalList= snippetVector;
-    // //std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> searchRet= searchObj->searchWithPrefix("");
-    // for (auto& itr : searchRet){
-    //         for (auto& itr2 : itr.second) {
-    //             // Create the custom widget
-    //             snippetPreviewBox* pb = new snippetPreviewBox(this, this);
-    //             pb->assignSnippet(itr2);
-
-    //             // Create a QListWidgetItem to hold the custom widget
-    //             QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
-
-    //             // Set the size of the item to match the widget
-    //             item->setSizeHint(pb->sizeHint());
-
-    //             // Store snippetPreviewBox pointer inside Qt::UserRole
-    //             item->setData(Qt::UserRole, QVariant::fromValue(pb));
-
-    //             // Add the item to the list widget
-    //             ui->browseMainViewArea->addItem(item);
-
-    //             // Set the custom widget for this item (for display only)
-    //             ui->browseMainViewArea->setItemWidget(item, pb);
-    //         }
-    //     }
 
 
+    int additionalItemsNeeded = limit - finalList.size();
+
+    // If there are fewer results than the limit, fetch additional items
+    if (finalList.size()!=0 && additionalItemsNeeded > 0) {
+        // Run search again with the remaining number of items needed
+        std::vector<std::pair<std::string, std::vector<snippetBaseClass *>>> additionalSearchRet = searchObj->pagedSearch(additionalItemsNeeded, flag);
+        std::vector<snippetBaseClass*> additionalSnippetVector;
+
+        for (const auto& pair : additionalSearchRet) {
+            additionalSnippetVector.insert(additionalSnippetVector.end(), pair.second.begin(), pair.second.end());
+        }
+
+        // Add the additional snippets to the final list
+        for (const auto& snippet : additionalSnippetVector) {
+            finalList.push_back(snippet);
+        }
+
+        // Filter the final list if filters are applied
+        if (langFilters.size() > 0 || tagFilters.size() > 0) {
+            finalList = getFilteredSnippets(langFilters, tagFilters, finalList, mainLangHolder, mainTagHolder);
+        }
+    }
 
     for (auto& itr2 : finalList) {
-        // Create the custom widget
         snippetPreviewBox* pb = new snippetPreviewBox(this, this);
         pb->assignSnippet(itr2);
 
-        // Create a QListWidgetItem to hold the custom widget
         QListWidgetItem* item = new QListWidgetItem(ui->browseMainViewArea);
 
-        // Set the size of the item to match the widget
         item->setSizeHint(pb->sizeHint());
 
-        // Store snippetPreviewBox pointer inside Qt::UserRole
         item->setData(Qt::UserRole, QVariant::fromValue(pb));
 
-        // Add the item to the list widget
         ui->browseMainViewArea->addItem(item);
 
-        // Set the custom widget for this item (for display only)
         ui->browseMainViewArea->setItemWidget(item, pb);
     }
 
 
+
+
+    if(finalList.size() == 0){
+        QString str=ui->browseViewTitle->text();
+        QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(ui->browseViewTitle);
+        ui->browseViewTitle->setGraphicsEffect(effect);
+
+        QPropertyAnimation* animation = new QPropertyAnimation(effect, "opacity");
+        animation->setDuration(1000); // Duration in milliseconds
+        animation->setLoopCount(2);   // Number of flashes (2 flashes = 4 opacity changes)
+        animation->setKeyValueAt(0, 1.0);   // Fully visible
+        animation->setKeyValueAt(0.5, 0.0); // Fully invisible
+        animation->setKeyValueAt(1, 1.0);   // Fully visible again
+
+        // Change the background color to red during the animation
+        QTimer::singleShot(100, [this]() {
+            ui->browseViewTitle->setStyleSheet(
+                "background-color: red;"  // Change to red
+                "color: black;"
+                "border-radius:10px;"
+                );
+            ui->browseViewTitle->setText("End of pages!");
+        });
+
+        // Reset the background color back to normal after the animation finishes
+        connect(animation, &QPropertyAnimation::finished, this, [this, str]() {
+            ui->browseViewTitle->setStyleSheet(
+                ""
+                );
+            ui->browseViewTitle->setText(str);
+        });
+
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 }
 
 

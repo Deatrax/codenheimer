@@ -240,6 +240,7 @@ private:
 
     void setAutoStartWindows(bool flag);
     bool loginEnabled;
+    int totalCount;
 
     void prepareBrowsePage();
     void applyFontToChildren(QWidget *parent, const QFont &font);

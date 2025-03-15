@@ -38,6 +38,7 @@ private:
 
     void collectAll(int &skipCount, int &remainingCount, Node *curr, std::string prefix, std::vector<std::pair<std::string, std::vector<snippetBaseClass *> > > &results);
     int searchAttempt;
+    int totalCount;
 public:
     searchSystem();
     ~searchSystem();
@@ -64,6 +65,7 @@ public:
     void putColors(std::unordered_map<std::string,std::vector<std::string>>& colorsData) override;
     void putTags(std::vector<std::string>&) override;
     bool isLocked() override;
+    void tellTotalCount(int t);
 
 
     void insert(const std::string& str, snippetBaseClass* targ) override;

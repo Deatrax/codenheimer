@@ -29,6 +29,5 @@ void browseLangWidget::init(std::string lang, filterWidget *fw){
 void browseLangWidget::on_pushButton_clicked()
 {
     thisFilterWidget->activated();
-    masterWindow->applyFilter(thisLang.toStdString(), 1);
 }
 

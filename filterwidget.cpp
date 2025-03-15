@@ -18,7 +18,11 @@ void filterWidget::init(std::string text, int type){
 }
 
 void filterWidget::activated(){
-    ui->checkBox->setCheckState(Qt::Checked);
+    if( !ui->checkBox->isChecked())
+    {
+        ui->checkBox->setCheckState(Qt::Checked);
+        on_checkBox_stateChanged(1);
+    }
 }
 
 filterWidget::~filterWidget()
