@@ -125,8 +125,10 @@ QString cryptographicAgent::decryptFileToString(const QString &filePath, const Q
 bool cryptographicAgent::deriveKeyAndIV(const QString &password, QByteArray &key, QByteArray &iv) {
     key.resize(32); // 256-bit key
     iv.resize(16);  // 128-bit IV
-    QByteArray salt = "example_salt"; // You can generate a random salt for stronger security
-
+    QByteArray salt = QByteArray::fromStdString(usrnam_salt);/*"example_salt"*/; // You can generate a random salt for stronger security
+    // qDebug() << "usrnam_salt (std::string):" << QString::fromStdString(usrnam_salt);
+    // qDebug() << "usrnam_salt size:" << usrnam_salt.size();
+    // qDebug() << "Salt size:" << salt.size() << "Salt data:" << salt.toHex();
     // Use PBKDF2 to derive the key and IV
     if (!PKCS5_PBKDF2_HMAC(password.toUtf8().data(),
                            password.length(),
@@ -375,5 +377,9 @@ void cryptographicAgent::on_passwordField_returnPressed()
 void cryptographicAgent::on_passwordConfirmField_returnPressed()
 {
     on_cofirmButton_clicked();
+}
+
+void cryptographicAgent::tellUsename(std::string str){
+    usrnam_salt=str;
 }
 

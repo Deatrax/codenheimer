@@ -37,6 +37,7 @@ public:
     std::string getHash();
     bool authenticate();
     void closeEvent(QCloseEvent *event) override;
+    void tellUsename(std::string str);
 private slots:
     void on_cofirmButton_clicked();
 
@@ -67,6 +68,7 @@ private:
 
     QString getAppDataFilePath(const QString &filename);
     QString hashPassword(const QString &pass);
+    std::string usrnam_salt;
 signals:
     void passwordSet();
     void windowClosed();

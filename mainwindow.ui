@@ -2157,7 +2157,7 @@ border-radius:7px;</string>
                         </spacer>
                        </item>
                        <item>
-                        <widget class="QPushButton" name="pushButton">
+                        <widget class="QPushButton" name="userUpdateButton">
                          <property name="minimumSize">
                           <size>
                            <width>49</width>

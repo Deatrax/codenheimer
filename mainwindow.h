@@ -170,6 +170,8 @@ public:
 
     void on_mofobutton_clicked();
 
+    void on_userUpdateButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started

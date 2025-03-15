@@ -146,6 +146,7 @@ void MainWindow::sandBox(){
         searchObj=new searchSystem;
         Julius= new cryptographicAgent();
         Julius->setHash(hashResult);
+        Julius->tellUsename(username);
         readData();
 
 
@@ -1877,3 +1878,9 @@ void MainWindow::completeTagDeletes() {
     pendingTagDeletions.clear();
     QFile::remove(tagTempFilePath);  // Remove temp file after processing
 }
+
+void MainWindow::on_userUpdateButton_clicked()
+{
+
+}
+
