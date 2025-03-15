@@ -174,6 +174,8 @@ public:
 
     void on_newPasswordEdit_returnPressed();
 
+    void on_showPasswordButton_pressed();
+    void on_showPasswordButton_released();
 private:
     Ui::MainWindow *ui;
     /// @brief this function encapsulates all the opertations that take place automatically first when the app is started

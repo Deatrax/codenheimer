@@ -1962,6 +1962,9 @@ QPushButton:hover{
                           <string notr="true">background:#2B3663;
 border-radius:7px;</string>
                          </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
                         </widget>
                        </item>
                        <item>
@@ -2053,6 +2056,9 @@ border-radius:7px;</string>
                          <property name="echoMode">
                           <enum>QLineEdit::Password</enum>
                          </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
                         </widget>
                        </item>
                        <item>
@@ -2141,6 +2147,9 @@ border-radius:7px;</string>
                          <property name="echoMode">
                           <enum>QLineEdit::Password</enum>
                          </property>
+                         <property name="alignment">
+                          <set>Qt::AlignCenter</set>
+                         </property>
                         </widget>
                        </item>
                        <item>
@@ -2155,6 +2164,42 @@ border-radius:7px;</string>
                           </size>
                          </property>
                         </spacer>
+                       </item>
+                       <item>
+                        <widget class="QPushButton" name="showPasswordButton">
+                         <property name="minimumSize">
+                          <size>
+                           <width>141</width>
+                           <height>21</height>
+                          </size>
+                         </property>
+                         <property name="maximumSize">
+                          <size>
+                           <width>141</width>
+                           <height>16777215</height>
+                          </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QWidget{
+	font-size:14px;
+	color: white;
+	border-radius:5px;
+margin-left:10px;
+margin-right:10px;
+}
+QPushButton{
+	background:#2B3663;
+}
+
+QPushButton:hover{
+	background:rgb(86, 99, 152);
+}
+</string>
+                         </property>
+                         <property name="text">
+                          <string>Show Password</string>
+                         </property>
+                        </widget>
                        </item>
                        <item>
                         <widget class="QPushButton" name="userUpdateButton">

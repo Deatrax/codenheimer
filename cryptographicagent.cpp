@@ -400,23 +400,21 @@ int cryptographicAgent::changePassword(const QString& oldPassword, const QString
     // Verify if the old password is correct
     if (hashPassword(oldPassword).toStdString() != hashResult) {
         qWarning() << "Old password is incorrect.";
-        return -1; // Old password doesn't match, return false
+        return -1;
     }
 
-    // Verify that new password is not empty
     if (newPassword.isEmpty()) {
         qWarning() << "New password cannot be empty.";
         return -2; // Return false if the new password is empty
     }
 
     qDebug()<<"the previous hash is: "<<hashResult<<"\nand the new hash is: "<<hashPassword(newPassword).toStdString();
-    // Store the new password (hash it for security)
     hashResult = hashPassword(newPassword).toStdString();
 
     secureErase(password, sizeof(password));
     storePassword(newPassword);
 
-    // Indicate success
+
     qDebug() << "Password changed successfully.";
     return 1; // Return true if the password change is successful
 }

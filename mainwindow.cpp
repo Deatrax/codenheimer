@@ -449,16 +449,19 @@ void MainWindow::sandBox(){
         ui->snLSettingTitle->setFont(CreteRoundFont);
         ui->fileSettingsTitle->setFont(CreteRoundFont);
         CreteRoundFont.setPointSize(12);
+        ui->showPasswordButton->setFont(CreteRoundFont);
         ui->usernameTitle->setFont(CreteRoundFont);
         ui->oldPasswordTitle->setFont(CreteRoundFont);
         ui->newPasswordTitle->setFont(CreteRoundFont);
+        ui->userUpdateButton->setFont(CreteRoundFont);
         ui->usernameEdit->setFont(CreteRoundFont);
         ui->oldPasswordEdit->setFont(CreteRoundFont);
         ui->newPasswordEdit->setFont(CreteRoundFont);
         ui->vaultLocationTitle->setFont(CreteRoundFont);
         ui->vaultLocationEdit->setFont(CreteRoundFont);
         ui->sysTrayCheckBox->setCheckState( trayEnabled ?  Qt::Checked  : Qt::Unchecked);
-         ui->OpenAtLoginCheckBox->setCheckState( loginEnabled ?  Qt::Checked  : Qt::Unchecked);
+        ui->OpenAtLoginCheckBox->setCheckState( loginEnabled ?  Qt::Checked  : Qt::Unchecked);
+        ui->usernameEdit->setPlaceholderText(QString::fromStdString(username));
 
     }
 
@@ -1931,5 +1934,19 @@ void MainWindow::on_userUpdateButton_clicked()
 void MainWindow::on_newPasswordEdit_returnPressed()
 {
     on_userUpdateButton_clicked();
+}
+
+
+void MainWindow::on_showPasswordButton_pressed()
+{
+    ui->oldPasswordEdit->setEchoMode(QLineEdit::Normal);
+    ui->newPasswordEdit->setEchoMode(QLineEdit::Normal);
+}
+
+
+void MainWindow::on_showPasswordButton_released()
+{
+    ui->oldPasswordEdit->setEchoMode( QLineEdit::Password);
+    ui->newPasswordEdit->setEchoMode( QLineEdit::Password);
 }
 
