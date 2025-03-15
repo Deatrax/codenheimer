@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "welcomescreen.h"
 
 #include <QApplication>
 
@@ -15,7 +16,9 @@ int main(int argc, char *argv[])
     if(ret==1){
         //launch onboarding flow
     }
-    MainWindow w;
-    w.show();
+    // MainWindow w;
+    // w.show();
+    welcomeScreen wel;
+    wel.show();
     return a.exec();
 }

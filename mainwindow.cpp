@@ -471,14 +471,15 @@ void MainWindow::sandBox(){
 
     void MainWindow::readUconfig(){
 
-        QSettings settings(company, appName);
-        QString u=settings.value("username","default_user").toString();
-        QString hs=settings.value("hashres","default_val").toString();
-        QString va=settings.value("vault","default").toString();
-        int ty=settings.value("type",0).toInt();
-        int tg=settings.value("tag",0).toInt();
-        bool login =settings.value("loginRun",false).toBool();
-        bool tray =  settings.value("trayIcon",false).toBool();
+        QSettings   settings(company, appName);
+        QString u   =settings.value("username","default_user").toString();
+        QString hs  =settings.value("hashres","default_val").toString();
+        QString va  =settings.value("vault","default").toString();
+        int ty      =settings.value("type",0).toInt();
+        int tg      =settings.value("tag",0).toInt();
+        bool login  =settings.value("loginRun",false).toBool();
+        bool tray   =settings.value("trayIcon",false).toBool();
+        int perpage =settings.value("showPerPage", 10).toInt();
 
         username=u.toStdString();
         hashResult=hs.toStdString();
@@ -487,6 +488,7 @@ void MainWindow::sandBox(){
         additionalTypeCount=ty;
         trayEnabled= tray;
         loginEnabled= login;
+        showPerPage=perpage;
 
 
 
@@ -1550,7 +1552,7 @@ void MainWindow::prepareBrowsePage(){
     }
     ui->tagAreaBox->setLayout(browseTagFL);
     qDebug()<<"==============================================tag add complete";
-
+    ui->perPageSee->setValue(showPerPage);
     ui->browsePageStack->setCurrentIndex(0);
 }
 
@@ -1774,6 +1776,9 @@ void MainWindow::updateBrowseView(bool flag){
 
 void MainWindow::on_perPageSee_valueChanged(int arg1)
 {
+    showPerPage=arg1;
+    QSettings settings(company, appName);
+    settings.setValue("showPerPage", showPerPage);
     updateBrowseView();
 }
 
