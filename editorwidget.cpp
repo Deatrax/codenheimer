@@ -53,7 +53,7 @@ editorWidget::editorWidget(MainWindow* mainwindow, QWidget *parent)
     if (fontId != -1) {
         QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
         menlo=QFont(family);
-        menlo.setPointSize(12);
+        menlo.setPointSize(16);
         ui->textEdit->setFont(menlo);
         ui->lineNo->setFont(menlo);
     } else {
