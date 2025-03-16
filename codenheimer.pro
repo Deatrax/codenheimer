@@ -93,6 +93,17 @@ macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 15.0
 }
 
+#-----------------
+# for app icon
+#-----------------
+win32{
+    RC_FILE = app_icon.rc
+
+}
+macx{
+    ICON = images/appicon/favicon.icns
+}
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
