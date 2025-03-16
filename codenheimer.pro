@@ -76,7 +76,8 @@ FORMS += \
 
 RESOURCES += \
     images/ \
-    fonts/
+    fonts/ \
+    app_icon.rc
 
 
 #-------------------------------------------------
@@ -91,6 +92,17 @@ macx {
     INCLUDEPATH += $$PWD/openssl_libs/mac/include
     LIBS += -L$$PWD/openssl_libs/mac/lib -lssl -lcrypto
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 15.0
+}
+
+#-----------------
+# for app icon
+#-----------------
+win32{
+    RC_FILE = app_icon.rc
+
+}
+macx{
+    ICON = images/appicon/favicon.icns
 }
 
 # Default rules for deployment.
