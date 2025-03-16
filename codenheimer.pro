@@ -76,7 +76,8 @@ FORMS += \
 
 RESOURCES += \
     images/ \
-    fonts/
+    fonts/ \
+    app_icon.rc
 
 
 #-------------------------------------------------
