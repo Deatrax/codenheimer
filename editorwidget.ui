@@ -66,7 +66,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>20</width>
+          <width>40</width>
           <height>16777215</height>
          </size>
         </property>
@@ -84,8 +84,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>20</width>
-           <height>288</height>
+           <width>40</width>
+           <height>291</height>
           </rect>
          </property>
          <property name="sizePolicy">
@@ -94,9 +94,15 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
-           <width>20</width>
+           <width>40</width>
            <height>16777215</height>
           </size>
          </property>
@@ -124,9 +130,15 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>20</width>
+              <width>40</width>
               <height>16777215</height>
              </size>
             </property>
@@ -150,6 +162,12 @@
       </item>
       <item>
        <widget class="QTextEdit" name="textEdit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="cursor" stdset="0">
          <cursorShape>IBeamCursor</cursorShape>
         </property>

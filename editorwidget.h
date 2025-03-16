@@ -37,6 +37,7 @@ private:
     snippetBaseClass* thisSnippet;
     MainWindow* mainWindow;
     int idx;
+    QFont menlo;
 };
 
 #endif // EDITORWIDGET_H
