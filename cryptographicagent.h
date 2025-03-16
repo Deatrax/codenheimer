@@ -63,7 +63,7 @@ private:
 
     char password[256];
     void secureErase(char *buffer, size_t size);
-    bool hasPassword;
+    bool hasPassword=false;
     std::string hashResult;
     int actionContinue;
     bool firstTime=false;
