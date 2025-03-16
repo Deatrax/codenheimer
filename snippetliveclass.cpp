@@ -195,7 +195,7 @@ std::string& snippetLiveClass::EditSnippet()
 
 bool snippetLiveClass::saveSnippetToFile(string snippet)
 {
-
+    SNIPPET=snippet;
     if(isLocked()){
         MainWindow* mainW=static_cast<MainWindow*>(masterWindow);
         mainW->encryptText( QString( filename.c_str() ) , QString::fromStdString(snippet));
