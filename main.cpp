@@ -11,7 +11,7 @@ void restartApplication() {
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(":/images/codenheimer_icon3.png"));
+    a.setWindowIcon(QIcon(":/images/codenheimer_icon.png"));
 
     int ret = MainWindow::firstTimeInit();
     if (ret == -1) {
