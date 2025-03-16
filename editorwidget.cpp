@@ -16,7 +16,7 @@ editorWidget::editorWidget(MainWindow* mainwindow, QWidget *parent)
     ui->scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    ui->lineNo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding); // Prevents expansion
+    ui->lineNo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding); // Prevents expansion
     ui->lineNo->setAlignment(Qt::AlignTop | Qt::AlignLeft);  // Aligns text properly
 
     ui->textEdit->setWordWrapMode(QTextOption::NoWrap); // Disable word wrapping
