@@ -192,10 +192,17 @@ void MainWindow::sandBox(){
 
     int MainWindow::firstTimeInit()
     {
-        std::ifstream inFile("firstrun.txt", std::ios::in); // Attempt to open the file in read mode
+        //std::ifstream inFile("firstrun.txt", std::ios::in); // Attempt to open the file in read mode
+            
+        QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        QDir().mkpath(appDataPath); // Ensure the directory exists
+
+        QString firstRunFile = appDataPath + "/firstrun.txt";
+
+        std::ifstream inFile(firstRunFile.toStdString(), std::ios::in);
 
         if (!inFile.is_open()) { // Check if the file could not be opened and if not then this is the first time this is being run
-            std::ofstream make("firstrun.txt");
+            std::ofstream make(firstRunFile.toStdString());
             make.close();
             std::cerr << "Error: First time run checker File does not exist or cannot be opened!\n";
             std::string strn;
