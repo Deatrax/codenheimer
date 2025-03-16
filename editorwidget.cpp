@@ -48,6 +48,17 @@ editorWidget::editorWidget(MainWindow* mainwindow, QWidget *parent)
 
     ui->tabCloseButton->setIcon(QIcon(":/images/closeIcon.svg"));
     ui->tabCloseButton->setIconSize(QSize(20,20));
+
+    int fontId = QFontDatabase::addApplicationFont(":/fonts/Menlo-Regular.ttf");
+    if (fontId != -1) {
+        QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
+        menlo=QFont(family);
+        menlo.setPointSize(12);
+        ui->textEdit->setFont(menlo);
+        ui->lineNo->setFont(menlo);
+    } else {
+        qDebug() << "Font loading failed!";
+    }
 }
 
 editorWidget::~editorWidget()
